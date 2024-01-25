@@ -1,0 +1,8 @@
+{
+  "apiKey": "$API_KEY",
+  "managementApiUrl": "$MANAGEMENT_API_URL",
+  "catalogUrl": "$CATALOG_URL",
+  "storageAccount": "$STORAGE_ACCOUNT",
+  "storageExplorerLinkTemplate": "$STORAGE_LINK_TEMPLATE",
+  "theme": "$APP_THEME"
+}
