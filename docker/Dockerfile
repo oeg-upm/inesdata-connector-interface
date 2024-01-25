@@ -29,8 +29,8 @@ ENV ENVIRONMENT_CFG=${DOCUMENT_ROOT}/assets/config/app.config.json \
     ENVIRONMENT_CFG_TMP=/tmp/app.config.temp.json
 
 # Copia fichero plantilla de configuracion de entorno y otorga permiso de escritura al mismo
-COPY ./src/environments/app.config.template.json ${ENVIRONMENT_CFG_TPL}
-COPY ./src/environments/app.config.template.json ${ENVIRONMENT_CFG}
+COPY ./src/assets/config/app.config.template.json ${ENVIRONMENT_CFG_TPL}
+COPY ./src/assets/config/app.config.template.json ${ENVIRONMENT_CFG}
 
 # Se setean permisos
 RUN chmod ug+w ${ENVIRONMENT_CFG} \
