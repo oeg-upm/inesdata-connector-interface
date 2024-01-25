@@ -25,7 +25,7 @@ module.exports = function (config) {
       suppressAll: true // removes the duplicated traces
     },
     coverageReporter: {
-      dir: require('path').join(__dirname, './coverage/edc-demo-client'),
+      dir: require('path').join(__dirname, './coverage/connector-management-interface'),
       subdir: '.',
       reporters: [
         { type: 'html' },

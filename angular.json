@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "edc-demo-client": {
+    "connector-management-interface": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -20,7 +20,8 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/edc-demo-client",
+            "baseHref": "/connector-management-interface/",
+            "outputPath": "dist/connector-management-interface",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -77,10 +78,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "edc-demo-client:build:production"
+              "buildTarget": "connector-management-interface:build:production"
             },
             "development": {
-              "buildTarget": "edc-demo-client:build:development"
+              "buildTarget": "connector-management-interface:build:development"
             }
           },
           "options": {
@@ -91,7 +92,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "edc-demo-client:build"
+            "buildTarget": "connector-management-interface:build"
           }
         },
         "test": {

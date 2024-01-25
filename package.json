@@ -1,6 +1,6 @@
 {
-  "name": "edc-demo-client",
-  "version": "0.0.0",
+  "name": "connector-management-interface",
+  "version": "0.1.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --proxy-config proxy.conf.json --host 0.0.0.0 ",

@@ -1,5 +1,6 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
+import {Location} from '@angular/common';
 
 export interface AppConfig {
   managementApiUrl: string;
@@ -15,11 +16,11 @@ export interface AppConfig {
 export class AppConfigService {
   config?: AppConfig;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private location: Location) {}
 
   loadConfig(): Promise<void> {
     return this.http
-      .get<AppConfig>('/assets/config/app.config.json')
+      .get<AppConfig>(this.location.prepareExternalUrl('/assets/config/app.config.json'))
       .toPromise()
       .then(data => {
         this.config = data;

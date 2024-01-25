@@ -37,7 +37,7 @@ resource "azurerm_container_group" "edc-dashboard" {
 
   container {
     cpu    = 2
-    image  = "${var.docker_repo_url}/edc-demo-client:latest"
+    image  = "${var.docker_repo_url}/connector-management-interface:latest"
     memory = "2"
     name   = "edc-data-dashboard"
 
