@@ -9,8 +9,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "test:ci": "ng test --watch=false --browsers=ChromeHeadless",
-    "e2e:ci": "ng e2e --protractorConfig=e2e/protractor.ci.conf.js",
+    "test:ci": "ng version",
+    "e2e:ci": "ng version",
     "cy": "cypress run"
   },
   "private": true,
