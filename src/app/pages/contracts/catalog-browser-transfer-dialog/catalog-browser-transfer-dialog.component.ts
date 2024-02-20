@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {StorageType} from '../../../shared/models/storage-type';
 
@@ -8,7 +8,7 @@ import {StorageType} from '../../../shared/models/storage-type';
   templateUrl: './catalog-browser-transfer-dialog.component.html',
   styleUrls: ['./catalog-browser-transfer-dialog.component.scss']
 })
-export class CatalogBrowserTransferDialog implements OnInit {
+export class CatalogBrowserTransferDialog {
 
   name: string = '';
   storageTypeId = '';
@@ -17,10 +17,6 @@ export class CatalogBrowserTransferDialog implements OnInit {
               private dialogRef: MatDialogRef<CatalogBrowserTransferDialog>,
               @Inject(MAT_DIALOG_DATA) contractDefinition?: any) {
   }
-
-  ngOnInit(): void {
-  }
-
 
   onTransfer() {
     this.dialogRef.close({storageTypeId: this.storageTypeId});

@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { AssetInput } from "@think-it-labs/edc-connector-client";
 import { MatDialogRef } from "@angular/material/dialog";
 import { StorageType } from "../../../shared/models/storage-type";
@@ -9,7 +9,7 @@ import { StorageType } from "../../../shared/models/storage-type";
   templateUrl: './asset-editor-dialog.component.html',
   styleUrls: ['./asset-editor-dialog.component.scss']
 })
-export class AssetEditorDialog implements OnInit {
+export class AssetEditorDialog {
 
   id: string = '';
   version: string = '';
@@ -23,9 +23,6 @@ export class AssetEditorDialog implements OnInit {
 
   constructor(private dialogRef: MatDialogRef<AssetEditorDialog>,
       @Inject('STORAGE_TYPES') public storageTypes: StorageType[]) {
-  }
-
-  ngOnInit(): void {
   }
 
   onSave() {
