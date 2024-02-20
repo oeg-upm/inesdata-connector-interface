@@ -10,8 +10,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "test:ci": "ng version",
-    "e2e:ci": "ng version",
-    "cy": "cypress run"
+    "e2e:ci": "ng version"
   },
   "private": true,
   "dependencies": {
@@ -36,7 +35,6 @@
     "@angular/compiler-cli": "~17.0.8",
     "@types/jasmine": "~4.0.3",
     "@types/node": "^20.8.7",
-    "cypress": "^13.3.2",
     "jasmine-core": "~5.1.1",
     "karma": "~6.4.2",
     "karma-chrome-launcher": "~3.1.0",
