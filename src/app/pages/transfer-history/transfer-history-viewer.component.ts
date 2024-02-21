@@ -7,7 +7,7 @@ import {ConfirmationDialogComponent, ConfirmDialogModel} from "../../shared/comp
 import {MatDialog} from "@angular/material/dialog";
 
 @Component({
-  selector: 'edc-demo-transfer-history',
+  selector: 'app-transfer-history',
   templateUrl: './transfer-history-viewer.component.html',
   styleUrls: ['./transfer-history-viewer.component.scss']
 })

@@ -8,17 +8,30 @@ body {
   margin: 0;
 }
 
-.snackbar-info-style {
-  background-color: orange;
-  color: black;
-}
-
-.snackbar-error-style {
-  background-color: crimson;
-  color: black;
-}
-
 .code{
   font-family: monospace;
   font-size: larger;
+}
+
+.mat-mdc-dialog-container, .mat-mdc-dialog-container .mdc-dialog__container, .mat-mdc-dialog-container .mdc-dialog__surface {
+  max-height: unset !important;
+  min-height: unset !important;
+  min-width: unset !important;
+  max-width: unset !important;
+}
+
+/* Snackbar styles */
+.mat-mdc-snack-bar-container {
+  &.snackbar-error-style {
+    --mdc-snackbar-container-color: crimson;
+    --mdc-snackbar-supporting-text-color: #fff;
+  }
+}
+
+.mat-mdc-snack-bar-container {
+  &.snackbar-info-style {
+    --mdc-snackbar-container-color: rgb(61, 170, 61);
+    --mdc-snackbar-supporting-text-color: #fff;
+    --mat-mdc-snack-bar-button-color: #fff;
+  }
 }

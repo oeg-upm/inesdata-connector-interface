@@ -62,7 +62,8 @@ export class ContractViewerComponent implements OnInit {
     return '';
   }
 
-  onTransferClicked(contract: ContractAgreement) {
+  // TODO: Pendiente de abordar en #422768
+/*   onTransferClicked(contract: ContractAgreement) {
     const dialogRef = this.dialog.open(CatalogBrowserTransferDialog);
 
     dialogRef.afterClosed().pipe(first()).subscribe(result => {
@@ -80,13 +81,14 @@ export class ContractViewerComponent implements OnInit {
           this.notificationService.showError("Error initiating transfer");
         });
     });
-  }
+  } */
 
   isTransferInProgress(contractId: string): boolean {
     return !!this.runningTransfers.find(rt => rt.contractId === contractId);
   }
 
-  private createTransferRequest(contract: ContractAgreement, storageTypeId: string): Observable<TransferProcessInput> {
+  // TODO: Pendiente de abordar en #422768
+/*   private createTransferRequest(contract: ContractAgreement, storageTypeId: string): Observable<TransferProcessInput> {
     return this.getContractOfferForAssetId(contract.assetId!).pipe(map(contractOffer => {
 
       const iniateTransfer : TransferProcessInput = {
@@ -105,7 +107,7 @@ export class ContractViewerComponent implements OnInit {
       return iniateTransfer;
     }));
 
-  }
+  } */
 
   /**
    * This method is used to obtain that URL of the connector that is offering a particular asset from the catalog.

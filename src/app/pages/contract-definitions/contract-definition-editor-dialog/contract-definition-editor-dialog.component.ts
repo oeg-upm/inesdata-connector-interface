@@ -6,7 +6,7 @@ import { Asset, ContractDefinitionInput, PolicyDefinition } from "../../../share
 
 
 @Component({
-  selector: 'edc-demo-contract-definition-editor-dialog',
+  selector: 'app-contract-definition-editor-dialog',
   templateUrl: './contract-definition-editor-dialog.component.html',
   styleUrls: ['./contract-definition-editor-dialog.component.scss']
 })

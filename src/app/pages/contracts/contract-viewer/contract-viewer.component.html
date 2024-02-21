@@ -30,11 +30,12 @@
 
           <mat-divider inset></mat-divider>
           <mat-card-actions class="card-actions">
-            <button (click)="onTransferClicked(contract)" [disabled]="isTransferInProgress(contract.id!)" color="accent"
+            <!-- TODO: Pendiente de abordar en #422768 -->
+            <!-- <button (click)="onTransferClicked(contract)" [disabled]="isTransferInProgress(contract.id!)" color="accent"
                     mat-stroked-button>
               <mat-icon>downloading</mat-icon>
               Transfer
-            </button>
+            </button> -->
           </mat-card-actions>
           <mat-card-footer class="contract-card-footer">
             <mat-progress-bar *ngIf="isTransferInProgress(contract.id!)" color="accent" mode="indeterminate"></mat-progress-bar>

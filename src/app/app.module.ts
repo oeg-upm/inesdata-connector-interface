@@ -67,7 +67,7 @@ import { HttpClientModule } from '@angular/common/http';
     },
     {
       provide: 'STORAGE_TYPES',
-      useFactory: () => [{id: "AzureStorage", name: "AzureStorage"}, {id: "AmazonS3", name: "AmazonS3"}],
+      useFactory: () => [{id: "HttpData", name: "HttpData"}, {id: "AmazonS3", name: "AmazonS3"}],
     },
     {
       provide: HTTP_INTERCEPTORS, multi: true, useFactory: () => {

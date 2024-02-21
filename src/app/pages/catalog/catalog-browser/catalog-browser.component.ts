@@ -17,7 +17,7 @@ interface RunningTransferProcess {
 }
 
 @Component({
-  selector: 'edc-demo-catalog-browser',
+  selector: 'app-catalog-browser',
   templateUrl: './catalog-browser.component.html',
   styleUrls: ['./catalog-browser.component.scss']
 })
@@ -54,7 +54,8 @@ export class CatalogBrowserComponent implements OnInit {
     this.fetch$.next(null);
   }
 
-  onNegotiateClicked(contractOffer: ContractOffer) {
+  // TODO: Pendiente de abordar en #422765
+  /* onNegotiateClicked(contractOffer: ContractOffer) {
     const initiateRequest: ContractNegotiationRequest = {
       connectorAddress: contractOffer.originator,
       offer: {
@@ -108,7 +109,7 @@ export class CatalogBrowserComponent implements OnInit {
       console.error(error);
       this.notificationService.showError("Error starting negotiation");
     });
-  }
+  } */
 
   isBusy(contractOffer: ContractOffer) {
     return this.runningNegotiations.get(contractOffer.id) !== undefined || !!this.runningTransferProcesses.find(tp => tp.assetId === contractOffer.assetId);
