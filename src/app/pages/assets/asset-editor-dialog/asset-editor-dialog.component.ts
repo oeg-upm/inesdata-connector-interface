@@ -10,7 +10,7 @@ import { NotificationService } from 'src/app/shared/services/notification.servic
   templateUrl: './asset-editor-dialog.component.html',
   styleUrls: ['./asset-editor-dialog.component.scss']
 })
-export class AssetEditorDialog implements OnInit {
+export class AssetEditorDialog {
 
   id: string = '';
   version: string = '';
@@ -32,9 +32,6 @@ export class AssetEditorDialog implements OnInit {
   constructor(private dialogRef: MatDialogRef<AssetEditorDialog>,
               private notificationService: NotificationService,
       @Inject('STORAGE_TYPES') public storageTypes: StorageType[]) {
-  }
-
-  ngOnInit(): void {
   }
 
   onSave() {

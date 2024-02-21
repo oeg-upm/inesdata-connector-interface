@@ -5,6 +5,7 @@ import {Observable} from 'rxjs';
 @Injectable()
 export class EdcApiKeyInterceptor implements HttpInterceptor {
   constructor() {
+    this._apiKey = "";
   }
 
   get apiKey(): string {
