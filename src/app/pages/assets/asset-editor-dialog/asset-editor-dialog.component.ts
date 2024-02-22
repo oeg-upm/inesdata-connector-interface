@@ -20,28 +20,14 @@ export class AssetEditorDialog {
   contenttype: string = '';
   storageTypeId: string = '';
 
-  // AmazonS3 dataAddress attributes
-  region: string = '';
-  bucketName?: string;
-  keyPrefix?: string;
-  folderName?: string;
-  accessKeyId?: string;
-  secretAccessKey?: string;
-  endpointOverride?: string;
+  amazonS3DataAddress: AmazonS3DataAddress = {
+    type: 'AmazonS3',
+    region: ''
+  };
 
-  // HttpData dataAddress attributes
-  httpDataName?: string;
-  path?: string;
-  method?: string;
-  baseUrl?: string;
-  authKey?: string;
-  authCode?: string;
-  secretName?: string;
-  proxyBody?: string;
-  proxyPath?: string;
-  proxyQueryParams?: string;
-  proxyMethod?: string;
-  contentType?: string;
+  httpDataAddress: HttpDataAddress = {
+    type: 'HttpData'
+  };
 
 
   constructor(private dialogRef: MatDialogRef<AssetEditorDialog>,
@@ -58,34 +44,9 @@ export class AssetEditorDialog {
     let dataAddress: DataAddress;
 
     if (this.storageTypeId === DATA_ADDRESS_TYPES.amazonS3) {
-      const amazonS3DataAddress: AmazonS3DataAddress = {
-        type: 'AmazonS3',
-        region: this.region,
-        bucketName: this.bucketName,
-        keyPrefix: this.keyPrefix,
-        folderName: this.folderName,
-        accessKeyId: this.accessKeyId,
-        secretAccessKey: this.secretAccessKey,
-        endpointOverride: this.endpointOverride
-      };
-      dataAddress = amazonS3DataAddress;
+      dataAddress = this.amazonS3DataAddress;
     } else if (this.storageTypeId === DATA_ADDRESS_TYPES.httpData) {
-      const httpDataAddress: HttpDataAddress = {
-        type: 'HttpData',
-        name: this.httpDataName,
-        path: this.path,
-        method: this.method,
-        baseUrl: this.baseUrl,
-        authKey: this.authKey,
-        authCode: this.authCode,
-        secretName: this.secretName,
-        proxyBody: this.proxyBody,
-        proxyPath: this.proxyPath,
-        proxyQueryParams: this.proxyQueryParams,
-        proxyMethod: this.proxyMethod,
-        contentType: this.contentType,
-      };
-      dataAddress = httpDataAddress;
+      dataAddress = this.httpDataAddress;
     } else {
       this.notificationService.showError("Incorrect destination value");
       return;
@@ -113,7 +74,7 @@ export class AssetEditorDialog {
     if (!this.id || !this.storageTypeId){
       return false;
     } else {
-      if (this.storageTypeId === DATA_ADDRESS_TYPES.amazonS3 && !this.region) {
+      if (this.storageTypeId === DATA_ADDRESS_TYPES.amazonS3 && !this.amazonS3DataAddress.region) {
         return false;
       } else {
         return true;
