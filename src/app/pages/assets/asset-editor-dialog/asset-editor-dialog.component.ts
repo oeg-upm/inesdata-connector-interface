@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { AssetInput, HttpDataAddress, DataAddress } from '@think-it-labs/edc-connector-client';
 import { MatDialogRef } from "@angular/material/dialog";
 import { StorageType } from "../../../shared/models/storage-type";
-import { AmazonS3DataAddress } from "../../../shared/models/inesdata-data-address";
+import { AmazonS3DataAddress } from "../../../shared/models/amazon-s3-data-address";
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { DATA_ADDRESS_TYPES } from 'src/app/shared/utils/app.constants';
 

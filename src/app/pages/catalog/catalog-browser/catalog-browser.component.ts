@@ -54,63 +54,6 @@ export class CatalogBrowserComponent implements OnInit {
     this.fetch$.next(null);
   }
 
-  // TODO: Pendiente de abordar en #422765
-  /* onNegotiateClicked(contractOffer: ContractOffer) {
-    const initiateRequest: ContractNegotiationRequest = {
-      connectorAddress: contractOffer.originator,
-      offer: {
-        offerId: contractOffer.id,
-        assetId: contractOffer.assetId,
-        policy: contractOffer.policy,
-      },
-      connectorId: 'connector',
-      providerId: contractOffer.properties.provider
-    };
-
-    const finishedNegotiationStates = [
-      "VERIFIED",
-      "TERMINATED",
-      "ERROR"];
-
-    this.apiService.initiateNegotiation(initiateRequest).subscribe(negotiationId => {
-      this.finishedNegotiations.delete(initiateRequest.offer.offerId);
-      this.runningNegotiations.set(initiateRequest.offer.offerId, {
-        id: negotiationId,
-        offerId: initiateRequest.offer.offerId
-      });
-
-      if (!this.pollingHandleNegotiation) {
-        // there are no active negotiations
-        this.pollingHandleNegotiation = setInterval(() => {
-          // const finishedNegotiations: NegotiationResult[] = [];
-
-          for (const negotiation of this.runningNegotiations.values()) {
-            this.apiService.getNegotiationState(negotiation.id).subscribe(updatedNegotiation => {
-              if (finishedNegotiationStates.includes(updatedNegotiation.state!)) {
-                let offerId = negotiation.offerId;
-                this.runningNegotiations.delete(offerId);
-                if (updatedNegotiation["edc:state"] === "VERIFIED") {
-                  this.finishedNegotiations.set(offerId, updatedNegotiation);
-                  this.notificationService.showInfo("Contract Negotiation complete!", "Show me!", () => {
-                    this.router.navigate(['/contracts'])
-                  })
-                }
-              }
-
-              if (this.runningNegotiations.size === 0) {
-                clearInterval(this.pollingHandleNegotiation);
-                this.pollingHandleNegotiation = undefined;
-              }
-            });
-          }
-        }, 1000);
-      }
-    }, error => {
-      console.error(error);
-      this.notificationService.showError("Error starting negotiation");
-    });
-  } */
-
   isBusy(contractOffer: ContractOffer) {
     return this.runningNegotiations.get(contractOffer.id) !== undefined || !!this.runningTransferProcesses.find(tp => tp.assetId === contractOffer.assetId);
   }
