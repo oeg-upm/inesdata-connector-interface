@@ -12,7 +12,7 @@ import { ContractDefinitionInput, ContractDefinition } from "../../../shared/mod
 
 
 @Component({
-  selector: 'edc-demo-contract-definition-viewer',
+  selector: 'app-contract-definition-viewer',
   templateUrl: './contract-definition-viewer.component.html',
   styleUrls: ['./contract-definition-viewer.component.scss']
 })

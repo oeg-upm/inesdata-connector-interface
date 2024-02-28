@@ -9,3 +9,8 @@ export const COLLECTION_FORMATS = {
     'ssv': ' ',
     'pipes': '|'
 }
+
+export const DATA_ADDRESS_TYPES = {
+  httpData: 'HttpData',
+  amazonS3: 'AmazonS3'
+}

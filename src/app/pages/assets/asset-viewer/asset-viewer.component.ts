@@ -10,7 +10,7 @@ import {NotificationService} from "../../../shared/services/notification.service
 
 
 @Component({
-  selector: 'edc-demo-asset-viewer',
+  selector: 'app-asset-viewer',
   templateUrl: './asset-viewer.component.html',
   styleUrls: ['./asset-viewer.component.scss']
 })

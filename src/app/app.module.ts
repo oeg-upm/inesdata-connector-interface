@@ -14,7 +14,7 @@ import {MatListModule} from '@angular/material/list';
 import {MAT_FORM_FIELD_DEFAULT_OPTIONS} from '@angular/material/form-field';
 import {AppConfigService} from "./app-config.service";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
-import {CONNECTOR_CATALOG_API, CONNECTOR_MANAGEMENT_API} from "./shared/utils/app.constants";
+import {CONNECTOR_CATALOG_API, CONNECTOR_MANAGEMENT_API, DATA_ADDRESS_TYPES} from "./shared/utils/app.constants";
 import {HTTP_INTERCEPTORS} from "@angular/common/http";
 import {EdcApiKeyInterceptor} from "./shared/interceptors/apikey.interceptor";
 import {environment} from "../environments/environment";
@@ -67,7 +67,7 @@ import { HttpClientModule } from '@angular/common/http';
     },
     {
       provide: 'STORAGE_TYPES',
-      useFactory: () => [{id: "AzureStorage", name: "AzureStorage"}, {id: "AmazonS3", name: "AmazonS3"}],
+      useFactory: () => [{id: DATA_ADDRESS_TYPES.httpData, name: DATA_ADDRESS_TYPES.httpData}, {id: DATA_ADDRESS_TYPES.amazonS3, name: DATA_ADDRESS_TYPES.amazonS3}],
     },
     {
       provide: HTTP_INTERCEPTORS, multi: true, useFactory: () => {
