@@ -62,52 +62,9 @@ export class ContractViewerComponent implements OnInit {
     return '';
   }
 
-  // TODO: Pendiente de abordar en #422768
-/*   onTransferClicked(contract: ContractAgreement) {
-    const dialogRef = this.dialog.open(CatalogBrowserTransferDialog);
-
-    dialogRef.afterClosed().pipe(first()).subscribe(result => {
-      const storageTypeId: string = result.storageTypeId;
-      if (storageTypeId !== 'AzureStorage') {
-        this.notificationService.showError("Only storage type \"AzureStorage\" is implemented currently!")
-        return;
-      }
-      this.createTransferRequest(contract, storageTypeId)
-        .pipe(switchMap(trq => this.transferService.initiateTransfer(trq)))
-        .subscribe(transferId => {
-          this.startPolling(transferId, contract["@id"]!);
-        }, error => {
-          console.error(error);
-          this.notificationService.showError("Error initiating transfer");
-        });
-    });
-  } */
-
   isTransferInProgress(contractId: string): boolean {
     return !!this.runningTransfers.find(rt => rt.contractId === contractId);
   }
-
-  // TODO: Pendiente de abordar en #422768
-/*   private createTransferRequest(contract: ContractAgreement, storageTypeId: string): Observable<TransferProcessInput> {
-    return this.getContractOfferForAssetId(contract.assetId!).pipe(map(contractOffer => {
-
-      const iniateTransfer : TransferProcessInput = {
-        assetId: contractOffer.assetId,
-        connectorAddress: contractOffer.originator,
-
-        connectorId: "consumer", //doesn't matter, but cannot be null
-        contractId: contract.id,
-        dataDestination: {
-          "type": storageTypeId,
-          account: this.homeConnectorStorageAccount, // CAUTION: hardcoded value for AzureBlob
-          // container: omitted, so it will be auto-assigned by the EDC runtime
-        }
-      };
-
-      return iniateTransfer;
-    }));
-
-  } */
 
   /**
    * This method is used to obtain that URL of the connector that is offering a particular asset from the catalog.

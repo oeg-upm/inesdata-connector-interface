@@ -75,13 +75,6 @@
 
             <mat-divider inset></mat-divider>
             <mat-card-actions class="card-actions">
-              <!-- TODO: Pendiente de abordar en #422765 -->
-              <!-- <button (click)="onNegotiateClicked(contractOffer)"
-                      [disabled]="isBusy(contractOffer) || isNegotiated(contractOffer)"
-                      color="accent" mat-stroked-button>
-                <mat-icon>drive_file_rename_outline</mat-icon>
-                Negotiate
-              </button> -->
             </mat-card-actions>
             <mat-card-footer>
               <mat-progress-bar *ngIf="isBusy(contractOffer)" color="accent" mode="indeterminate"></mat-progress-bar>
