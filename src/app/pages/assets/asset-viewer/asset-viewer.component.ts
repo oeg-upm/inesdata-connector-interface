@@ -52,7 +52,7 @@ export class AssetViewerComponent implements OnInit {
 
   onDelete(asset: Asset) {
     const dialogData = ConfirmDialogModel.forDelete("asset", `"${asset.id}"`)
-    const ref = this.dialog.open(ConfirmationDialogComponent, {maxWidth: "20%", data: dialogData});
+    const ref = this.dialog.open(ConfirmationDialogComponent, {maxWidth: "30%", data: dialogData});
 
     ref.afterClosed().subscribe({
       next: res => {

@@ -6,35 +6,22 @@
     <input [(ngModel)]="policyDefinition.id" matInput required>
   </mat-form-field>
 
-  <!--  Assigner / Assignee-->
-  <div>
-    <mat-form-field class="form-field form-field-half" id="form-field-asignee">
-      <mat-label>Assignee</mat-label>
-      <input [(ngModel)]="policy.assignee" matInput>
-    </mat-form-field>
-
-    <mat-form-field class="form-field form-field-half" id="form-field-assigner">
-      <mat-label>Assigner</mat-label>
-      <input [(ngModel)]="policy.assigner" matInput>
-    </mat-form-field>
-  </div>
-
   <!--  Permissions -->
   <mat-form-field class="form-field-stretch" color="accent" id="form-field-permissions">
     <mat-label>Permissions (JSON)</mat-label>
-    <input [(ngModel)]="permissionsJson" matInput>
+    <textarea [(ngModel)]="permissionsJson" rows=4 matInput></textarea>
   </mat-form-field>
 
   <!--  Prohibitions -->
   <mat-form-field class="form-field-stretch" color="accent" id="form-field-prohibitions">
     <mat-label>Prohibitions (JSON)</mat-label>
-    <input [(ngModel)]="prohibitionsJson" matInput>
+    <textarea [(ngModel)]="prohibitionsJson" rows=4 matInput></textarea>
   </mat-form-field>
 
   <!--  Obligations -->
   <mat-form-field class="form-field-stretch" color="accent" id="form-field-obligations">
     <mat-label>Obligations (JSON)</mat-label>
-    <input [(ngModel)]="obligationsJson" matInput>
+    <textarea [(ngModel)]="obligationsJson" rows=4 matInput></textarea>
   </mat-form-field>
 
 </mat-dialog-content>
@@ -50,7 +37,7 @@
     Create
   </button>
 
-  <button color="accent" mat-dialog-close="true" mat-stroked-button>
+  <button color="accent" mat-dialog-close mat-stroked-button>
     <mat-icon>cancel</mat-icon>
     Cancel
   </button>
