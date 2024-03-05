@@ -2,9 +2,13 @@ mat-dialog-content {
     width: 800px;
 }
 
-.form-field {
+.form-field:nth-child(odd) {
     margin-right: 10px;
-    width: 350px;
+    width: calc(50% - 10px)
+}
+
+.form-field:nth-child(even) {
+  width: 50%
 }
 
 mat-card-actions {

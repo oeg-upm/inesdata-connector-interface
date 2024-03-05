@@ -7,6 +7,7 @@ import {NewPolicyDialogComponent} from "../new-policy-dialog/new-policy-dialog.c
 import {NotificationService} from "../../../shared/services/notification.service";
 import {ConfirmationDialogComponent, ConfirmDialogModel} from "../../../shared/components/confirmation-dialog/confirmation-dialog.component";
 import {PolicyDefinition, PolicyDefinitionInput, IdResponse} from "../../../shared/models/edc-connector-entities";
+import { PolicyRuleViewerComponent } from '../policy-rule-viewer/policy-rule-viewer.component';
 
 @Component({
   selector: 'app-policy-view',
@@ -77,7 +78,7 @@ export class PolicyViewComponent implements OnInit {
     let policyId = policy['@id']!;
     const dialogData = ConfirmDialogModel.forDelete("policy", policyId);
 
-    const ref = this.dialog.open(ConfirmationDialogComponent, {maxWidth: '20%', data: dialogData});
+    const ref = this.dialog.open(ConfirmationDialogComponent, {maxWidth: '30%', data: dialogData});
 
     ref.afterClosed().subscribe({
 
@@ -97,5 +98,14 @@ export class PolicyViewComponent implements OnInit {
   private showError(error: Error, errorMessage: string) {
     console.error(error);
     this.notificationService.showError(errorMessage);
+  }
+
+  viewRules(title: string, rules: any){
+    this.dialog.open(PolicyRuleViewerComponent, {
+      data: {
+        title: title,
+        rules: rules
+      },
+    });
   }
 }

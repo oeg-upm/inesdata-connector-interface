@@ -1,8 +1,12 @@
-<mat-expansion-panel fxFill [disabled]="rules?.length === 0" hideToggle>
-  <mat-expansion-panel-header>
-    <mat-panel-title>{{title}}</mat-panel-title>
-  </mat-expansion-panel-header>
+<h2 mat-dialog-title>{{data.title}}</h2>
+<mat-dialog-content>
   <div class="rule-json-panel">
-    <pre><p>{{rules | json}}</p></pre>
+    <pre><p>{{data.rules | json}}</p></pre>
   </div>
-</mat-expansion-panel>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button color="accent" mat-dialog-close mat-stroked-button>
+    <mat-icon>cancel</mat-icon>
+    close
+  </button>
+</mat-dialog-actions>

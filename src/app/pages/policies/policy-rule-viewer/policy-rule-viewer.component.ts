@@ -1,4 +1,10 @@
-import {Component, Input} from '@angular/core';
+import {Component, Inject} from '@angular/core';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+
+export interface DialogData {
+  title: string;
+  rules: any;
+}
 
 @Component({
   selector: 'policy-rules',
@@ -7,9 +13,5 @@ import {Component, Input} from '@angular/core';
 })
 export class PolicyRuleViewerComponent {
 
-  @Input() rules: any[] | undefined = [];
-  @Input() title: string =''
-
-  constructor() {
-  }
+  constructor(@Inject(MAT_DIALOG_DATA) public data: DialogData) {}
 }
