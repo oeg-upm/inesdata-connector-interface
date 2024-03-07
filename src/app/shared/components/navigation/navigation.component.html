@@ -5,10 +5,12 @@
       [opened]="(isHandset$ | async) === false">
     <mat-toolbar>INESData</mat-toolbar>
     <mat-nav-list>
-      <a mat-list-item *ngFor="let route of routes" [routerLink]="[route.path]">
+      <ng-container *ngFor="let route of routes">
+        <a mat-list-item *ngIf="route.data?.title" [routerLink]="[route.path]">
           <mat-icon matListItemIcon>{{route.data?.icon}}</mat-icon>
           {{route.data?.title ?? route.path}}
       </a>
+     </ng-container>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>

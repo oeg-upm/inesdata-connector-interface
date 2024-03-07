@@ -8,7 +8,7 @@ import {
 import { ContractDefinitionService } from "../../../shared/services/contractDefinition.service";
 import {ConfirmationDialogComponent, ConfirmDialogModel} from "../../../shared/components/confirmation-dialog/confirmation-dialog.component";
 import {NotificationService} from "../../../shared/services/notification.service";
-import { ContractDefinitionInput, ContractDefinition } from "../../../shared/models/edc-connector-entities"
+import { ContractDefinitionInput, ContractDefinition } from "../../../shared/models/contract-definition"
 
 
 @Component({
@@ -46,7 +46,7 @@ export class ContractDefinitionViewerComponent implements OnInit {
   onDelete(contractDefinition: ContractDefinition) {
     const dialogData = ConfirmDialogModel.forDelete("contract definition", contractDefinition.id);
 
-    const ref = this.dialog.open(ConfirmationDialogComponent, {maxWidth: '20%', data: dialogData});
+    const ref = this.dialog.open(ConfirmationDialogComponent, {maxWidth: '30%', data: dialogData});
 
     ref.afterClosed().subscribe(res => {
       if (res) {
@@ -71,5 +71,4 @@ export class ContractDefinitionViewerComponent implements OnInit {
       }
     });
   }
-
 }
