@@ -45,7 +45,7 @@ export class CatalogBrowserService {
           datasets = [datasets];
         }
 
-        for(let i = 0; i < datasets.length; i++) {
+        for (let i = 0; i < datasets.length; i++) {
           const dataSet: any = datasets[i];
           const properties: { [key: string]: string; } = {
             id: dataSet["id"],
@@ -59,7 +59,7 @@ export class CatalogBrowserService {
           const hasPolicy = dataSet["odrl:hasPolicy"];
           const policy: PolicyInput = {
             "@type": "set",
-            "@context" : "http://www.w3.org/ns/odrl.jsonld",
+            "@context": "http://www.w3.org/ns/odrl.jsonld",
             "uid": hasPolicy["@id"],
             "assignee": hasPolicy["assignee"],
             "assigner": hasPolicy["assigner"],
@@ -83,9 +83,9 @@ export class CatalogBrowserService {
         }
         return arr;
       })), reduce((acc, val) => {
-        for(let i = 0; i < val.length; i++){
-          for(let j = 0; j < val[i].length; j++){
-            acc.push(val[i][j]);
+        for (const subArray of val) {
+          for (const item of subArray) {
+            acc.push(item);
           }
         }
         return acc;
