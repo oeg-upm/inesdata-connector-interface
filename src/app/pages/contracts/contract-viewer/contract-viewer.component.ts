@@ -74,7 +74,7 @@ export class ContractViewerComponent implements OnInit {
    */
   private getContractOfferForAssetId(assetId: string): Observable<ContractOffer> {
     //return this.catalogService.getContractOffers()
-    return this.catalogService.getContractOffersFromConnector()
+    return this.catalogService.getContractOffers()
       .pipe(
         map(offers => offers.find(o => o.assetId === assetId)),
         map(o => {

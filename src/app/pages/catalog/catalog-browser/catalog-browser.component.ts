@@ -1,14 +1,14 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
-import {BehaviorSubject, Observable, of} from 'rxjs';
-import {map, switchMap} from 'rxjs/operators';
-import {CatalogBrowserService} from "../../../shared/services/catalog-browser.service";
-import {NotificationService} from "../../../shared/services/notification.service";
-import {Router} from "@angular/router";
-import {TransferProcessStates} from "../../../shared/models/transfer-process-states";
-import {ContractOffer} from "../../../shared/models/contract-offer";
-import {NegotiationResult} from "../../../shared/models/negotiation-result";
-import {ContractNegotiation, ContractNegotiationRequest} from "../../../shared/models/edc-connector-entities";
+import { Component, Inject, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
+import { CatalogBrowserService } from "../../../shared/services/catalog-browser.service";
+import { NotificationService } from "../../../shared/services/notification.service";
+import { Router } from "@angular/router";
+import { TransferProcessStates } from "../../../shared/models/transfer-process-states";
+import { ContractOffer } from "../../../shared/models/contract-offer";
+import { NegotiationResult } from "../../../shared/models/negotiation-result";
+import { ContractNegotiation, ContractNegotiationRequest } from "../../../shared/models/edc-connector-entities";
 
 interface RunningTransferProcess {
   processId: string;
@@ -32,17 +32,17 @@ export class CatalogBrowserComponent implements OnInit {
   private pollingHandleNegotiation?: any;
 
   constructor(private apiService: CatalogBrowserService,
-              public dialog: MatDialog,
-              private router: Router,
-              private notificationService: NotificationService,
-              @Inject('HOME_CONNECTOR_STORAGE_ACCOUNT') private homeConnectorStorageAccount: string) {
+    public dialog: MatDialog,
+    private router: Router,
+    private notificationService: NotificationService,
+    @Inject('HOME_CONNECTOR_STORAGE_ACCOUNT') private homeConnectorStorageAccount: string) {
   }
 
   ngOnInit(): void {
     this.filteredContractOffers$ = this.fetch$
       .pipe(
         switchMap(() => {
-          const contractOffers$ = this.apiService.getContractOffersFromConnector();
+          const contractOffers$ = this.apiService.getContractOffers();
           return !!this.searchText ?
             contractOffers$.pipe(map(contractOffers => contractOffers.filter(contractOffer => contractOffer.id.toLowerCase().includes(this.searchText))))
             :
