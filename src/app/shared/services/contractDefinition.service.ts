@@ -15,7 +15,8 @@ import { Injectable } from '@angular/core';
 import { HttpResponse, HttpEvent, HttpContext } from '@angular/common/http';
 import { Observable, from } from 'rxjs';
 import { EdcConnectorClient } from '@think-it-labs/edc-connector-client';
-import { ContractDefinitionInput, ContractDefinition, IdResponse, QuerySpec } from "../models/edc-connector-entities"
+import { IdResponse, QuerySpec } from "../models/edc-connector-entities"
+import { ContractDefinitionInput, ContractDefinition } from "../models/contract-definition"
 
 
 @Injectable({

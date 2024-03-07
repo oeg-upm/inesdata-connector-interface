@@ -2,7 +2,8 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {AssetService} from "../../../shared/services/asset.service";
 import {PolicyService} from "../../../shared/services/policy.service";
-import { Asset, ContractDefinitionInput, PolicyDefinition } from "../../../shared/models/edc-connector-entities";
+import { Asset, PolicyDefinition } from "../../../shared/models/edc-connector-entities";
+import { ContractDefinitionInput } from "../../../shared/models/contract-definition";
 
 
 @Component({
