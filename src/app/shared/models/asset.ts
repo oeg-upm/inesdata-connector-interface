@@ -1,6 +1,4 @@
 import { ContractOffer } from './contract-offer';
-import { DataService } from './data-service';
-
 
 export interface Asset {
   id?: string;
