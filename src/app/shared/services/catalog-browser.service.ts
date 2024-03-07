@@ -35,59 +35,61 @@ export class CatalogBrowserService {
               @Inject(CONNECTOR_CATALOG_API) private catalogApiUrl: string) {
   }
 
-  getContractOffersFromConnector(): Observable<ContractOffer[]> {
+  getContractOffers(): Observable<ContractOffer[]> {
     let url = this.catalogApiUrl || this.managementApiUrl;
-    return this.post<Catalog>(url + "/v2/catalog/request").pipe(
-      map(catalog => {
-        const arr: ContractOffer[] = [];
-        let datasets = catalog["dcat:dataset"];
-
+    return this.post<Catalog[]>(url)
+      .pipe(map(catalogs => catalogs.map(catalog => {
+        const arr = Array<ContractOffer>();
+        let datasets = catalog["http://www.w3.org/ns/dcat#dataset"];
         if (!Array.isArray(datasets)) {
           datasets = [datasets];
         }
 
-        datasets.forEach(dataSet => {
-          const properties: { [key: string]: string } = {
+        for(let i = 0; i < datasets.length; i++) {
+          const dataSet: any = datasets[i];
+          const properties: { [key: string]: string; } = {
             id: dataSet["id"],
             name: dataSet["name"],
             version: dataSet["version"],
             type: dataSet["type"],
             contentType: dataSet["contenttype"]
+          }
+          const assetId = dataSet["@id"];
+
+          const hasPolicy = dataSet["odrl:hasPolicy"];
+          const policy: PolicyInput = {
+            "@type": "set",
+            "@context" : "http://www.w3.org/ns/odrl.jsonld",
+            "uid": hasPolicy["@id"],
+            "assignee": hasPolicy["assignee"],
+            "assigner": hasPolicy["assigner"],
+            "obligation": hasPolicy["odrl:obligations"],
+            "permission": hasPolicy["odrl:permissions"],
+            "prohibition": hasPolicy["odrl:prohibitions"],
+            "target": hasPolicy["odrl:target"]
           };
 
-          const assetId = dataSet["@id"];
-          const hasPolicy = dataSet["odrl:hasPolicy"];
+          const newContractOffer: ContractOffer = {
+            assetId: assetId,
+            properties: properties,
+            "dcat:service": catalog["dcat:service"],
+            "dcat:dataset": datasets,
+            id: hasPolicy["@id"],
+            originator: catalog["originator"],
+            policy: policy
+          };
 
-
-
-          hasPolicy.forEach((element: PolicyElement) => {
-            const policy: PolicyInput = {
-              "@type": "set",
-              "@context": "http://www.w3.org/ns/odrl.jsonld",
-              "uid": element["@id"],
-              "assignee": element["assignee"],
-              "assigner": element["assigner"],
-              "obligation": element["odrl:obligations"],
-              "permission": element["odrl:permissions"],
-              "prohibition": element["odrl:prohibitions"],
-              "target": element["odrl:target"]
-            };
-
-            const newContractOffer: ContractOffer = {
-              assetId: assetId,
-              properties: properties,
-              id: hasPolicy["@id"],
-              originator: catalog["edc:originator"] ?? catalog["dcat:service"]["endpointUrl"],
-              policy: policy
-            };
-
-            arr.push(newContractOffer);
-          });
-        });
-
+          arr.push(newContractOffer)
+        }
         return arr;
-      })
-    );
+      })), reduce((acc, val) => {
+        for(let i = 0; i < val.length; i++){
+          for(let j = 0; j < val[i].length; j++){
+            acc.push(val[i][j]);
+          }
+        }
+        return acc;
+      }, new Array<ContractOffer>()));
   }
 
   initiateTransfer(transferRequest: TransferProcessInput): Observable<string> {
@@ -110,16 +112,8 @@ export class CatalogBrowserService {
                   params?: HttpParams | { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean>; })
     : Observable<T> {
     const url = `${urlPath}`;
-    const fetchCatalogData = {
-      "@context": {
-        "@vocab": "https://w3id.org/edc/v0.0.1/ns/"
-      },
-      "counterPartyAddress": "http://localhost:19194/protocol",
-      "protocol": "dataspace-protocol-http"
-    };
     let headers = new HttpHeaders({"Content-type": "application/json"});
-    //return this.catchError(this.httpClient.post<T>(url, "{\"edc:operandLeft\": \"\",\"edc:operandRight\": \"\",\"edc:operator\": \"\",\"edc:Criterion\":\"\"}", {headers, params}), url, 'POST');
-    return this.catchError(this.httpClient.post<T>(url, fetchCatalogData, {headers, params}), url, 'POST');
+    return this.catchError(this.httpClient.post<T>(url, "{\"edc:operandLeft\": \"\",\"edc:operandRight\": \"\",\"edc:operator\": \"\",\"edc:Criterion\":\"\"}", {headers, params}), url, 'POST');
   }
 
   private catchError<T>(observable: Observable<T>, url: string, method: string): Observable<T> {

@@ -17,8 +17,8 @@
     </div>
 
     <div fxLayout="row wrap" fxLayoutAlign="start start">
-        <mat-card *ngFor="let contractOffer of filteredContractOffers" class="asset-card">
 
+        <mat-card *ngFor="let contractOffer of filteredContractOffers" class="asset-card">
             <mat-card-header>
                 <mat-icon mat-card-avatar>sim_card</mat-icon>
                 <mat-card-title>{{contractOffer.properties.name}}</mat-card-title>
@@ -73,8 +73,14 @@
 
             </mat-card-content>
 
-            <mat-divider inset></mat-divider>
+            <mat-divider></mat-divider>
             <mat-card-actions class="card-actions">
+              <button
+                      [disabled]="isBusy(contractOffer) || isNegotiated(contractOffer)"
+                      color="accent" mat-stroked-button>
+                <mat-icon>drive_file_rename_outline</mat-icon>
+                Negotiate
+              </button>
             </mat-card-actions>
             <mat-card-footer>
               <mat-progress-bar *ngIf="isBusy(contractOffer)" color="accent" mode="indeterminate"></mat-progress-bar>
