@@ -45,18 +45,17 @@ export class CatalogBrowserService {
           datasets = [datasets];
         }
 
-        for (let i = 0; i < datasets.length; i++) {
-          const dataSet: any = datasets[i];
+        for (const dataset of datasets) {
           const properties: { [key: string]: string; } = {
-            id: dataSet["id"],
-            name: dataSet["name"],
-            version: dataSet["version"],
-            type: dataSet["type"],
-            contentType: dataSet["contenttype"]
+            id: dataset["id"],
+            name: dataset["name"],
+            version: dataset["version"],
+            type: dataset["type"],
+            contentType: dataset["contenttype"]
           }
-          const assetId = dataSet["@id"];
+          const assetId = dataset["@id"];
 
-          const hasPolicy = dataSet["odrl:hasPolicy"];
+          const hasPolicy = dataset["odrl:hasPolicy"];
           const policy: PolicyInput = {
             "@type": "set",
             "@context": "http://www.w3.org/ns/odrl.jsonld",
