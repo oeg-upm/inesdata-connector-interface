@@ -17,8 +17,8 @@
 
   </div>
 
-  <div fxLayout="row wrap" fxLayoutGap="15px">
-    <mat-card fxFlex="0 1 calc(33.3% - 15px)" *ngFor="let policyDef of policyDefinitions" class="policy-card">
+  <div fxLayout="row wrap" fxLayoutGap="15px" fxLayoutAlign="start start">
+    <mat-card *ngFor="let policyDef of policyDefinitions">
       <mat-card-header>
         <mat-icon mat-card-avatar>policy</mat-icon>
         <mat-card-title><span class="code">{{policyDef.id}}</span></mat-card-title>

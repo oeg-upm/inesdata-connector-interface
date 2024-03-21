@@ -1,5 +1,5 @@
 {
-  "name": "connector-management-interface",
+  "name": "inesdata-connector-interface",
   "version": "0.2.0-SNAPSHOT",
   "project": "com.gmv.inesdata",
   "scripts": {

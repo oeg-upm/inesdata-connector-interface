@@ -3,11 +3,6 @@ import {RouterModule, Routes} from '@angular/router';
 
 export const routes: Routes = [
   {
-    path: 'introduction',
-    data: {title: 'Getting Started', icon: 'info_outline'},
-    loadChildren: () => import('./pages/introduction/introduction.module').then(m => m.IntroductionModule)
-  },
-  {
     path: 'catalog',
     data: {title: 'Catalog Browser', icon: 'sim_card'},
     loadChildren: () => import('./pages/catalog/catalog.module').then(m => m.CatalogModule)
@@ -38,7 +33,7 @@ export const routes: Routes = [
     loadChildren: () => import('./pages/assets/assets.module').then(m => m.AssetsModule)
   },
   {
-    path: '', redirectTo: 'introduction', pathMatch: 'full'
+    path: '', redirectTo: 'assets', pathMatch: 'full'
   }
 ];
 

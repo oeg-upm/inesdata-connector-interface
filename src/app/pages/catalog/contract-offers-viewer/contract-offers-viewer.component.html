@@ -1,0 +1,51 @@
+<h2 mat-dialog-title>Contract Offers - {{data.assetId}} </h2>
+
+  <mat-dialog-content>
+    <div fxLayout="column" fxLayoutAlign="stretch" fxLayoutGap="15px">
+      <mat-card class="dialog-card">
+        <mat-card-title>
+          Properties
+        </mat-card-title>
+        <div fxLayout="row" fxLayoutGap="15px">
+          <mat-list-item class="property" fxFlex="33" *ngIf="data.properties.version">
+            <mat-icon class="property-icon" matListItemIcon>numbers</mat-icon>
+            <div class="property-title" matListItemTitle>Version</div>
+            <div class="property-value" matListItemLine>{{data.properties.version}}</div>
+          </mat-list-item>
+            <mat-list-item class="property" fxFlex="33" *ngIf="data.properties.contentType">
+              <mat-icon class="property-icon" matListItemIcon>content_paste</mat-icon>
+              <div class="property-title" matListItemTitle>Content-Type</div>
+              <div class="property-value" matListItemLine>{{data.properties.contentType}}</div>
+            </mat-list-item>
+        </div>
+      </mat-card>
+
+      <mat-card class="dialog-card" *ngFor="let contractOffer of data.contractOffers">
+        <mat-card-title>
+          Contract offer
+        </mat-card-title>
+        <mat-card-content>
+          <pre class="json-policy break-all">{{ getPolicy(contractOffer.policy) | json }}</pre>
+        </mat-card-content>
+        <mat-card-actions align="end">
+          <button mat-stroked-button color="accent"
+          [disabled]="isBusy(contractOffer) || isNegotiated(contractOffer)"
+          (click)="onNegotiateClicked(contractOffer)">
+          <mat-icon>drive_file_rename_outline</mat-icon>
+          Negotiate Contract
+        </button>
+        </mat-card-actions>
+        <mat-card-footer>
+          <mat-progress-bar diameter="10" mode="indeterminate" color="accent" *ngIf="isBusy(contractOffer)">
+          </mat-progress-bar>
+        </mat-card-footer>
+      </mat-card>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions>
+    <button color="accent" mat-dialog-close mat-stroked-button>
+      <mat-icon>cancel</mat-icon>
+      close
+    </button>
+  </mat-dialog-actions>

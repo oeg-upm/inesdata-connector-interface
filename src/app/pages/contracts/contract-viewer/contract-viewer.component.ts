@@ -14,6 +14,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {CatalogBrowserService} from "../../../shared/services/catalog-browser.service";
 import {Router} from "@angular/router";
 import {TransferProcessStates} from "../../../shared/models/transfer-process-states";
+import { DataOffer } from 'src/app/shared/models/data-offer';
 
 interface RunningTransferProcess {
   processId: string;
@@ -72,9 +73,9 @@ export class ContractViewerComponent implements OnInit {
    *
    * @param assetId Asset ID of the asset that is associated with the contract.
    */
-  private getContractOfferForAssetId(assetId: string): Observable<ContractOffer> {
+  private getContractOfferForAssetId(assetId: string): Observable<DataOffer> {
     //return this.catalogService.getContractOffers()
-    return this.catalogService.getContractOffers()
+    return this.catalogService.getDataOffers()
       .pipe(
         map(offers => offers.find(o => o.assetId === assetId)),
         map(o => {
