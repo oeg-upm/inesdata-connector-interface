@@ -1,5 +1,5 @@
 export interface DataService {
-  id: string;
+  "@id": string;
   terms?: string,
   endpointUrl: string;
 }

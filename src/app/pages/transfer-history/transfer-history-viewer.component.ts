@@ -13,7 +13,7 @@ import {MatDialog} from "@angular/material/dialog";
 })
 export class TransferHistoryViewerComponent implements OnInit {
 
-  columns: string[] = ['id', 'state', 'lastUpdated', 'connectorId', 'assetId', 'contractId', 'action'];
+  columns: string[] = ['id', 'state', 'lastUpdated', 'assetId', 'contractId', 'action'];
   transferProcesses$: Observable<TransferProcess[]> = of([]);
   storageExplorerLinkTemplate: string | undefined;
 
@@ -47,7 +47,7 @@ export class TransferHistoryViewerComponent implements OnInit {
   }
 
   showDeprovisionButton(transferProcess: TransferProcess) {
-    return ['COMPLETED', 'PROVISIONED', 'REQUESTED', 'REQUESTED_ACK', 'IN_PROGRESS', 'STREAMING'].includes(transferProcess.state!);
+    return ['COMPLETED', 'PROVISIONED', 'REQUESTED', 'REQUESTED_ACK', 'IN_PROGRESS', 'STREAMING'].includes(transferProcess.state);
   }
 
   loadTransferProcesses() {

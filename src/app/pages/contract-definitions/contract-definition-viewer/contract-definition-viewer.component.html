@@ -16,9 +16,9 @@
 
   </div>
 
-  <div fxLayout="row wrap" fxLayoutAlign="start start">
+  <div fxLayout="row wrap" fxLayoutGap="15px" fxLayoutAlign="start start">
 
-    <mat-card *ngFor="let contractDefinition of contractDefinitions" class="contract-definition-card">
+    <mat-card *ngFor="let contractDefinition of contractDefinitions">
       <mat-card-header>
         <mat-icon mat-card-avatar>policy</mat-icon>
         <mat-card-title>{{contractDefinition.id}}</mat-card-title>
@@ -39,7 +39,10 @@
             <div class="policy-assets" matListItemTitle>Assets</div>
             <mat-icon matListItemIcon>policy</mat-icon>
 
-            <div matListItemLine *ngFor="let criterion of contractDefinition.assetsSelector">{{criterion.operandRight}}</div>
+            <div matListItemLine *ngIf="contractDefinition.assetsSelector.length == 0; else elseBlock">All assets</div>
+            <ng-template #elseBlock>
+              <div matListItemLine *ngFor="let criterion of contractDefinition.assetsSelector">{{criterion.operandRight}}</div>
+            </ng-template>
           </mat-list-item>
         </mat-list>
 

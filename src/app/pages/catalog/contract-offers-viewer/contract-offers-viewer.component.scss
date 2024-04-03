@@ -1,0 +1,37 @@
+.mat-mdc-card {
+  --mdc-elevated-card-container-color: #474747;
+}
+
+mat-card-title{
+  padding: 20px;
+  color: white;
+}
+
+.property-title{
+  font-weight: bold !important;
+}
+
+mat-list-item:hover .property-title,
+.property-title{
+  color: white;
+}
+
+.property-value{
+  font-size: 14px;
+}
+
+.property-icon {
+  margin: 15px;
+}
+
+.property {
+  padding: 0px 5px;
+}
+
+.json-policy{
+  white-space: break-spaces;
+}
+
+.dialog-card {
+  width: 750px;
+}

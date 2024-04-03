@@ -25,7 +25,7 @@ module.exports = function (config) {
       suppressAll: true // removes the duplicated traces
     },
     coverageReporter: {
-      dir: require('path').join(__dirname, './coverage/connector-management-interface'),
+      dir: require('path').join(__dirname, './coverage/inesdata-connector-interface'),
       subdir: '.',
       reporters: [
         { type: 'html' },

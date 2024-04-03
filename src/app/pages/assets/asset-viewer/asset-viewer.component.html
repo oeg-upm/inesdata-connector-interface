@@ -15,8 +15,8 @@
     </button>
   </div>
 
-  <div fxLayout="row wrap" fxLayoutAlign="start start">
-    <mat-card *ngFor="let asset of assets" class="asset-card">
+  <div fxLayout="row wrap" fxLayoutGap="15px" fxLayoutAlign="start start">
+    <mat-card *ngFor="let asset of assets">
       <mat-card-header>
         <mat-icon mat-card-avatar>upload</mat-icon>
         <mat-card-title>{{asset.id}}</mat-card-title>

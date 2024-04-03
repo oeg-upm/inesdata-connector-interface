@@ -9,8 +9,8 @@ export class ReplacePipe implements PipeTransform {
     }
 
     let result = value;
-    for(let [key,value] of Object.entries(replaceMap)){
-      result = result.replace(new RegExp(`\{\{${key}\}\}`, 'g'), value);
+    for(let [key,val] of Object.entries(replaceMap)){
+      result = result.replace(new RegExp(`\{\{${key}\}\}`, 'g'), val);
     }
 
     return result;

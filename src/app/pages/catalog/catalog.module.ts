@@ -1,23 +1,28 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CatalogRoutingModule } from './catalog-routing.module'
-import {MatFormFieldModule} from '@angular/material/form-field';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {MatIconModule} from '@angular/material/icon';
-import {MatPaginatorModule} from '@angular/material/paginator';
-import {MatCardModule} from '@angular/material/card';
-import {MatListModule} from '@angular/material/list';
-import {MatExpansionModule} from '@angular/material/expansion';
+import { MatIconModule } from '@angular/material/icon';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatCardModule } from '@angular/material/card';
+import { MatListModule } from '@angular/material/list';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { MatProgressBarModule } from "@angular/material/progress-bar";
-import {FlexLayoutModule} from '@angular/flex-layout';
-import {MatInputModule} from '@angular/material/input';
-import {MatButtonModule} from '@angular/material/button';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 
 import { CatalogBrowserComponent } from './catalog-browser/catalog-browser.component';
+import { ContractOffersViewerComponent } from './contract-offers-viewer/contract-offers-viewer.component';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
-  declarations: [CatalogBrowserComponent],
+  declarations: [
+    CatalogBrowserComponent,
+    ContractOffersViewerComponent
+  ],
   imports: [
     CommonModule,
     CatalogRoutingModule,
@@ -33,7 +38,8 @@ import { CatalogBrowserComponent } from './catalog-browser/catalog-browser.compo
     FlexLayoutModule,
     MatInputModule,
     MatButtonModule,
-    MatDialogModule
+    MatDialogModule,
+    MatSelectModule
   ]
 })
 export class CatalogModule { }

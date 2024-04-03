@@ -1,14 +1,14 @@
-import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams} from '@angular/common/http';
-import {Inject, Injectable} from '@angular/core';
-import {EMPTY, Observable} from 'rxjs';
-import {catchError, map, reduce} from 'rxjs/operators';
-import {Catalog} from '../models/catalog';
-import {ContractOffer} from '../models/contract-offer';
-import {PolicyElement} from '../models/policy';
-import {ContractNegotiationService} from './contractNegotiation.service';
-import {TransferProcessService} from './transferProcess.service';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Inject, Injectable } from '@angular/core';
+import { EMPTY, Observable } from 'rxjs';
+import { catchError, map, reduce } from 'rxjs/operators';
+import { Catalog } from '../models/catalog';
+import { ContractOffer } from '../models/contract-offer';
+import { DataOffer } from '../models/data-offer';
+import { ContractNegotiationService } from './contractNegotiation.service';
+import { TransferProcessService } from './transferProcess.service';
 
-import {CONNECTOR_CATALOG_API, CONNECTOR_MANAGEMENT_API} from "../utils/app.constants";
+import { CONNECTOR_CATALOG_API, CONNECTOR_MANAGEMENT_API } from "../utils/app.constants";
 
 import {
   ContractNegotiationRequest,
@@ -29,17 +29,17 @@ import {
 export class CatalogBrowserService {
 
   constructor(private httpClient: HttpClient,
-              private transferProcessService: TransferProcessService,
-              private negotiationService: ContractNegotiationService,
-              @Inject(CONNECTOR_MANAGEMENT_API) private managementApiUrl: string,
-              @Inject(CONNECTOR_CATALOG_API) private catalogApiUrl: string) {
+    private transferProcessService: TransferProcessService,
+    private negotiationService: ContractNegotiationService,
+    @Inject(CONNECTOR_MANAGEMENT_API) private managementApiUrl: string,
+    @Inject(CONNECTOR_CATALOG_API) private catalogApiUrl: string) {
   }
 
-  getContractOffers(): Observable<ContractOffer[]> {
+  getDataOffers(): Observable<DataOffer[]> {
     let url = this.catalogApiUrl || this.managementApiUrl;
     return this.post<Catalog[]>(url)
       .pipe(map(catalogs => catalogs.map(catalog => {
-        const arr = Array<ContractOffer>();
+        const arr = Array<DataOffer>();
         let datasets = catalog["http://www.w3.org/ns/dcat#dataset"];
         if (!Array.isArray(datasets)) {
           datasets = [datasets];
@@ -56,29 +56,30 @@ export class CatalogBrowserService {
           const assetId = dataset["@id"];
 
           const hasPolicy = dataset["odrl:hasPolicy"];
-          const policy: PolicyInput = {
-            "@type": "set",
-            "@context": "http://www.w3.org/ns/odrl.jsonld",
-            "uid": hasPolicy["@id"],
-            "assignee": hasPolicy["assignee"],
-            "assigner": hasPolicy["assigner"],
-            "obligation": hasPolicy["odrl:obligations"],
-            "permission": hasPolicy["odrl:permissions"],
-            "prohibition": hasPolicy["odrl:prohibitions"],
-            "target": hasPolicy["odrl:target"]
-          };
+          const contractOffers = Array<ContractOffer>();
 
-          const newContractOffer: ContractOffer = {
+          if (Array.isArray(hasPolicy)) {
+            for (const offer of hasPolicy) {
+              const policy = this.createPolicy(offer);
+              const newContractOffer = this.createContractOffer(assetId, offer["@id"], policy);
+              contractOffers.push(newContractOffer);
+            }
+          } else {
+            const policy = this.createPolicy(hasPolicy);
+              const newContractOffer = this.createContractOffer(assetId, hasPolicy["@id"], policy);
+              contractOffers.push(newContractOffer);
+          }
+
+          const dataOffer = {
             assetId: assetId,
             properties: properties,
-            "dcat:service": catalog["dcat:service"],
             "dcat:dataset": datasets,
-            id: hasPolicy["@id"],
+            service: catalog["http://www.w3.org/ns/dcat#service"],
+            contractOffers: contractOffers,
             originator: catalog["originator"],
-            policy: policy
-          };
+          }
 
-          arr.push(newContractOffer)
+          arr.push(dataOffer);
         }
         return arr;
       })), reduce((acc, val) => {
@@ -88,11 +89,33 @@ export class CatalogBrowserService {
           }
         }
         return acc;
-      }, new Array<ContractOffer>()));
+      }, new Array<DataOffer>()));
+  }
+
+  private createContractOffer(assetId: string, id: string, policy: PolicyInput): ContractOffer{
+    return {
+      assetId: assetId,
+      id: id,
+      policy: policy
+    };
+  }
+
+  private createPolicy(offer: any): PolicyInput{
+    return {
+      "@type": "set",
+      "@context": "http://www.w3.org/ns/odrl.jsonld",
+      uid: offer["@id"],
+      assignee: offer["assignee"],
+      assigner: offer["assigner"],
+      obligation: offer["odrl:obligation"],
+      permission: offer["odrl:permission"],
+      prohibition: offer["odrl:prohibition"],
+      target: offer["odrl:target"],
+    };
   }
 
   initiateTransfer(transferRequest: TransferProcessInput): Observable<string> {
-    return this.transferProcessService.initiateTransfer(transferRequest).pipe(map(t => t.id!))
+    return this.transferProcessService.initiateTransfer(transferRequest).pipe(map(t => t.id))
   }
 
   getTransferProcessesById(id: string): Observable<TransferProcess> {
@@ -100,7 +123,7 @@ export class CatalogBrowserService {
   }
 
   initiateNegotiation(initiate: ContractNegotiationRequest): Observable<string> {
-    return this.negotiationService.initiateContractNegotiation(initiate).pipe(map(t => t.id!))
+    return this.negotiationService.initiateContractNegotiation(initiate).pipe(map(t => t.id))
   }
 
   getNegotiationState(id: string): Observable<ContractNegotiation> {
@@ -108,11 +131,11 @@ export class CatalogBrowserService {
   }
 
   private post<T>(urlPath: string,
-                  params?: HttpParams | { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean>; })
+    params?: HttpParams | { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean>; })
     : Observable<T> {
     const url = `${urlPath}`;
-    let headers = new HttpHeaders({"Content-type": "application/json"});
-    return this.catchError(this.httpClient.post<T>(url, "{\"edc:operandLeft\": \"\",\"edc:operandRight\": \"\",\"edc:operator\": \"\",\"edc:Criterion\":\"\"}", {headers, params}), url, 'POST');
+    let headers = new HttpHeaders({ "Content-type": "application/json" });
+    return this.catchError(this.httpClient.post<T>(url, "{\"edc:operandLeft\": \"\",\"edc:operandRight\": \"\",\"edc:operator\": \"\",\"edc:Criterion\":\"\"}", { headers, params }), url, 'POST');
   }
 
   private catchError<T>(observable: Observable<T>, url: string, method: string): Observable<T> {

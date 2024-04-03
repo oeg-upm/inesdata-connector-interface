@@ -1,9 +1,10 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {AssetService} from "../../../shared/services/asset.service";
-import {PolicyService} from "../../../shared/services/policy.service";
+import { Component, Inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { AssetService } from "../../../shared/services/asset.service";
+import { PolicyService } from "../../../shared/services/policy.service";
 import { Asset, PolicyDefinition } from "../../../shared/models/edc-connector-entities";
 import { ContractDefinitionInput } from "../../../shared/models/contract-definition";
+import { NotificationService } from 'src/app/shared/services/notification.service';
 
 
 @Component({
@@ -28,9 +29,10 @@ export class ContractDefinitionEditorDialog implements OnInit {
   };
 
   constructor(private policyService: PolicyService,
-              private assetService: AssetService,
-              private dialogRef: MatDialogRef<ContractDefinitionEditorDialog>,
-              @Inject(MAT_DIALOG_DATA) contractDefinition?: ContractDefinitionInput) {
+    private assetService: AssetService,
+    private dialogRef: MatDialogRef<ContractDefinitionEditorDialog>,
+    private notificationService: NotificationService,
+    @Inject(MAT_DIALOG_DATA) contractDefinition?: ContractDefinitionInput) {
     if (contractDefinition) {
       this.contractDefinition = contractDefinition;
       this.editMode = true;
@@ -54,19 +56,40 @@ export class ContractDefinitionEditorDialog implements OnInit {
   }
 
   onSave() {
+    if (!this.checkRequiredFields()) {
+      this.notificationService.showError("Review required fields");
+      return;
+    }
+
     this.contractDefinition.accessPolicyId = this.accessPolicy!['@id']!;
     this.contractDefinition.contractPolicyId = this.contractPolicy!['@id']!;
     this.contractDefinition.assetsSelector = [];
 
-    const ids = this.assets.map(asset => asset.id);
-    this.contractDefinition.assetsSelector = [...this.contractDefinition.assetsSelector, {
-      operandLeft: 'https://w3id.org/edc/v0.0.1/ns/id',
-      operator: 'in',
-      operandRight: ids,
-    }];
+    if (this.assets.length > 0) {
+      const ids = this.assets.map(asset => asset.id);
+      this.contractDefinition.assetsSelector = [...this.contractDefinition.assetsSelector, {
+        operandLeft: 'https://w3id.org/edc/v0.0.1/ns/id',
+        operator: 'in',
+        operandRight: ids,
+      }];
+    }
+
 
     this.dialogRef.close({
       "contractDefinition": this.contractDefinition
     });
+  }
+
+  /**
+   * Checks the required fields
+   *
+   * @returns true if required fields have been filled
+   */
+   private checkRequiredFields(): boolean {
+    if (!this.contractDefinition['@id'] || !this.accessPolicy || !this.contractPolicy){
+      return false;
+    } else {
+      return true;
+    }
   }
 }

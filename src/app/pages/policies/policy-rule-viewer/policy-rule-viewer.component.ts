@@ -8,8 +8,7 @@ export interface DialogData {
 
 @Component({
   selector: 'policy-rules',
-  templateUrl: './policy-rule-viewer.component.html',
-  styleUrls: ['./policy-rule-viewer.component.scss']
+  templateUrl: './policy-rule-viewer.component.html'
 })
 export class PolicyRuleViewerComponent {
 

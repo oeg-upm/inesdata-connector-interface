@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "connector-management-interface": {
+    "inesdata-connector-interface": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -20,8 +20,8 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "baseHref": "/connector-management-interface/",
-            "outputPath": "dist/connector-management-interface",
+            "baseHref": "/inesdata-connector-interface/",
+            "outputPath": "dist/inesdata-connector-interface",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -78,10 +78,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "connector-management-interface:build:production"
+              "buildTarget": "inesdata-connector-interface:build:production"
             },
             "development": {
-              "buildTarget": "connector-management-interface:build:development"
+              "buildTarget": "inesdata-connector-interface:build:development"
             }
           },
           "options": {
@@ -92,7 +92,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "connector-management-interface:build"
+            "buildTarget": "inesdata-connector-interface:build"
           }
         },
         "test": {

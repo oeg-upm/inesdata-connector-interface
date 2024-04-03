@@ -15,12 +15,12 @@ RUN npm install &&\
 FROM nginx:alpine
 
 ENV NGINX_HOME=/usr/share/nginx
-RUN mkdir ${NGINX_HOME}/html/connector-management-interface
-RUN chmod 755 ${NGINX_HOME}/html/connector-management-interface
-ENV DOCUMENT_ROOT=${NGINX_HOME}/html/connector-management-interface
+RUN mkdir ${NGINX_HOME}/html/inesdata-connector-interface
+RUN chmod 755 ${NGINX_HOME}/html/inesdata-connector-interface
+ENV DOCUMENT_ROOT=${NGINX_HOME}/html/inesdata-connector-interface
 
 # copy static contents of project to nginx html
-COPY --from=builder /app/dist/connector-management-interface ${DOCUMENT_ROOT}
+COPY --from=builder /app/dist/inesdata-connector-interface ${DOCUMENT_ROOT}
 
 COPY ./docker/assets/scripts/docker-entrypoint.sh ${NGINX_HOME}
 
