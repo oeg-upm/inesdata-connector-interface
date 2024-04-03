@@ -8,8 +8,6 @@
         <mat-icon>close</mat-icon>
       </button>
     </mat-form-field>
-
-    <!-- <button mat-button (click)="onSearch()">Search</button> -->
   </div>
 
   <div fxLayout="row wrap" fxLayoutGap="15px" fxLayoutAlign="start start">
@@ -36,16 +34,12 @@
 
       <mat-divider></mat-divider>
       <mat-card-actions class="card-actions">
-        <!-- <button
-                      [disabled]="isBusy(dataOffer) || isNegotiated(dataOffer)"
-                      color="accent" mat-stroked-button> -->
         <button color="accent" mat-stroked-button
           (click)="viewContractOffers(dataOffer.assetId, dataOffer.contractOffers, dataOffer.originator, dataOffer.properties)">
           View details and contract offers
         </button>
       </mat-card-actions>
       <mat-card-footer>
-        <!-- <mat-progress-bar *ngIf="isBusy(dataOffer)" color="accent" mode="indeterminate"></mat-progress-bar> -->
       </mat-card-footer>
     </mat-card>
   </div>

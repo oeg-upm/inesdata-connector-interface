@@ -29,8 +29,8 @@ interface RunningTransferProcess {
 export class ContractOffersViewerComponent {
 
   runningTransferProcesses: RunningTransferProcess[] = [];
-  runningNegotiations: Map<string, NegotiationResult> = new Map<string, NegotiationResult>(); // contractOfferId, NegotiationResult
-  finishedNegotiations: Map<string, ContractNegotiation> = new Map<string, ContractNegotiation>(); // contractOfferId, contractAgreementId
+  runningNegotiations: Map<string, NegotiationResult> = new Map<string, NegotiationResult>();
+  finishedNegotiations: Map<string, ContractNegotiation> = new Map<string, ContractNegotiation>();
 
   private pollingHandleNegotiation?: any;
 
@@ -82,11 +82,9 @@ export class ContractOffersViewerComponent {
       if (!this.pollingHandleNegotiation) {
         // there are no active negotiations
         this.pollingHandleNegotiation = setInterval(() => {
-          // const finishedNegotiations: NegotiationResult[] = [];
-
           for (const negotiation of this.runningNegotiations.values()) {
             this.apiService.getNegotiationState(negotiation.id).subscribe(updatedNegotiation => {
-              if (finishedNegotiationStates.includes(updatedNegotiation.state!)) {
+              if (finishedNegotiationStates.includes(updatedNegotiation.state)) {
                 let offerId = negotiation.offerId;
                 this.runningNegotiations.delete(offerId);
                 if (updatedNegotiation["state"] === "VERIFIED") {

@@ -34,10 +34,7 @@ export class ContractViewerComponent implements OnInit {
   private pollingHandleTransfer?: any;
 
   constructor(private contractAgreementService: ContractAgreementService,
-              private assetService: AssetService,
               public dialog: MatDialog,
-              @Inject('HOME_CONNECTOR_STORAGE_ACCOUNT') private homeConnectorStorageAccount: string,
-              private transferService: TransferProcessService,
               private catalogService: CatalogBrowserService,
               private router: Router,
               private notificationService: NotificationService) {
@@ -74,7 +71,6 @@ export class ContractViewerComponent implements OnInit {
    * @param assetId Asset ID of the asset that is associated with the contract.
    */
   private getContractOfferForAssetId(assetId: string): Observable<DataOffer> {
-    //return this.catalogService.getContractOffers()
     return this.catalogService.getDataOffers()
       .pipe(
         map(offers => offers.find(o => o.assetId === assetId)),
