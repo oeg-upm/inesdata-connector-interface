@@ -15,13 +15,12 @@ import {MAT_FORM_FIELD_DEFAULT_OPTIONS} from '@angular/material/form-field';
 import {AppConfigService} from "./app-config.service";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {CONNECTOR_CATALOG_API, CONNECTOR_MANAGEMENT_API, DATA_ADDRESS_TYPES} from "./shared/utils/app.constants";
-import {HTTP_INTERCEPTORS} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {EdcApiKeyInterceptor} from "./shared/interceptors/apikey.interceptor";
 import {environment} from "../environments/environment";
 import { EdcConnectorClient } from "@think-it-labs/edc-connector-client";
 import {MatCardModule} from '@angular/material/card';
 import {SharedModule} from './shared/shared.module';
-import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   imports: [
@@ -72,7 +71,6 @@ import { HttpClientModule } from '@angular/common/http';
     {
       provide: HTTP_INTERCEPTORS, multi: true, useFactory: () => {
         let i = new EdcApiKeyInterceptor();
-        // TODO: read this from app.config.json??
         i.apiKey = environment.apiKey
         return i;
       }, deps: [AppConfigService]

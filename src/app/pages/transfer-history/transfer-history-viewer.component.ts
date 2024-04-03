@@ -47,7 +47,7 @@ export class TransferHistoryViewerComponent implements OnInit {
   }
 
   showDeprovisionButton(transferProcess: TransferProcess) {
-    return ['COMPLETED', 'PROVISIONED', 'REQUESTED', 'REQUESTED_ACK', 'IN_PROGRESS', 'STREAMING'].includes(transferProcess.state!);
+    return ['COMPLETED', 'PROVISIONED', 'REQUESTED', 'REQUESTED_ACK', 'IN_PROGRESS', 'STREAMING'].includes(transferProcess.state);
   }
 
   loadTransferProcesses() {

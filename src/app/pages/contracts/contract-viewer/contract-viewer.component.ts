@@ -1,15 +1,9 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {AssetService} from "../../../shared/services/asset.service";
+import {Component, OnInit} from '@angular/core';
 import {ContractAgreementService} from "../../../shared/services/contractAgreement.service";
-import {TransferProcessService} from "../../../shared/services/transferProcess.service";
 import {from, Observable, of} from "rxjs";
-import { Asset, ContractAgreement, TransferProcessInput, IdResponse } from "../../../shared/models/edc-connector-entities";
-import {ContractOffer} from "../../../shared/models/contract-offer";
-import {filter, first, map, switchMap, tap} from "rxjs/operators";
+import { ContractAgreement, IdResponse } from "../../../shared/models/edc-connector-entities";
+import {filter, map, switchMap, tap} from "rxjs/operators";
 import {NotificationService} from"../../../shared/services/notification.service";
-import {
-  CatalogBrowserTransferDialog
-} from "../catalog-browser-transfer-dialog/catalog-browser-transfer-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
 import {CatalogBrowserService} from "../../../shared/services/catalog-browser.service";
 import {Router} from "@angular/router";
@@ -83,7 +77,7 @@ export class ContractViewerComponent implements OnInit {
   private startPolling(transferProcessId: IdResponse, contractId: string) {
     // track this transfer process
     this.runningTransfers.push({
-      processId: transferProcessId.id!,
+      processId: transferProcessId.id,
       state: TransferProcessStates.REQUESTED,
       contractId: contractId
     });

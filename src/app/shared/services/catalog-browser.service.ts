@@ -115,7 +115,7 @@ export class CatalogBrowserService {
   }
 
   initiateTransfer(transferRequest: TransferProcessInput): Observable<string> {
-    return this.transferProcessService.initiateTransfer(transferRequest).pipe(map(t => t.id!))
+    return this.transferProcessService.initiateTransfer(transferRequest).pipe(map(t => t.id))
   }
 
   getTransferProcessesById(id: string): Observable<TransferProcess> {
@@ -123,7 +123,7 @@ export class CatalogBrowserService {
   }
 
   initiateNegotiation(initiate: ContractNegotiationRequest): Observable<string> {
-    return this.negotiationService.initiateContractNegotiation(initiate).pipe(map(t => t.id!))
+    return this.negotiationService.initiateContractNegotiation(initiate).pipe(map(t => t.id))
   }
 
   getNegotiationState(id: string): Observable<ContractNegotiation> {

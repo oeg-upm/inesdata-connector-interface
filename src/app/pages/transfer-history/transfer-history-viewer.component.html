@@ -9,7 +9,8 @@
       <mat-paginator [length]="transferProcesses.length" pageSize="transferProcesses.length" hidePageSize="true"></mat-paginator>
     </div>
 
-      <table mat-table [dataSource]="transferProcesses" class="transfer-history-table">
+
+      <table mat-table [dataSource]="transferProcesses" class="transfer-history-table" aria-describedby="Transfer processes">
 
           <ng-container matColumnDef="id">
               <th mat-header-cell *matHeaderCellDef scope="col">Id</th>
