@@ -4,7 +4,26 @@
 
 export const environment = {
   production: false,
-  apiKey: "ApiKeyDefaultValue"
+  jwt: {
+    storageKey: 'access_token',
+    storageRefreshKey: 'refresh_token'
+  },
+  runtime: {
+    managementApiUrl: "http://localhost:29193/management",
+    catalogUrl: "http://localhost:29193/management/federatedcatalog",
+    storageAccount: "company2assets",
+    storageExplorerLinkTemplate: "storageexplorer://v=1",
+    theme: "theme-2",
+    oauth2: {
+      issuer: 'http://keycloak:8080/realms/dataspace',
+      redirectPath: '//',
+      clientId: 'management-client',
+      scope: 'openid profile email',
+      responseType: 'code',
+      showDebugInformation: true,
+      allowedUrls: 'http://localhost:4200'
+    }
+  }
 };
 
 /*

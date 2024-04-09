@@ -1,8 +1,16 @@
 {
-  "apiKey": "ApiKeyDefaultValue",
-  "managementApiUrl": "http://localhost:29193/management",
-  "catalogUrl": "http://localhost:29193/management/federatedcatalog",
+  "managementApiUrl": "http://localhost:19193/management",
+  "catalogUrl": "http://localhost:19193/management/federatedcatalog",
   "storageAccount": "company2assets",
   "storageExplorerLinkTemplate": "storageexplorer://v=1",
-  "theme": "theme-2"
+  "theme": "theme-2",
+  "oauth2": {
+    "issuer": "http://keycloak:8080/realms/dataspace",
+    "redirectPath": "/inesdata-connector-interface/",
+    "clientId": "management-client",
+    "scope": "openid profile email",
+    "responseType": "code",
+    "showDebugInformation": true,
+    "allowedUrls": "http://localhost:4200,http://connector-c1:4200"
+  }
 }

@@ -1,1 +1,4 @@
-<app-navigation [class]="themeClass()"></app-navigation>
+
+
+<app-navigation *ngIf="authService.isAuthenticated()" [class]="themeClass()"></app-navigation>
+<h2 *ngIf="!authService.isAuthenticated()" [class]="themeClass()"> NO AUTH! </h2>

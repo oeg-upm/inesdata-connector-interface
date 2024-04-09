@@ -1,8 +1,8 @@
+import { environment } from 'src/environments/environment';
 import {Component, OnInit} from '@angular/core';
 import {Observable, of} from 'rxjs';
 import {TransferProcessService} from "../../shared/services/transferProcess.service";
 import {TransferProcess} from "../../shared/models/edc-connector-entities";
-import {AppConfigService} from "../../../app/app-config.service";
 import {ConfirmationDialogComponent, ConfirmDialogModel} from "../../shared/components/confirmation-dialog/confirmation-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
 
@@ -18,13 +18,12 @@ export class TransferHistoryViewerComponent implements OnInit {
   storageExplorerLinkTemplate: string | undefined;
 
   constructor(private transferProcessService: TransferProcessService,
-              private dialog : MatDialog,
-              private appConfigService: AppConfigService) {
+              private dialog : MatDialog) {
   }
 
   ngOnInit(): void {
     this.loadTransferProcesses();
-    this.storageExplorerLinkTemplate = this.appConfigService.getConfig()?.storageExplorerLinkTemplate
+    this.storageExplorerLinkTemplate = environment.runtime.storageExplorerLinkTemplate
   }
 
   onDeprovision(transferProcess: TransferProcess): void {
