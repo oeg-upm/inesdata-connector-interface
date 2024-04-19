@@ -22,6 +22,11 @@ import { EdcConnectorClient } from "@think-it-labs/edc-connector-client";
 import {MatCardModule} from '@angular/material/card';
 import {SharedModule} from './shared/shared.module';
 
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { JsonFormsModule } from '@jsonforms/angular';
+import { JsonFormsAngularMaterialModule } from '@jsonforms/angular-material';
+
+
 @NgModule({
   imports: [
     BrowserModule,
@@ -36,7 +41,11 @@ import {SharedModule} from './shared/shared.module';
     MatSnackBarModule,
     MatCardModule,
     SharedModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule,
+    JsonFormsModule,
+    JsonFormsAngularMaterialModule,
   ],
   declarations: [
     AppComponent
