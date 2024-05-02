@@ -22,20 +22,30 @@ import { MatCardModule } from '@angular/material/card';
 import { SharedModule } from './shared/shared.module';
 
 import { AuthService } from './auth/auth.service';
-import { JwtModule, JWT_OPTIONS } from '@auth0/angular-jwt';
+import { JwtHelperService, JwtModule, JWT_OPTIONS } from '@auth0/angular-jwt';
 import { OAuthModule, OAuthModuleConfig } from 'angular-oauth2-oidc';
 
 /**
- * Declare the JWT Module configuration. It will be used to work with tokens, like decode the access token
- *
- * @returns JWT Module config
+ * JWT options factory
+ * @param authService Auth service
+ * @returns jwtOptions factory
  */
-export function jwtOptionsFactory() {
+ export function jwtOptionsFactory(authService: AuthService){
+  const jwtHelper: JwtHelperService = new JwtHelperService;
   return {
-    tokenGetter: () => {
-      return sessionStorage.getItem(environment.jwt.storageKey);
-    },
-    allowedDomains: environment.runtime.oauth2.allowedUrls.split(',')
+      tokenGetter: (): Promise<string> => {
+          let accessToken = authService.getAccessToken();
+          if (accessToken !== null && jwtHelper.isTokenExpired(accessToken)) {
+              return new Promise((resolve) => {
+                  authService.refreshToken().then(token => {
+                    return resolve(token.access_token);
+                  })
+              });
+          }
+          return Promise.resolve(accessToken);
+      },
+      allowedDomains: environment.jwt.allowedDomains,
+      disallowedRoutes: environment.jwt.disallowedRoutes
   }
 }
 
@@ -57,7 +67,8 @@ export function jwtOptionsFactory() {
     JwtModule.forRoot({
       jwtOptionsProvider: {
         provide: JWT_OPTIONS,
-        useFactory: jwtOptionsFactory
+        useFactory: jwtOptionsFactory,
+        deps: [AuthService]
       }
     }),
     OAuthModule.forRoot({
