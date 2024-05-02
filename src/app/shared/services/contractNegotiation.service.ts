@@ -11,11 +11,12 @@
  */
 /* tslint:disable:no-unused-variable member-ordering */
 
-import { Injectable }                      from '@angular/core';
-import { HttpResponse, HttpEvent, HttpContext}       from '@angular/common/http';
-import {from, Observable} from 'rxjs';
-import {EdcConnectorClient, IdResponse, QuerySpec} from "@think-it-labs/edc-connector-client";
-import {ContractNegotiation, ContractNegotiationState, ContractNegotiationRequest} from "../models/edc-connector-entities";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { from, lastValueFrom, Observable } from 'rxjs';
+import { JSON_LD_DEFAULT_CONTEXT, QuerySpec, ContractNegotiation, ContractNegotiationState, expand, IdResponse } from '@think-it-labs/edc-connector-client';
+import { ContractNegotiationRequest } from "../models/edc-connector-entities";
+import { environment } from 'src/environments/environment';
 
 
 @Injectable({
@@ -23,87 +24,86 @@ import {ContractNegotiation, ContractNegotiationState, ContractNegotiationReques
 })
 export class ContractNegotiationService {
 
-    private contractNegotiation = this.edcConnectorClient.management.contractNegotiations;
+  private readonly BASE_URL = `${environment.runtime.managementApiUrl}${environment.runtime.service.contractNegotiation.baseUrl}`;
 
-    constructor(private edcConnectorClient: EdcConnectorClient) {
-    }
-
-    /**
-     * Requests aborting the contract negotiation. Due to the asynchronous nature of contract negotiations, a successful response only indicates that the request was successfully received. Clients must poll the /{id}/state endpoint to track the state.
-     * @param id
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public cancelNegotiation(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any>;
-    public cancelNegotiation(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<any>>;
-    public cancelNegotiation(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<any>>;
-    public cancelNegotiation(id: string): Observable<any> {
-        return from(this.contractNegotiation.terminate(id, "Cancelled by DataDashboard"))
-    }
-
-    /**
-     * Requests cancelling the contract negotiation. Due to the asynchronous nature of contract negotiations, a successful response only indicates that the request was successfully received. Clients must poll the /{id}/state endpoint to track the state.
-     * @param id
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public declineNegotiation(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any>;
-    public declineNegotiation(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<any>>;
-    public declineNegotiation(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<any>>;
-    public declineNegotiation(id: string): Observable<any> {
-        return from(this.contractNegotiation.terminate(id, "Terminated by the DataDashboard"))
-    }
-
-    /**
-     * Gets an contract negotiation with the given ID
-     * @param id
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getNegotiation(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<ContractNegotiation>;
-    public getNegotiation(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<ContractNegotiation>>;
-  public getNegotiation(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<ContractNegotiation>>;
-  public getNegotiation(id: string): Observable<any> {
-    return from(this.contractNegotiation.get(id))
+  constructor(private http: HttpClient) {
   }
 
-    /**
-     * Gets the state of a contract negotiation with the given ID
-     * @param id
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getNegotiationState(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<ContractNegotiationState>;
-     public getNegotiationState(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<ContractNegotiationState>>;
-    public getNegotiationState(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<ContractNegotiationState>>;
-    public getNegotiationState(id: string): Observable<any> {
-        return from(this.contractNegotiation.getState(id))
+  /**
+   * Requests aborting the contract negotiation. Due to the asynchronous nature of contract negotiations, a successful response only indicates that the request was successfully received. Clients must poll the /{id}/state endpoint to track the state.
+   * @param id
+   */
+  public cancelNegotiation(id: string): Observable<any> {
+    let body = {
+      reason: "Cancelled by DataDashboard",
+      "@id": id,
+      "@context": JSON_LD_DEFAULT_CONTEXT,
     }
 
-    /**
-     * Initiates a contract negotiation for a given offer and with the given counter part. Please note that successfully invoking this endpoint only means that the negotiation was initiated. Clients must poll the /{id}/state endpoint to track the state
-     * @param negotiationInitiateRequest
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public initiateContractNegotiation(negotiationInitiateRequest: ContractNegotiationRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<IdResponse>;
-    public initiateContractNegotiation(negotiationInitiateRequest: ContractNegotiationRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<IdResponse>>;
-    public initiateContractNegotiation(negotiationInitiateRequest: ContractNegotiationRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<IdResponse>>;
-    public initiateContractNegotiation(negotiationInitiateRequest: ContractNegotiationRequest): Observable<any> {
-        return from(this.contractNegotiation.initiate(negotiationInitiateRequest));
+    return from(lastValueFrom(this.http.post<ContractNegotiation>(
+      `${this.BASE_URL}${environment.runtime.service.contractNegotiation.get}${id}${environment.runtime.service.contractNegotiation.terminate}`, body
+    )));
+  }
+
+  /**
+   * Gets an contract negotiation with the given ID
+   * @param id
+   */
+  public getNegotiation(id: string): Observable<any> {
+    return from(lastValueFrom(this.http.get<ContractNegotiation>(
+      `${this.BASE_URL}${environment.runtime.service.contractNegotiation.get}${id}`
+    )).then(result => {
+      return expand(result, () => new ContractNegotiation());
+    }));
+  }
+
+  /**
+   * Gets the state of a contract negotiation with the given ID
+   * @param id
+   */
+  public getNegotiationState(id: string): Observable<any> {
+    return from(lastValueFrom(this.http.get<ContractNegotiationState>(
+      `${this.BASE_URL}${id}${environment.runtime.service.contractNegotiation.state}`
+    )).then(result => {
+      return expand(result, () => new ContractNegotiationState());
+    }));
+  }
+
+  /**
+   * Initiates a contract negotiation for a given offer and with the given counter part. Please note that successfully invoking this endpoint only means that the negotiation was initiated. Clients must poll the /{id}/state endpoint to track the state
+   * @param negotiationInitiateRequest
+   */
+  public initiateContractNegotiation(negotiationInitiateRequest: ContractNegotiationRequest): Observable<any> {
+    let body = {
+      ...negotiationInitiateRequest,
+      "@type": 'ContractRequest',
+      "@context": JSON_LD_DEFAULT_CONTEXT,
+      protocol: 'dataspace-protocol-http'
     }
 
-    /**
-     * Returns all contract negotiations according to a query
-     * @param querySpec
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public queryNegotiations(querySpec: QuerySpec, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<ContractNegotiation>>;
-    public queryNegotiations(querySpec: QuerySpec, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<ContractNegotiation>>>;
-    public queryNegotiations(querySpec: QuerySpec, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<ContractNegotiation>>>;
-    public queryNegotiations(querySpec: QuerySpec): Observable<any> {
-        return from(this.contractNegotiation.queryAll(querySpec))
-    }
+    return from(lastValueFrom(this.http.post<ContractNegotiationRequest>(
+      `${this.BASE_URL}`, body
+    )).then(result => {
+      return expand(result, () => new IdResponse());
+    }));
+  }
+
+  /**
+   * Returns all contract negotiations according to a query
+   * @param querySpec
+   */
+  public queryNegotiations(querySpec: QuerySpec): Observable<any> {
+    let body =
+      querySpec === undefined || querySpec === null || Object.keys(querySpec).length === 0
+        ? null
+        : {
+          ...querySpec,
+          "@context": JSON_LD_DEFAULT_CONTEXT,
+        }
+
+    return from(lastValueFrom(this.http.post<ContractNegotiationRequest>(
+      `${this.BASE_URL}${environment.runtime.service.contractNegotiation.getAll}`, body
+    )));
+  }
 
 }

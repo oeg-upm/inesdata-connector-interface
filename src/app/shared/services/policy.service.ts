@@ -12,10 +12,11 @@
 /* tslint:disable:no-unused-variable member-ordering */
 
 import {Injectable} from '@angular/core';
-import {HttpResponse, HttpEvent, HttpContext} from '@angular/common/http';
-import {Observable, from} from 'rxjs';
-import {EdcConnectorClient} from "@think-it-labs/edc-connector-client";
-import { PolicyDefinition, PolicyDefinitionInput, IdResponse, QuerySpec } from "../models/edc-connector-entities"
+import {HttpClient} from '@angular/common/http';
+import {Observable, from, lastValueFrom} from 'rxjs';
+import {expandArray, PolicyDefinition, QuerySpec, EDC_CONTEXT} from "@think-it-labs/edc-connector-client";
+import {PolicyDefinitionInput} from "../models/edc-connector-entities"
+import { environment } from 'src/environments/environment';
 
 
 @Injectable({
@@ -23,69 +24,67 @@ import { PolicyDefinition, PolicyDefinitionInput, IdResponse, QuerySpec } from "
 })
 export class PolicyService {
 
-  private policyDefinition = this.edcConnectorClient.management.policyDefinitions;
+  private readonly BASE_URL = `${environment.runtime.managementApiUrl}${environment.runtime.service.policy.baseUrl}`;
 
-
-  constructor(private edcConnectorClient: EdcConnectorClient) {
+  constructor(private http: HttpClient) {
   }
 
   /**
    * Creates a new policy definition
    * @param input
-   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-   * @param reportProgress flag to report request and response progress.
    */
-  public createPolicy(input: PolicyDefinitionInput, observe?: 'body', reportProgress?: boolean, options?: { httpHeaderAccept?: 'application/json', context?: HttpContext }): Observable<IdResponse>;
-  public createPolicy(input: PolicyDefinitionInput, observe?: 'response', reportProgress?: boolean, options?: { httpHeaderAccept?: 'application/json', context?: HttpContext }): Observable<HttpResponse<IdResponse>>;
-  public createPolicy(input: PolicyDefinitionInput, observe?: 'events', reportProgress?: boolean, options?: { httpHeaderAccept?: 'application/json', context?: HttpContext }): Observable<HttpEvent<IdResponse>>;
   public createPolicy(input: PolicyDefinitionInput): Observable<any> {
-      return from(this.policyDefinition.create(input));
+
+    let body = {
+      ...input,
+      "@context": {
+        "@vocab": EDC_CONTEXT,
+        "odrl": "http://www.w3.org/ns/odrl/2/"
+      }
+    }
+
+    return from(lastValueFrom(this.http.post<PolicyDefinition>(
+      `${this.BASE_URL}`, body
+    )));
   }
 
   /**
    * Removes a policy definition with the given ID if possible. Deleting a policy definition is only possible if that policy definition is not yet referenced by a contract definition, in which case an error is returned. DANGER ZONE: Note that deleting policy definitions can have unexpected results, do this at your own risk!
    * @param id
-   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-   * @param reportProgress flag to report request and response progress.
    */
-  public deletePolicy(id: string, observe?: 'body', reportProgress?: boolean, options?: { httpHeaderAccept?: 'application/json', context?: HttpContext }): Observable<any>;
-  public deletePolicy(id: string, observe?: 'response', reportProgress?: boolean, options?: { httpHeaderAccept?: 'application/json', context?: HttpContext }): Observable<HttpResponse<any>>;
-  public deletePolicy(id: string, observe?: 'events', reportProgress?: boolean, options?: { httpHeaderAccept?: 'application/json', context?: HttpContext }): Observable<HttpEvent<any>>;
   public deletePolicy(id: string): Observable<any> {
     if (id === null || id === undefined) {
       throw new Error('Required parameter id was null or undefined when calling deletePolicy.');
     }
-    return from(this.policyDefinition.delete(id))
+    return from(lastValueFrom(this.http.delete<PolicyDefinition>(
+      `${this.BASE_URL}${environment.runtime.service.policy.get}${id}`
+    )));
   }
 
   /**
    * Gets a policy definition with the given ID
    * @param id
-   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-   * @param reportProgress flag to report request and response progress.
    */
-  public getPolicy(id: string, observe?: 'body', reportProgress?: boolean, options?: { httpHeaderAccept?: 'application/json', context?: HttpContext }): Observable<PolicyDefinition>;
-  public getPolicy(id: string, observe?: 'response', reportProgress?: boolean, options?: { httpHeaderAccept?: 'application/json', context?: HttpContext }): Observable<HttpResponse<PolicyDefinition>>;
-  public getPolicy(id: string, observe?: 'events', reportProgress?: boolean, options?: { httpHeaderAccept?: 'application/json', context?: HttpContext }): Observable<HttpEvent<PolicyDefinition>>;
   public getPolicy(id: string): Observable<any> {
     if (id === null || id === undefined) {
       throw new Error('Required parameter id was null or undefined when calling getPolicy.');
     }
 
-    return from(this.policyDefinition.get(id))
-
+    return from(lastValueFrom(this.http.get<PolicyDefinition>(
+      `${this.BASE_URL}${environment.runtime.service.policy.get}${id}`
+    )));
   }
 
   /**
    * Returns all policy definitions according to a query
-   * @param querySpec
-   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-   * @param reportProgress flag to report request and response progress.
-   */
-  public queryAllPolicies(querySpec?: QuerySpec, observe?: 'body', reportProgress?: boolean, options?: { httpHeaderAccept?: 'application/json', context?: HttpContext }): Observable<Array<PolicyDefinition>>;
-  public queryAllPolicies(querySpec?: QuerySpec, observe?: 'response', reportProgress?: boolean, options?: { httpHeaderAccept?: 'application/json', context?: HttpContext }): Observable<HttpResponse<Array<PolicyDefinition>>>;
-  public queryAllPolicies(querySpec?: QuerySpec, observe?: 'events', reportProgress?: boolean, options?: { httpHeaderAccept?: 'application/json', context?: HttpContext }): Observable<HttpEvent<Array<PolicyDefinition>>>;
-  public queryAllPolicies(querySpec?: QuerySpec): Observable<any> {
-      return from(this.policyDefinition.queryAll(querySpec))
+   * @param QuerySpec
+   **/
+  public queryAllPolicies(querySpec?: QuerySpec): Observable<Array<PolicyDefinition>> {
+
+    return from(lastValueFrom(this.http.post<Array<PolicyDefinition>>(
+      `${this.BASE_URL}${environment.runtime.service.policy.getAll}`, querySpec
+    )).then(results => {
+      return expandArray(results, () => new PolicyDefinition());
+    }));
   }
 }

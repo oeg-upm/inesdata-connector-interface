@@ -1,22 +1,20 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { EMPTY, Observable } from 'rxjs';
 import { catchError, map, reduce } from 'rxjs/operators';
-import { Catalog } from '../models/catalog';
-import { ContractOffer } from '../models/contract-offer';
 import { DataOffer } from '../models/data-offer';
 import { ContractNegotiationService } from './contractNegotiation.service';
 import { TransferProcessService } from './transferProcess.service';
-
-import { CONNECTOR_CATALOG_API, CONNECTOR_MANAGEMENT_API } from "../utils/app.constants";
+import { environment } from "src/environments/environment";
 
 import {
   ContractNegotiationRequest,
   ContractNegotiation,
-  PolicyInput,
   TransferProcess,
   TransferProcessInput,
+  Policy,
 } from "../models/edc-connector-entities";
+import { PolicyBuilder } from '@think-it-labs/edc-connector-client';
 
 
 
@@ -28,16 +26,15 @@ import {
 })
 export class CatalogBrowserService {
 
+  private readonly BASE_URL = `${environment.runtime.catalogUrl}`;
+
   constructor(private httpClient: HttpClient,
     private transferProcessService: TransferProcessService,
-    private negotiationService: ContractNegotiationService,
-    @Inject(CONNECTOR_MANAGEMENT_API) private managementApiUrl: string,
-    @Inject(CONNECTOR_CATALOG_API) private catalogApiUrl: string) {
+    private negotiationService: ContractNegotiationService) {
   }
 
   getDataOffers(): Observable<DataOffer[]> {
-    let url = this.catalogApiUrl || this.managementApiUrl;
-    return this.post<Catalog[]>(url)
+    return this.post<Array<any>>(`${this.BASE_URL}`)
       .pipe(map(catalogs => catalogs.map(catalog => {
         const arr = Array<DataOffer>();
         let datasets = catalog["http://www.w3.org/ns/dcat#dataset"];
@@ -56,18 +53,32 @@ export class CatalogBrowserService {
           const assetId = dataset["@id"];
 
           const hasPolicy = dataset["odrl:hasPolicy"];
-          const contractOffers = Array<ContractOffer>();
+          const contractOffers = Array<Policy>();
 
           if (Array.isArray(hasPolicy)) {
             for (const offer of hasPolicy) {
-              const policy = this.createPolicy(offer);
-              const newContractOffer = this.createContractOffer(assetId, offer["@id"], policy);
-              contractOffers.push(newContractOffer);
+
+              const contractOffer = new PolicyBuilder()
+              .raw({
+                ...offer,
+                assigner: catalog.participantId,
+                target: assetId
+              })
+              .build();
+
+              contractOffers.push(contractOffer);
             }
           } else {
-            const policy = this.createPolicy(hasPolicy);
-              const newContractOffer = this.createContractOffer(assetId, hasPolicy["@id"], policy);
-              contractOffers.push(newContractOffer);
+
+            const contractOffer = new PolicyBuilder()
+              .raw({
+                ...hasPolicy,
+                assigner: catalog.participantId,
+                target: assetId
+              })
+              .build();
+
+              contractOffers.push(contractOffer);
           }
 
           const dataOffer = {
@@ -90,28 +101,6 @@ export class CatalogBrowserService {
         }
         return acc;
       }, new Array<DataOffer>()));
-  }
-
-  private createContractOffer(assetId: string, id: string, policy: PolicyInput): ContractOffer{
-    return {
-      assetId: assetId,
-      id: id,
-      policy: policy
-    };
-  }
-
-  private createPolicy(offer: any): PolicyInput{
-    return {
-      "@type": "set",
-      "@context": "http://www.w3.org/ns/odrl.jsonld",
-      uid: offer["@id"],
-      assignee: offer["assignee"],
-      assigner: offer["assigner"],
-      obligation: offer["odrl:obligation"],
-      permission: offer["odrl:permission"],
-      prohibition: offer["odrl:prohibition"],
-      target: offer["odrl:target"],
-    };
   }
 
   initiateTransfer(transferRequest: TransferProcessInput): Observable<string> {

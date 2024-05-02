@@ -3,11 +3,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { CatalogBrowserService } from "../../../shared/services/catalog-browser.service";
-
-import { ContractOffer } from "../../../shared/models/contract-offer";
-
 import { DataOffer } from 'src/app/shared/models/data-offer';
 import { ContractOffersViewerComponent } from '../contract-offers-viewer/contract-offers-viewer.component';
+import { Policy } from 'src/app/shared/models/edc-connector-entities';
 
 
 
@@ -45,7 +43,7 @@ export class CatalogBrowserComponent implements OnInit {
   }
 
 
-  viewContractOffers(assetId: string, contractOffers: ContractOffer[], originator: string, properties: any) {
+  viewContractOffers(assetId: string, contractOffers: Policy[], originator: string, properties: any) {
     this.dialog.open(ContractOffersViewerComponent, {
       data: {
         assetId: assetId,

@@ -12,11 +12,11 @@
 /* tslint:disable:no-unused-variable member-ordering */
 
 import { Injectable } from '@angular/core';
-import { HttpResponse, HttpEvent, HttpContext } from '@angular/common/http';
-import { Observable, from } from 'rxjs';
-import { EdcConnectorClient } from '@think-it-labs/edc-connector-client';
-import { IdResponse, QuerySpec } from "../models/edc-connector-entities"
-import { ContractDefinitionInput, ContractDefinition } from "../models/contract-definition"
+import { HttpClient } from '@angular/common/http';
+import { Observable, from, lastValueFrom } from 'rxjs';
+import { expandArray, ContractDefinition, JSON_LD_DEFAULT_CONTEXT } from '@think-it-labs/edc-connector-client';
+import { QuerySpec, ContractDefinitionInput } from "../models/edc-connector-entities"
+import { environment } from 'src/environments/environment';
 
 
 @Injectable({
@@ -24,69 +24,64 @@ import { ContractDefinitionInput, ContractDefinition } from "../models/contract-
 })
 export class ContractDefinitionService {
 
-    private contractDefinitions = this.edcConnectorClient.management.contractDefinitions;
+  private readonly BASE_URL = `${environment.runtime.managementApiUrl}${environment.runtime.service.contractDefinition.baseUrl}`;
 
-    constructor(private edcConnectorClient: EdcConnectorClient) {
+  constructor(private http: HttpClient) {
+  }
+
+  /**
+   * Creates a new contract definition
+   * @param input
+   **/
+  public createContractDefinition(input: ContractDefinitionInput): Observable<any> {
+    let body = {
+      ...input,
+      "@context": JSON_LD_DEFAULT_CONTEXT,
     }
 
-    /**
-     * Creates a new contract definition
-     * @param input
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public createContractDefinition(input: ContractDefinitionInput, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<IdResponse>;
-    public createContractDefinition(input: ContractDefinitionInput, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<IdResponse>>;
-    public createContractDefinition(input: ContractDefinitionInput, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<IdResponse>>;
-    public createContractDefinition(input: ContractDefinitionInput): Observable<any> {
-        return from(this.contractDefinitions.create(input));
+    return from(lastValueFrom(this.http.post<ContractDefinitionInput>(
+      `${this.BASE_URL}`, body
+    )));
+  }
+
+  /**
+   * Removes a contract definition with the given ID if possible. DANGER ZONE: Note that deleting contract definitions can have unexpected results, especially for contract offers that have been sent out or ongoing or contract negotiations.
+   * @param id
+   */
+  public deleteContractDefinition(id: string): Observable<any> {
+    if (id === null || id === undefined) {
+      throw new Error('Required parameter id was null or undefined when calling deleteContractDefinition.');
     }
 
-    /**
-     * Removes a contract definition with the given ID if possible. DANGER ZONE: Note that deleting contract definitions can have unexpected results, especially for contract offers that have been sent out or ongoing or contract negotiations.
-     * @param id
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public deleteContractDefinition(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any>;
-    public deleteContractDefinition(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<any>>;
-    public deleteContractDefinition(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<any>>;
-    public deleteContractDefinition(id: string): Observable<any> {
-      if (id === null || id === undefined) {
-          throw new Error('Required parameter id was null or undefined when calling deleteContractDefinition.');
-      }
+    return from(lastValueFrom(this.http.delete<ContractDefinitionInput>(
+      `${this.BASE_URL}${environment.runtime.service.contractDefinition.get}${id}`
+    )));
+  }
 
-      return from(this.contractDefinitions.delete(id))
+  /**
+   * Gets an contract definition with the given ID
+   * @param id
+   */
+  public getContractDefinition(id: string): Observable<any> {
+    if (id === null || id === undefined) {
+      throw new Error('Required parameter id was null or undefined when calling getContractDefinition.');
     }
 
-    /**
-     * Gets an contract definition with the given ID
-     * @param id
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getContractDefinition(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<ContractDefinition>;
-    public getContractDefinition(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<ContractDefinition>>;
-    public getContractDefinition(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<ContractDefinition>>;
-    public getContractDefinition(id: string): Observable<any> {
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling getContractDefinition.');
-        }
+    return from(lastValueFrom(this.http.get<ContractDefinitionInput>(
+      `${this.BASE_URL}${environment.runtime.service.contractDefinition.get}${id}`
+    )));
+  }
 
-        return from(this.contractDefinitions.get(id))
-    }
-
-    /**
-     * Returns all contract definitions according to a query
-     * @param querySpec
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public queryAllContractDefinitions(querySpec?: QuerySpec, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<ContractDefinition>>;
-    public queryAllContractDefinitions(querySpec?: QuerySpec, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<ContractDefinition>>>;
-    public queryAllContractDefinitions(querySpec?: QuerySpec, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<ContractDefinition>>>;
-    public queryAllContractDefinitions(querySpec?: QuerySpec): Observable<any> {
-        return from(this.contractDefinitions.queryAll(querySpec))
-    }
+  /**
+   * Returns all contract definitions according to a query
+   * @param querySpec
+   */
+  public queryAllContractDefinitions(querySpec?: QuerySpec): Observable<Array<ContractDefinition>> {
+    return from(lastValueFrom(this.http.post<Array<ContractDefinition>>(
+      `${this.BASE_URL}${environment.runtime.service.contractDefinition.getAll}`, querySpec
+    )).then(results => {
+      return expandArray(results, () => new ContractDefinition());
+    }));
+  }
 
 }

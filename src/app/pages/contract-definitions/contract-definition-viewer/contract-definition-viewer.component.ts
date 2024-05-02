@@ -8,7 +8,7 @@ import {
 import { ContractDefinitionService } from "../../../shared/services/contractDefinition.service";
 import {ConfirmationDialogComponent, ConfirmDialogModel} from "../../../shared/components/confirmation-dialog/confirmation-dialog.component";
 import {NotificationService} from "../../../shared/services/notification.service";
-import { ContractDefinitionInput, ContractDefinition } from "../../../shared/models/contract-definition"
+import { ContractDefinition, ContractDefinitionInput } from 'src/app/shared/models/edc-connector-entities';
 
 
 @Component({

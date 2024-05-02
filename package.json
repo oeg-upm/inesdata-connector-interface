@@ -25,7 +25,9 @@
     "@angular/platform-browser": "^17.1.2",
     "@angular/platform-browser-dynamic": "^17.1.2",
     "@angular/router": "^17.1.2",
-    "@think-it-labs/edc-connector-client": "0.3.0",
+    "@auth0/angular-jwt": "^5.2.0",
+    "@think-it-labs/edc-connector-client": "0.4.0",
+    "angular-oauth2-oidc": "^17.0.2",
     "install": "^0.13.0",
     "rxjs": "~7.8.1",
     "zone.js": "~0.14.2"

@@ -11,99 +11,111 @@
  */
 /* tslint:disable:no-unused-variable member-ordering */
 
-import { Injectable }                      from '@angular/core';
-import { HttpResponse, HttpEvent, HttpContext }              from '@angular/common/http';
-import { Observable, from }                                        from 'rxjs';
-import {EdcConnectorClient} from "@think-it-labs/edc-connector-client";
-import { TransferProcessState, TransferProcess, TransferProcessInput, QuerySpec, IdResponse } from "../models/edc-connector-entities";
-
-
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, from, lastValueFrom } from 'rxjs';
+import { TransferProcessInput, QuerySpec } from "../models/edc-connector-entities";
+import { environment } from 'src/environments/environment';
+import { expand, IdResponse, JSON_LD_DEFAULT_CONTEXT, TransferProcess, TransferProcessState } from '@think-it-labs/edc-connector-client';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TransferProcessService {
-    private transferProcessService = this.edcConnectorClient.management.transferProcesses;
+  private readonly BASE_URL = `${environment.runtime.managementApiUrl}${environment.runtime.service.transferProcess.baseUrl}`;
 
-    constructor(private edcConnectorClient: EdcConnectorClient) {
+  constructor(private http: HttpClient) {
+  }
+
+  /**
+   * Requests aborting the transfer process. Due to the asynchronous nature of transfers, a successful response only indicates that the request was successfully received. Clients must poll the /{id}/state endpoint to track the state.
+   * @param id
+   */
+  public cancelTransferProcess(id: string): Observable<any> {
+    let body = {
+      reason: "Call by DataDashboard.",
+      "@id": id,
+      "@context": JSON_LD_DEFAULT_CONTEXT,
     }
 
-    /**
-     * Requests aborting the transfer process. Due to the asynchronous nature of transfers, a successful response only indicates that the request was successfully received. Clients must poll the /{id}/state endpoint to track the state.
-     * @param id
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public cancelTransferProcess(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any>;
-    public cancelTransferProcess(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<any>>;
-    public cancelTransferProcess(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<any>>;
-    public cancelTransferProcess(id: string): Observable<any> {
-        return from(this.transferProcessService.terminate(id, "Call by DataDashboard."));
+    return from(lastValueFrom(this.http.post<any>(
+      `${this.BASE_URL}${environment.runtime.service.transferProcess.get}${id}${environment.runtime.service.transferProcess.terminate}`, body
+    )));
+  }
+
+  /**
+   * Requests the deprovisioning of resources associated with a transfer process. Due to the asynchronous nature of transfers, a successful response only indicates that the request was successfully received. This may take a long time, so clients must poll the /{id}/state endpoint to track the state.
+   * @param id
+   */
+  public deprovisionTransferProcess(id: string): Observable<any> {
+    let body = {
+      "@id": id,
+      "@context": JSON_LD_DEFAULT_CONTEXT,
     }
 
-    /**
-     * Requests the deprovisioning of resources associated with a transfer process. Due to the asynchronous nature of transfers, a successful response only indicates that the request was successfully received. This may take a long time, so clients must poll the /{id}/state endpoint to track the state.
-     * @param id
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public deprovisionTransferProcess(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any>;
-    public deprovisionTransferProcess(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<any>>;
-    public deprovisionTransferProcess(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<any>>;
-    public deprovisionTransferProcess(id: string): Observable<any> {
-      return from(this.transferProcessService.deprovision(id))
+    return from(lastValueFrom(this.http.post<any>(
+      `${this.BASE_URL}${environment.runtime.service.transferProcess.get}${id}${environment.runtime.service.transferProcess.deprovision}`, body
+    )));
+  }
+
+  /**
+   * Gets a transfer process with the given ID
+   * @param id
+   */
+  public getTransferProcess(id: string): Observable<any> {
+    return from(lastValueFrom(this.http.get<TransferProcess>(
+      `${this.BASE_URL}${environment.runtime.service.transferProcess.get}${id}`
+    )).then(result => {
+      return expand(result, () => new TransferProcess());
+    }));
+  }
+
+  /**
+   * Gets the state of a transfer process with the given ID
+   * @param id
+   */
+  public getTransferProcessState(id: string): Observable<any> {
+    return from(lastValueFrom(this.http.get<TransferProcessState>(
+      `${this.BASE_URL}${id}${environment.runtime.service.transferProcess.state}`
+    )).then(result => {
+      return expand(result, () => new TransferProcessState());
+    }));
+  }
+
+  /**
+   * Initiates a data transfer with the given parameters. Please note that successfully invoking this endpoint only means that the transfer was initiated. Clients must poll the /{id}/state endpoint to track the state
+   * @param transferRequestInput
+   */
+  public initiateTransfer(transferRequestInput: TransferProcessInput): Observable<any> {
+    let body = {
+      protocol: "dataspace-protocol-http",
+      "@context": JSON_LD_DEFAULT_CONTEXT,
+      ...transferRequestInput
     }
 
-    /**
-     * Gets an transfer process with the given ID
-     * @param id
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getTransferProcess(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<TransferProcess>;
-    public getTransferProcess(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<TransferProcess>>;
-    public getTransferProcess(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<TransferProcess>>;
-    public getTransferProcess(id: string): Observable<any> {
-        return from(this.transferProcessService.get(id))
-    }
+    return from(lastValueFrom(this.http.post<any>(
+      `${this.BASE_URL}`, body
+    )).then(result => {
+      return expand(result, () => new IdResponse());
+    }));
+  }
 
-    /**
-     * Gets the state of a transfer process with the given ID
-     * @param id
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getTransferProcessState(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<TransferProcessState>;
-    public getTransferProcessState(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<TransferProcessState>>;
-    public getTransferProcessState(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<TransferProcessState>>;
-    public getTransferProcessState(id: string): Observable<any> {
-        return from(this.transferProcessService.getState(id))
-    }
+  /**
+   * Returns all transfer process according to a query
+   * @param querySpec
+   */
+  public queryAllTransferProcesses(querySpec?: QuerySpec): Observable<any> {
+    let body =
+      querySpec === undefined || querySpec === null || Object.keys(querySpec).length === 0
+        ? null
+        : {
+          ...querySpec,
+          "@context": JSON_LD_DEFAULT_CONTEXT,
+        }
 
-    /**
-     * Initiates a data transfer with the given parameters. Please note that successfully invoking this endpoint only means that the transfer was initiated. Clients must poll the /{id}/state endpoint to track the state
-     * @param transferRequestInput
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public initiateTransfer(transferRequestInput: TransferProcessInput, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<IdResponse>;
-    public initiateTransfer(transferRequestInput: TransferProcessInput, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<IdResponse>>;
-    public initiateTransfer(transferRequestInput: TransferProcessInput, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<IdResponse>>;
-    public initiateTransfer(transferRequestInput: TransferProcessInput): Observable<any> {
-      return from(this.transferProcessService.initiate(transferRequestInput))
-    }
-
-    /**
-     * Returns all transfer process according to a query
-     * @param querySpec
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public queryAllTransferProcesses(querySpec?: QuerySpec, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<TransferProcess>>;
-    public queryAllTransferProcesses(querySpec?: QuerySpec, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<TransferProcess>>>;
-    public queryAllTransferProcesses(querySpec?: QuerySpec, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<TransferProcess>>>;
-    public queryAllTransferProcesses(querySpec?: QuerySpec): Observable<any> {
-      return from(this.transferProcessService.queryAll(querySpec))
-    }
+    return from(lastValueFrom(this.http.post<TransferProcess>(
+      `${this.BASE_URL}${environment.runtime.service.transferProcess.getAll}`, body
+    )));
+  }
 
 }

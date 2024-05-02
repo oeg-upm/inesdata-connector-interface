@@ -1,13 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-import {BehaviorSubject, Observable, of} from 'rxjs';
+import {BehaviorSubject, from, Observable, of} from 'rxjs';
 import {first, map, switchMap} from 'rxjs/operators';
 import {MatDialog} from '@angular/material/dialog';
-import {AssetInput, Asset } from "../../../shared/models/edc-connector-entities";
+import {AssetInput, Asset} from "../../../shared/models/edc-connector-entities";
 import {AssetService} from "../../../shared/services/asset.service";
 import {AssetEditorDialog} from "../asset-editor-dialog/asset-editor-dialog.component";
 import {ConfirmationDialogComponent, ConfirmDialogModel} from "../../../shared/components/confirmation-dialog/confirmation-dialog.component";
 import {NotificationService} from "../../../shared/services/notification.service";
-
 
 @Component({
   selector: 'app-asset-viewer',
@@ -32,14 +31,15 @@ export class AssetViewerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.filteredAssets$ = this.fetch$
-      .pipe(
+    this.filteredAssets$ = this.fetch$.
+    pipe(
         switchMap(() => {
           const assets$ = this.assetService.requestAssets();
           return !!this.searchText
             ? assets$.pipe(map(assets => assets.filter(asset => asset.id.toLowerCase().includes(this.searchText))))
             : assets$;
-        }));
+        })
+      );
   }
 
   isBusy() {

@@ -4,9 +4,24 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
 
-if (environment.production) {
-  enableProdMode();
-}
+import { runtimeEnvLoader as runtimeEnvLoaderPromise } from './assets/config/runtimeEnvLoader';
 
-platformBrowserDynamic().bootstrapModule(AppModule)
-  .catch(err => console.error(err));
+runtimeEnvLoaderPromise.then(runtimeEnv => {
+
+  if (environment.production) {
+    enableProdMode();
+
+    window.console.log = () => { }
+    window.console.error = () => { }
+    window.console.trace = () => { }
+    window.console.debug = () => { }
+  }
+
+  if (runtimeEnv.runtime != '') {
+    environment.runtime = runtimeEnv;
+  }
+
+  platformBrowserDynamic().bootstrapModule(AppModule)
+    .catch(err => console.error(err));
+
+});
