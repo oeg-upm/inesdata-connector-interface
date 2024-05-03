@@ -1,140 +1,173 @@
+
 <mat-dialog-content>
-  <div>
-    <mat-form-field class="form-field" color="accent">
-      <mat-label>Id</mat-label>
-      <input required [(ngModel)]="id" matInput>
-    </mat-form-field>
-    <mat-form-field class="form-field" color="accent">
-      <mat-label>Name</mat-label>
-      <input [(ngModel)]="name" matInput>
-    </mat-form-field>
-  </div>
-  <div>
-    <mat-form-field class="form-field" color="accent">
-      <mat-label>Content Type</mat-label>
-      <input [(ngModel)]="contenttype" matInput [placeholder]="'text/plain'">
-    </mat-form-field>
+  <mat-tab-group>
+    <mat-tab label="Asset information">
+      <div class="asset-creation-tab">
+        <div>
+          <mat-form-field class="form-field" color="accent">
+            <mat-label>Id</mat-label>
+            <input required [(ngModel)]="id" matInput>
+          </mat-form-field>
+          <mat-form-field class="form-field" color="accent">
+            <mat-label>Name</mat-label>
+            <input [(ngModel)]="name" matInput>
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field class="form-field" color="accent">
+            <mat-label>Content Type</mat-label>
+            <input [(ngModel)]="contenttype" matInput [placeholder]="'text/plain'">
+          </mat-form-field>
 
-    <mat-form-field class="form-field" color="accent">
-      <mat-label>Version</mat-label>
-      <input [(ngModel)]="version" matInput [placeholder]="'1.0'">
-    </mat-form-field>
-  </div>
+          <mat-form-field class="form-field" color="accent">
+            <mat-label>Version</mat-label>
+            <input [(ngModel)]="version" matInput [placeholder]="'1.0'">
+          </mat-form-field>
+        </div>
+      </div>
+    </mat-tab>
 
-  <div>
-    <mat-form-field class="form-field" color="accent">
-      <mat-label>Destination</mat-label>
-      <mat-select [(ngModel)]="storageTypeId">
-        <mat-option *ngFor="let storageType of storageTypes " [value]="storageType.id">
-          {{storageType.name}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
+    <mat-tab label="Detailed information">
+      <div class="asset-creation-tab">
+        <div>
+          <button (click)="setVocaulary(null)" color="{{vocabularyId == null ? 'accent' : 'primary'}}" mat-stroked-button>Default asset</button>
+          <button *ngFor="let vocabulary of vocabularies" (click)="setVocaulary(vocabulary.id)" color="{{vocabularyId != null && vocabularyId == vocabulary.id ? 'accent' : 'primary'}}" mat-stroked-button>
+            {{vocabulary.name}}
+          </button>
+        </div>
+        <div *ngIf="vocabularyId">
+          <h3>{{getVocabulary(vocabularyId).name}}</h3>
+          <jsonforms
+              [(data)]="data"
+              [schema]="schema"
+              [uischema]="uischema"
+              [renderers]="renderers"
+              [ajv]="ajv"
+          ></jsonforms>
+        </div>
+        <div *ngIf="! vocabularyId">
+          <p>No additional metadata is required</p>
+        </div>
+      </div>
+    </mat-tab>
 
-  <div *ngIf="storageTypeId === 'HttpData'">
-    <mat-form-field class="form-field" color="accent">
-      <mat-label>Name</mat-label>
-      <input [(ngModel)]="httpDataAddress.name" matInput>
-    </mat-form-field>
+    <mat-tab label="Storage information">
+      <div class="asset-creation-tab">
+        <div>
+          <mat-form-field class="form-field" color="accent">
+            <mat-label>Destination</mat-label>
+            <mat-select [(ngModel)]="storageTypeId">
+              <mat-option *ngFor="let storageType of storageTypes " [value]="storageType.id">
+                {{storageType.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
 
-    <mat-form-field class="form-field" color="accent">
-      <mat-label>Path</mat-label>
-      <input [(ngModel)]="httpDataAddress.path" matInput>
-    </mat-form-field>
+        <div *ngIf="storageTypeId === 'HttpData'">
+          <mat-form-field class="form-field" color="accent">
+            <mat-label>Name</mat-label>
+            <input [(ngModel)]="httpDataAddress.name" matInput>
+          </mat-form-field>
 
-    <mat-form-field class="form-field" color="accent">
-      <mat-label>Base URL</mat-label>
-      <input [(ngModel)]="httpDataAddress.baseUrl" matInput>
-    </mat-form-field>
+          <mat-form-field class="form-field" color="accent">
+            <mat-label>Path</mat-label>
+            <input [(ngModel)]="httpDataAddress.path" matInput>
+          </mat-form-field>
 
-    <mat-form-field class="form-field" color="accent">
-      <mat-label>Auth Key</mat-label>
-      <input [(ngModel)]="httpDataAddress.authKey" matInput>
-    </mat-form-field>
+          <mat-form-field class="form-field" color="accent">
+            <mat-label>Base URL</mat-label>
+            <input [(ngModel)]="httpDataAddress.baseUrl" matInput>
+          </mat-form-field>
 
-    <mat-form-field class="form-field" color="accent">
-      <mat-label>Auth Code</mat-label>
-      <input [(ngModel)]="httpDataAddress.authCode" matInput>
-    </mat-form-field>
+          <mat-form-field class="form-field" color="accent">
+            <mat-label>Auth Key</mat-label>
+            <input [(ngModel)]="httpDataAddress.authKey" matInput>
+          </mat-form-field>
 
-    <mat-form-field class="form-field" color="accent">
-      <mat-label>Secret Name</mat-label>
-      <input [(ngModel)]="httpDataAddress.secretName" matInput>
-    </mat-form-field>
+          <mat-form-field class="form-field" color="accent">
+            <mat-label>Auth Code</mat-label>
+            <input [(ngModel)]="httpDataAddress.authCode" matInput>
+          </mat-form-field>
 
-    <mat-form-field class="form-field" color="accent">
-      <mat-label>Proxy Body</mat-label>
-      <input [(ngModel)]="httpDataAddress.proxyBody" matInput>
-    </mat-form-field>
+          <mat-form-field class="form-field" color="accent">
+            <mat-label>Secret Name</mat-label>
+            <input [(ngModel)]="httpDataAddress.secretName" matInput>
+          </mat-form-field>
 
-    <mat-form-field class="form-field" color="accent">
-      <mat-label>Proxy Path</mat-label>
-      <input [(ngModel)]="httpDataAddress.proxyPath" matInput>
-    </mat-form-field>
+          <mat-form-field class="form-field" color="accent">
+            <mat-label>Proxy Body</mat-label>
+            <input [(ngModel)]="httpDataAddress.proxyBody" matInput>
+          </mat-form-field>
 
-    <mat-form-field class="form-field" color="accent">
-      <mat-label>Proxy Query Params</mat-label>
-      <input [(ngModel)]="httpDataAddress.proxyQueryParams" matInput>
-    </mat-form-field>
+          <mat-form-field class="form-field" color="accent">
+            <mat-label>Proxy Path</mat-label>
+            <input [(ngModel)]="httpDataAddress.proxyPath" matInput>
+          </mat-form-field>
 
-    <mat-form-field class="form-field" color="accent">
-      <mat-label>Proxy Method</mat-label>
-      <input [(ngModel)]="httpDataAddress.roxyMethod" matInput>
-    </mat-form-field>
+          <mat-form-field class="form-field" color="accent">
+            <mat-label>Proxy Query Params</mat-label>
+            <input [(ngModel)]="httpDataAddress.proxyQueryParams" matInput>
+          </mat-form-field>
 
-    <mat-form-field class="form-field" color="accent">
-      <mat-label>Content Type</mat-label>
-      <input [(ngModel)]="httpDataAddress.contentType" matInput>
-    </mat-form-field>
-  </div>
+          <mat-form-field class="form-field" color="accent">
+            <mat-label>Proxy Method</mat-label>
+            <input [(ngModel)]="httpDataAddress.roxyMethod" matInput>
+          </mat-form-field>
 
-  <div *ngIf="storageTypeId === 'AmazonS3'">
-    <mat-form-field class="form-field" color="accent">
-      <mat-label>Region</mat-label>
-      <input required [(ngModel)]="amazonS3DataAddress.region" matInput>
-    </mat-form-field>
+          <mat-form-field class="form-field" color="accent">
+            <mat-label>Content Type</mat-label>
+            <input [(ngModel)]="httpDataAddress.contentType" matInput>
+          </mat-form-field>
+        </div>
 
-    <mat-form-field class="form-field" color="accent">
-      <mat-label>Bucket Name</mat-label>
-      <input [(ngModel)]="amazonS3DataAddress.bucketName" matInput>
-    </mat-form-field>
+        <div *ngIf="storageTypeId === 'AmazonS3'">
+          <mat-form-field class="form-field" color="accent">
+            <mat-label>Region</mat-label>
+            <input required [(ngModel)]="amazonS3DataAddress.region" matInput>
+          </mat-form-field>
 
-    <mat-form-field class="form-field" color="accent">
-      <mat-label>Key Prefix</mat-label>
-      <input [(ngModel)]="amazonS3DataAddress.keyPrefix" matInput>
-    </mat-form-field>
+          <mat-form-field class="form-field" color="accent">
+            <mat-label>Bucket Name</mat-label>
+            <input [(ngModel)]="amazonS3DataAddress.bucketName" matInput>
+          </mat-form-field>
 
-    <mat-form-field class="form-field" color="accent">
-      <mat-label>Folder Name</mat-label>
-      <input [(ngModel)]="amazonS3DataAddress.folderName" matInput>
-    </mat-form-field>
+          <mat-form-field class="form-field" color="accent">
+            <mat-label>Key Prefix</mat-label>
+            <input [(ngModel)]="amazonS3DataAddress.keyPrefix" matInput>
+          </mat-form-field>
 
-    <mat-form-field class="form-field" color="accent">
-      <mat-label>Access Key Id</mat-label>
-      <input [(ngModel)]="amazonS3DataAddress.accessKeyId" matInput>
-    </mat-form-field>
+          <mat-form-field class="form-field" color="accent">
+            <mat-label>Folder Name</mat-label>
+            <input [(ngModel)]="amazonS3DataAddress.folderName" matInput>
+          </mat-form-field>
 
-    <mat-form-field class="form-field" color="accent">
-      <mat-label>Secret Access Key</mat-label>
-      <input [(ngModel)]="amazonS3DataAddress.secretAccessKey" matInput>
-    </mat-form-field>
+          <mat-form-field class="form-field" color="accent">
+            <mat-label>Access Key Id</mat-label>
+            <input [(ngModel)]="amazonS3DataAddress.accessKeyId" matInput>
+          </mat-form-field>
 
-    <mat-form-field class="form-field" color="accent">
-      <mat-label>Endpoint Override</mat-label>
-      <input [(ngModel)]="amazonS3DataAddress.endpointOverride" matInput>
-    </mat-form-field>
-  </div>
+          <mat-form-field class="form-field" color="accent">
+            <mat-label>Secret Access Key</mat-label>
+            <input [(ngModel)]="amazonS3DataAddress.secretAccessKey" matInput>
+          </mat-form-field>
 
+          <mat-form-field class="form-field" color="accent">
+            <mat-label>Endpoint Override</mat-label>
+            <input [(ngModel)]="amazonS3DataAddress.endpointOverride" matInput>
+          </mat-form-field>
+        </div>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
 </mat-dialog-content>
 
-
 <mat-dialog-actions>
-    <button (click)="onSave()" color="accent" mat-stroked-button>
-        <mat-icon>add_circle_outline</mat-icon> Create
-    </button>
+  <button (click)="onSave()" color="accent" mat-stroked-button>
+      <mat-icon>add_circle_outline</mat-icon> Create
+  </button>
 
-    <button color="accent" mat-dialog-close mat-stroked-button>
-        <mat-icon>cancel</mat-icon> Cancel
-    </button>
+  <button color="accent" mat-dialog-close mat-stroked-button>
+      <mat-icon>cancel</mat-icon> Cancel
+  </button>
 </mat-dialog-actions>
