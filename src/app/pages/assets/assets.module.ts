@@ -14,9 +14,13 @@ import {MatInputModule} from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
 import {MatDialogModule} from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
-
+import { MatTabsModule } from "@angular/material/tabs";
 import { AssetViewerComponent } from './asset-viewer/asset-viewer.component';
 import { AssetEditorDialog } from './asset-editor-dialog/asset-editor-dialog.component';
+import { SchemaFormModule } from "ngx-schema-form";
+
+import { JsonFormsModule } from '@jsonforms/angular';
+import { JsonFormsAngularMaterialModule } from '@jsonforms/angular-material';
 
 @NgModule({
   declarations: [
@@ -39,7 +43,11 @@ import { AssetEditorDialog } from './asset-editor-dialog/asset-editor-dialog.com
     MatInputModule,
     MatButtonModule,
     MatDialogModule,
-    MatSelectModule
+    MatSelectModule,
+    MatTabsModule,
+    SchemaFormModule,
+    JsonFormsModule,
+    JsonFormsAngularMaterialModule,
   ]
 })
 export class AssetsModule { }

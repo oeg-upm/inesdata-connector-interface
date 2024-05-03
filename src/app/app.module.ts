@@ -25,6 +25,11 @@ import { AuthService } from './auth/auth.service';
 import { JwtHelperService, JwtModule, JWT_OPTIONS } from '@auth0/angular-jwt';
 import { OAuthModule, OAuthModuleConfig } from 'angular-oauth2-oidc';
 
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { JsonFormsModule } from '@jsonforms/angular';
+import { JsonFormsAngularMaterialModule } from '@jsonforms/angular-material';
+
+
 /**
  * JWT options factory
  * @param authService Auth service
@@ -64,6 +69,10 @@ import { OAuthModule, OAuthModuleConfig } from 'angular-oauth2-oidc';
     MatCardModule,
     SharedModule,
     HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule,
+    JsonFormsModule,
+    JsonFormsAngularMaterialModule,
     JwtModule.forRoot({
       jwtOptionsProvider: {
         provide: JWT_OPTIONS,
