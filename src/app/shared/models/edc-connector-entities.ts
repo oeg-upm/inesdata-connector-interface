@@ -8,6 +8,8 @@ export type {
   CatalogRequest,
   Constraint,
   ContractAgreement,
+  ContractDefinition,
+  ContractDefinitionInput,
   ContractNegotiation,
   ContractNegotiationRequest,
   ContractNegotiationState,

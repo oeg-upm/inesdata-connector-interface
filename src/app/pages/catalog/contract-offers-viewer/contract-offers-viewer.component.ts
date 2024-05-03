@@ -1,16 +1,15 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ContractOffer } from '../../../shared/models/contract-offer';
 import { TransferProcessStates } from "../../../shared/models/transfer-process-states";
 import { NegotiationResult } from "../../../shared/models/negotiation-result";
-import { ContractNegotiation, ContractNegotiationRequest, PolicyInput } from "../../../shared/models/edc-connector-entities";
+import { ContractNegotiation, ContractNegotiationRequest, Policy } from "../../../shared/models/edc-connector-entities";
 import { CatalogBrowserService } from 'src/app/shared/services/catalog-browser.service';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { Router } from '@angular/router';
 
 export interface ContractOffersDialogData {
   assetId: string;
-  contractOffers: ContractOffer[];
+  contractOffers: Policy[];
   originator: string;
   properties: any;
 }
@@ -38,17 +37,17 @@ export class ContractOffersViewerComponent {
     private apiService: CatalogBrowserService, private notificationService: NotificationService,
     private router: Router) { }
 
-  isBusy(contractOffer: ContractOffer) {
-    return this.runningNegotiations.get(contractOffer.id) !== undefined || !!this.runningTransferProcesses.find(tp => tp.assetId === contractOffer.assetId);
+  isBusy(contractOffer: Policy) {
+    return this.runningNegotiations.get(contractOffer["@id"]) !== undefined || !!this.runningTransferProcesses.find(tp => tp.assetId === contractOffer.assetId);
   }
 
-  getState(contractOffer: ContractOffer): string {
+  getState(contractOffer: Policy): string {
     const transferProcess = this.runningTransferProcesses.find(tp => tp.assetId === contractOffer.assetId);
     if (transferProcess) {
       return TransferProcessStates[transferProcess.state];
     }
 
-    const negotiation = this.runningNegotiations.get(contractOffer.id);
+    const negotiation = this.runningNegotiations.get(contractOffer["@id"]);
     if (negotiation) {
       return 'negotiating';
     }
@@ -56,15 +55,14 @@ export class ContractOffersViewerComponent {
     return '';
   }
 
-  isNegotiated(contractOffer: ContractOffer) {
+  isNegotiated(contractOffer: Policy) {
     return this.finishedNegotiations.get(contractOffer.id) !== undefined;
   }
 
-  onNegotiateClicked(contractOffer: ContractOffer) {
+  onNegotiateClicked(contractOffer: Policy) {
     const initiateRequest: ContractNegotiationRequest = {
       counterPartyAddress: this.data.originator,
-      policy: contractOffer.policy,
-      providerId: contractOffer.policy.target!
+      policy: contractOffer
     };
 
     const finishedNegotiationStates = [
@@ -73,10 +71,10 @@ export class ContractOffersViewerComponent {
       "ERROR"];
 
     this.apiService.initiateNegotiation(initiateRequest).subscribe(negotiationId => {
-      this.finishedNegotiations.delete(initiateRequest.policy.uid);
-      this.runningNegotiations.set(initiateRequest.policy.uid, {
+      this.finishedNegotiations.delete(initiateRequest.policy["@id"]);
+      this.runningNegotiations.set(initiateRequest.policy["@id"], {
         id: negotiationId,
-        offerId: initiateRequest.policy.uid
+        offerId: initiateRequest.policy["@id"]
       });
 
       if (!this.pollingHandleNegotiation) {
@@ -107,11 +105,11 @@ export class ContractOffersViewerComponent {
     });
   }
 
-  getPolicy(policy: PolicyInput): any {
+  getJsonPolicy(policy: Policy): any {
     return {
-      permission: policy.permission,
-      obligation: policy.obligation,
-      prohibition: policy.prohibition
+      permission: policy['odrl:permission'],
+      prohibition: policy['odrl:prohibition'],
+      obligation: policy['odrl:obligation']
     }
   }
 }

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { PolicyDefinitionInput, PolicyInput } from "../../../shared/models/edc-connector-entities";
+import { PolicyInput } from "../../../shared/models/edc-connector-entities";
 import { MatDialogRef } from "@angular/material/dialog";
 import { NotificationService } from 'src/app/shared/services/notification.service';
+import { PolicyBuilder } from '@think-it-labs/edc-connector-client';
 
 @Component({
   selector: 'app-new-policy-dialog',
@@ -11,12 +12,10 @@ import { NotificationService } from 'src/app/shared/services/notification.servic
 export class NewPolicyDialogComponent implements OnInit {
   editMode: boolean = false;
   policy: PolicyInput = {
-    "@type": "set"
+    "@type": "Set"
   };
-  policyDefinition: PolicyDefinitionInput = {
-    "policy": this.policy,
-    "@id": ''
-  };
+
+  policyId: string = '';
   permissionsJson: string = '';
   prohibitionsJson: string = '';
   obligationsJson: string = '';
@@ -35,11 +34,13 @@ export class NewPolicyDialogComponent implements OnInit {
       this.policy.prohibition = this.parseAndVerifyJson(this.prohibitionsJson, "Prohibitions");
       this.policy.obligation = this.parseAndVerifyJson(this.obligationsJson, "Obligations");
 
-      this.policy["@context"] = "http://www.w3.org/ns/odrl.jsonld";
-
       this.dialogRef.close({
-        policy: this.policyDefinition.policy,
-        '@id': this.policyDefinition.id
+        '@id': this.policyId,
+        policy: new PolicyBuilder()
+        .raw({
+          ...this.policy
+        })
+        .build()
       });
 
     } catch (error) {

@@ -12,11 +12,12 @@
 /* tslint:disable:no-unused-variable member-ordering */
 
 import { Injectable } from '@angular/core';
-import { HttpResponse, HttpEvent, HttpContext } from '@angular/common/http';
-import { Observable, from } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Observable, from, lastValueFrom } from 'rxjs';
 
-import { EdcConnectorClient } from '@think-it-labs/edc-connector-client';
-import { ContractAgreement, QuerySpec } from '../models/edc-connector-entities'
+import { ContractAgreement, expandArray } from '@think-it-labs/edc-connector-client';
+import { QuerySpec } from '../models/edc-connector-entities'
+import { environment } from 'src/environments/environment';
 
 
 @Injectable({
@@ -24,23 +25,21 @@ import { ContractAgreement, QuerySpec } from '../models/edc-connector-entities'
 })
 export class ContractAgreementService {
 
-    private contractAgreements = this.edcConnectorClient.management.contractAgreements;
+  private readonly BASE_URL = `${environment.runtime.managementApiUrl}${environment.runtime.service.contractAgreement.baseUrl}`;
 
-    constructor(private edcConnectorClient: EdcConnectorClient) {
-
-    }
+  constructor(private http: HttpClient) {
+  }
 
     /**
      * Gets all contract agreements according to a particular query
      * @param querySpec
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
      */
-    public queryAllAgreements(querySpec?: QuerySpec, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<Array<ContractAgreement>>;
-    public queryAllAgreements(querySpec?: QuerySpec, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<Array<ContractAgreement>>>;
-    public queryAllAgreements(querySpec?: QuerySpec, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<Array<ContractAgreement>>>;
     public queryAllAgreements(querySpec?: QuerySpec): Observable<any> {
-        return from(this.contractAgreements.queryAll(querySpec))
+      return from(lastValueFrom(this.http.post<Array<ContractAgreement>>(
+        `${this.BASE_URL}${environment.runtime.service.asset.getAll}`, querySpec
+      )).then(results => {
+        return expandArray(results, () => new ContractAgreement());
+      }));
     }
 
 }
