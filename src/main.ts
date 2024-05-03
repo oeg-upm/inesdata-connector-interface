@@ -17,7 +17,7 @@ runtimeEnvLoaderPromise.then(runtimeEnv => {
     window.console.debug = () => { }
   }
 
-  if (runtimeEnv.runtime != '') {
+  if (runtimeEnv) {
     environment.runtime = runtimeEnv;
   }
 
