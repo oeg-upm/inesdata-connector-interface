@@ -68,6 +68,7 @@ export class ContractOffersViewerComponent {
     const finishedNegotiationStates = [
       "VERIFIED",
       "TERMINATED",
+      "FINALIZED",
       "ERROR"];
 
     this.apiService.initiateNegotiation(initiateRequest).subscribe(negotiationId => {
@@ -85,7 +86,7 @@ export class ContractOffersViewerComponent {
               if (finishedNegotiationStates.includes(updatedNegotiation.state)) {
                 let offerId = negotiation.offerId;
                 this.runningNegotiations.delete(offerId);
-                if (updatedNegotiation["state"] === "VERIFIED") {
+                if (updatedNegotiation["state"] === "VERIFIED" || updatedNegotiation["state"] === "FINALIZED") {
                   this.finishedNegotiations.set(offerId, updatedNegotiation);
                   this.notificationService.showInfo("Contract Negotiation complete!");
                 }

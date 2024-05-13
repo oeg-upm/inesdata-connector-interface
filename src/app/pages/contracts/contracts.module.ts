@@ -15,12 +15,13 @@ import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {MatButtonModule} from '@angular/material/button';
 
 import { ContractViewerComponent } from './contract-viewer/contract-viewer.component';
-import { CatalogBrowserTransferDialog } from './catalog-browser-transfer-dialog/catalog-browser-transfer-dialog.component';
+import { ContractTransferDialog } from './contract-transfer-dialog/contract-transfer-dialog.component';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
   declarations: [
     ContractViewerComponent,
-    CatalogBrowserTransferDialog
+    ContractTransferDialog
   ],
   imports: [
     CommonModule,
@@ -29,6 +30,7 @@ import { CatalogBrowserTransferDialog } from './catalog-browser-transfer-dialog/
     MatFormFieldModule,
     MatProgressBarModule,
     MatCardModule,
+    MatInputModule,
     MatIconModule,
     MatDividerModule,
     MatListModule,

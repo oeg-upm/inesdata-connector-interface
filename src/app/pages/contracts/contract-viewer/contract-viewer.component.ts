@@ -1,14 +1,17 @@
 import {Component, OnInit} from '@angular/core';
 import {ContractAgreementService} from "../../../shared/services/contractAgreement.service";
 import {from, Observable, of} from "rxjs";
-import { ContractAgreement, IdResponse } from "../../../shared/models/edc-connector-entities";
-import {filter, map, switchMap, tap} from "rxjs/operators";
+import { ContractAgreement, IdResponse, TransferProcessInput } from "../../../shared/models/edc-connector-entities";
+import {filter, first, map, switchMap, tap} from "rxjs/operators";
 import {NotificationService} from"../../../shared/services/notification.service";
 import {MatDialog} from "@angular/material/dialog";
 import {CatalogBrowserService} from "../../../shared/services/catalog-browser.service";
 import {Router} from "@angular/router";
 import {TransferProcessStates} from "../../../shared/models/transfer-process-states";
 import { DataOffer } from 'src/app/shared/models/data-offer';
+import { ContractTransferDialog } from '../contract-transfer-dialog/contract-transfer-dialog.component';
+import { TransferProcessService } from 'src/app/shared/services/transferProcess.service';
+import { DataAddress} from '@think-it-labs/edc-connector-client';
 
 interface RunningTransferProcess {
   processId: string;
@@ -27,22 +30,63 @@ export class ContractViewerComponent implements OnInit {
   private runningTransfers: RunningTransferProcess[] = [];
   private pollingHandleTransfer?: any;
 
+
+
   constructor(private contractAgreementService: ContractAgreementService,
               public dialog: MatDialog,
               private catalogService: CatalogBrowserService,
+              private transferService: TransferProcessService,
               private router: Router,
               private notificationService: NotificationService) {
   }
 
-  private static isFinishedState(state: string): boolean {
-    return [
-      "COMPLETED",
-      "ERROR",
-      "ENDED"].includes(state);
+  private static isFinishedState(storageType:string, state: string): boolean {
+    if(storageType === 'HttpData' && state === 'STARTED') {
+      return true;
+    } else {
+      return [
+        "COMPLETED",
+        "ERROR",
+        "ENDED"].includes(state);
+    }
   }
 
   ngOnInit(): void {
     this.contracts$ = this.contractAgreementService.queryAllAgreements();
+  }
+
+  onTransferClicked(contract: ContractAgreement) {
+    const dialogRef = this.dialog.open(ContractTransferDialog);
+
+    dialogRef.afterClosed().pipe(first()).subscribe(result => {
+      if(result !== undefined && result.transferButtonclicked){
+
+        this.createTransferRequest(contract, result.dataAddress)
+          .pipe(switchMap(trq => this.transferService.initiateTransfer(trq)))
+          .subscribe(transferId => {
+            this.startPolling(transferId, contract["@id"]!);
+          }, error => {
+            console.error(error);
+            this.notificationService.showError("Error initiating transfer");
+          });
+      }
+    });
+  }
+
+  private createTransferRequest(contract: ContractAgreement, dataAddress: DataAddress): Observable<TransferProcessInput> {
+    return this.getContractOfferForAssetId(contract.assetId!).pipe(map(contractOffer => {
+
+      const iniateTransfer : TransferProcessInput = {
+        assetId: contractOffer.assetId,
+        counterPartyAddress: contractOffer.originator,
+        contractId: contract.id,
+        transferType: dataAddress.type,
+        dataDestination: dataAddress
+      };
+
+      return iniateTransfer;
+    }));
+
   }
 
   asDate(epochSeconds?: number): string {
@@ -92,7 +136,7 @@ export class ContractViewerComponent implements OnInit {
     return () => {
       from(this.runningTransfers) //create from array
         .pipe(switchMap(runningTransferProcess => this.catalogService.getTransferProcessesById(runningTransferProcess.processId)), // fetch from API
-          filter(transferprocess => ContractViewerComponent.isFinishedState(transferprocess.state!)), // only use finished ones
+          filter(transferprocess => ContractViewerComponent.isFinishedState(transferprocess.type, transferprocess.state!)), // only use finished ones
           tap(transferProcess => {
             // remove from in-progress
             this.runningTransfers = this.runningTransfers.filter(rtp => rtp.processId !== transferProcess.id)
