@@ -8,11 +8,10 @@ import { Vocabulary } from "../../../shared/models/vocabulary";
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { DATA_ADDRESS_TYPES } from 'src/app/shared/utils/app.constants';
 
-import { HttpClient } from '@angular/common/http';
-import { Location } from '@angular/common';
 import { createAjv } from '@jsonforms/core';
 import { angularMaterialRenderers } from '@jsonforms/angular-material';
 import * as jsonld from 'jsonld';
+import { VocabularyService } from 'src/app/shared/services/vocabulary.service';
 
 
 @Component({
@@ -54,7 +53,7 @@ export class AssetEditorDialog implements OnInit {
     strict: false,
     });
   validator:any;
-  
+
   // Default asset properties
   id: string = '';
   version: string = '';
@@ -73,26 +72,18 @@ export class AssetEditorDialog implements OnInit {
   };
 
   ngOnInit(): void {
-    // Currently predefined vocabularies
     this.validator = this.ajv.compile(this.schema);
-    this.vocabularies = [
-      {
-        id: "1", 
-        name: "DCAT dataset",
-        url: "/assets/schemas/dcat-schema.json"
-      },
-      {
-        id: "2", 
-        name: "Inesdata ML",
-        url: "/assets/schemas/ml-schema.json"
-      }
-    ]
+
+    this.vocabularyService.requestVocabularies().subscribe({
+			next: (res: Vocabulary[]) => {
+				this.vocabularies = res;
+			},
+		});
   }
 
 
   constructor(private dialogRef: MatDialogRef<AssetEditorDialog>,
-              private location: Location,
-              private http: HttpClient,
+              private vocabularyService: VocabularyService,
               private notificationService: NotificationService,
       @Inject('STORAGE_TYPES') public storageTypes: StorageType[]) {
   }
@@ -104,7 +95,7 @@ export class AssetEditorDialog implements OnInit {
       return;
     }
 
-    // Generate the asset properties    
+    // Generate the asset properties
     let properties:JsonDoc = {};
 
     if (this.vocabularyId) {
@@ -122,7 +113,7 @@ export class AssetEditorDialog implements OnInit {
       const vocabulary = this.getVocabulary(this.vocabularyId);
       properties["http://purl.org/dc/terms/type"] = vocabulary.name;
     }
-    
+
     // Add default information
     properties["name"] = this.name;
     properties["version"] = this.version;
@@ -161,10 +152,9 @@ export class AssetEditorDialog implements OnInit {
       this.data = {};
       if (id != null) {
         this.vocabularies.forEach(element => {
-          if (id == element.id) {
-            this.http.get(this.location.prepareExternalUrl(element.url)).toPromise()
-            .then(res => {
-              this.schema = res;
+          if (id == element['@id']) {
+            const vocabulary = this.getVocabulary(id);
+            this.schema = JSON.parse(vocabulary.jsonSchema);
               this.validator = this.ajv.compile(this.schema);
               if (this.schema && this.schema.hasOwnProperty("@uischema")) {
                 // Get uischema from json schema definition
@@ -172,12 +162,6 @@ export class AssetEditorDialog implements OnInit {
               } else {
                 this.uischema = this.uischemaComplete;
               }
-            })
-            .catch(error => {
-              console.error('Error getting the vocabulary schema:', error);
-              this.notificationService.showError("Error retrieving the asset vocabulary");
-              this.vocabularyId = null;
-            });
           }
         });
       }
@@ -193,7 +177,7 @@ export class AssetEditorDialog implements OnInit {
     let vocabulary = null;
 
     this.vocabularies.forEach(element => {
-      if (id == element.id) {
+      if (id == element['@id']) {
         vocabulary =  element;
       }
     });

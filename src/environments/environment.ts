@@ -53,6 +53,10 @@ export const environment = {
         state: '/state',
         terminate: '/terminate',
         getAll: '/request'
+      },
+      vocabulary: {
+        baseUrl: '/vocabularies',
+        getAll: '/request'
       }
     },
     oauth2: {

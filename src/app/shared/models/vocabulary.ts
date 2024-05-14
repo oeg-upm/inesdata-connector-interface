@@ -1,5 +1,5 @@
 export interface Vocabulary {
-    id: string;
+    "@id": string;
     name: string;
-    url: string;
+    jsonSchema: string;
 }

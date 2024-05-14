@@ -31,7 +31,7 @@
       <div class="asset-creation-tab">
         <div>
           <button (click)="setVocaulary(null)" color="{{vocabularyId == null ? 'accent' : 'primary'}}" mat-stroked-button>Default asset</button>
-          <button *ngFor="let vocabulary of vocabularies" (click)="setVocaulary(vocabulary.id)" color="{{vocabularyId != null && vocabularyId == vocabulary.id ? 'accent' : 'primary'}}" mat-stroked-button>
+          <button *ngFor="let vocabulary of vocabularies" (click)="setVocaulary(vocabulary['@id'])" color="{{vocabularyId != null && vocabularyId == vocabulary['@id'] ? 'accent' : 'primary'}}" mat-stroked-button>
             {{vocabulary.name}}
           </button>
         </div>
