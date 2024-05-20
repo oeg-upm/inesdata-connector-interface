@@ -45,7 +45,7 @@
     "@angular/compiler-cli": "^17.1.2",
     "@types/jasmine": "~4.0.3",
     "@types/jsonld": "^1.5.13",
-    "@types/node": "^20.8.7",
+    "@types/node": "^20.12.12",
     "codelyzer": "^6.0.0",
     "eslint": "~8.42.0",
     "jasmine-core": "~5.1.1",
