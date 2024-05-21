@@ -6,7 +6,7 @@ import { StorageType } from "../../../shared/models/storage-type";
 import { AmazonS3DataAddress } from "../../../shared/models/amazon-s3-data-address";
 import { Vocabulary } from "../../../shared/models/vocabulary";
 import { NotificationService } from 'src/app/shared/services/notification.service';
-import { DATA_ADDRESS_TYPES } from 'src/app/shared/utils/app.constants';
+import { DATA_ADDRESS_TYPES, ASSET_TYPES } from 'src/app/shared/utils/app.constants';
 
 import { createAjv } from '@jsonforms/core';
 import { angularMaterialRenderers } from '@jsonforms/angular-material';
@@ -71,16 +71,29 @@ export class AssetEditorDialog implements OnInit {
     type: 'HttpData'
   };
 
+  assetType: string = '';
+  assetTypes = Object.entries(ASSET_TYPES);
+
   ngOnInit(): void {
     this.validator = this.ajv.compile(this.schema);
 
     this.vocabularyService.requestVocabularies().subscribe({
 			next: (res: Vocabulary[]) => {
 				this.vocabularies = res;
+        this.setDefaultVocabulary();
 			},
 		});
   }
 
+  setDefaultVocabulary() {
+    this.vocabularies.forEach(element => {
+      if (element['defaultVocabulary'] == true) {
+        this.vocabularyId =  element['@id'];
+        this.assetType = element['category'];
+      }
+    });
+    
+  }
 
   constructor(private dialogRef: MatDialogRef<AssetEditorDialog>,
               private vocabularyService: VocabularyService,
@@ -103,6 +116,10 @@ export class AssetEditorDialog implements OnInit {
         // Add context if it is provided in the Json Schema
         const jsonSchema:JsonDoc = this.schema as JsonDoc;
         const context = jsonSchema["@context"];
+        // Add default EDC vocabulary is none has been set up
+        if (! this.schema["@context"].hasOwnProperty("@vocab")) {
+          context["@vocab"] = "https://w3id.org/edc/v0.0.1/ns/"
+        }
         let compacted: JsonDoc = this.data as JsonDoc;
         compacted["@context"] = context;
         properties = await jsonld.expand(compacted);
@@ -110,8 +127,7 @@ export class AssetEditorDialog implements OnInit {
         properties = this.data;
       }
 
-      const vocabulary = this.getVocabulary(this.vocabularyId);
-      properties["http://purl.org/dc/terms/type"] = vocabulary.name;
+      properties["http://purl.org/dc/terms/type"] = this.vocabularyId;
     }
 
     // Add default information
@@ -204,10 +220,14 @@ export class AssetEditorDialog implements OnInit {
   /**
    * Checks the vocabulary data is compilant with the json schema
    *
-   * @returns true there is no vocabulary or the data is validated
+   * @returns true there is no vocabulary in the connector or the data is validated
    */
   private checkVocabularyData(): boolean {
-    return !this.vocabularyId || this.validator(this.data);
+    return this.vocabularies?.length < 1 || (this.vocabularyId && this.validator(this.data));
+  }
+
+  assetTypeChange() {
+    console.log(this.assetType);
   }
 
 }

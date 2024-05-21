@@ -24,13 +24,22 @@
             <input [(ngModel)]="version" matInput [placeholder]="'1.0'">
           </mat-form-field>
         </div>
+        <div>
+          <mat-form-field class="form-field" color="accent">
+            <mat-label>Asset type</mat-label>
+            <mat-select [(ngModel)]="assetType" (selectionChange)="assetTypeChange()">
+              <mat-option *ngFor="let assetType of assetTypes" [value]="assetType[0]">
+                {{ assetType[1] }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
       </div>
     </mat-tab>
 
-    <mat-tab label="Detailed information">
+    <mat-tab label="Detailed information" *ngIf="vocabularies?.length > 0">
       <div class="asset-creation-tab">
         <div>
-          <button (click)="setVocaulary(null)" color="{{vocabularyId == null ? 'accent' : 'primary'}}" mat-stroked-button>Default asset</button>
           <button *ngFor="let vocabulary of vocabularies" (click)="setVocaulary(vocabulary['@id'])" color="{{vocabularyId != null && vocabularyId == vocabulary['@id'] ? 'accent' : 'primary'}}" mat-stroked-button>
             {{vocabulary.name}}
           </button>
@@ -46,7 +55,7 @@
           ></jsonforms>
         </div>
         <div *ngIf="! vocabularyId">
-          <p>No additional metadata is required</p>
+          <p>Please, select a vocabulary and complete its detailed information</p>
         </div>
       </div>
     </mat-tab>
