@@ -38,26 +38,37 @@
     </mat-tab>
 
     <mat-tab label="Detailed information" *ngIf="vocabularies?.length > 0">
-      <div class="asset-creation-tab">
-        <div>
-          <button *ngFor="let vocabulary of vocabularies" (click)="setVocaulary(vocabulary['@id'])" color="{{vocabularyId != null && vocabularyId == vocabulary['@id'] ? 'accent' : 'primary'}}" mat-stroked-button>
-            {{vocabulary.name}}
-          </button>
-        </div>
-        <div *ngIf="vocabularyId">
-          <h3>{{getVocabulary(vocabularyId).name}}</h3>
-          <jsonforms
-              [(data)]="data"
-              [schema]="schema"
-              [uischema]="uischema"
-              [renderers]="renderers"
-              [ajv]="ajv"
-          ></jsonforms>
-        </div>
-        <div *ngIf="! vocabularyId">
-          <p>Please, select a vocabulary and complete its detailed information</p>
-        </div>
-      </div>
+      <mat-tab-group>
+        <mat-tab label="Default information" *ngIf="defaultVocabularies?.length>0 && defaultForms?.length>0">
+          <div class="asset-creation-tab">
+            <div *ngFor="let defaultForm of defaultForms">
+              <h3>{{defaultForm.name}}</h3>
+              <jsonforms
+                  [(data)]="defaultForm.data"
+                  [schema]="defaultForm.schema"
+                  [uischema]="defaultForm.uischema"
+                  [renderers]="defaultForm.renderers"
+                  [ajv]="ajv"
+              ></jsonforms>
+            </div>
+          </div>
+        </mat-tab>
+        <mat-tab [label]="getAssetTypeText()+' information'" *ngIf="selectedVocabularies?.length>0 && selectedForms?.length>0">
+          <div class="asset-creation-tab">
+            <div *ngFor="let selectedForm of selectedForms">
+              <h3>{{selectedForm.name}}</h3>
+              <jsonforms
+                  [(data)]="selectedForm.data"
+                  [schema]="selectedForm.schema"
+                  [uischema]="selectedForm.uischema"
+                  [renderers]="selectedForm.renderers"
+                  [ajv]="ajv"
+              ></jsonforms>
+            </div>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+
     </mat-tab>
 
     <mat-tab label="Storage information">
