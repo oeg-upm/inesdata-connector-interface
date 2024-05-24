@@ -56,7 +56,7 @@ export class AuthService {
     public oauthService: OAuthService) {
 
     this.configureOAuth();
-    
+
     if (this.oauthService.hasValidAccessToken()) {
       // Recover the user from session
       this.createMember();
@@ -229,11 +229,11 @@ export class AuthService {
 
     if (this.oauthService.getAccessToken() != null) {
       const decodedToken = this.jwtHelper.decodeToken(this.oauthService.getAccessToken());
-      // Get the resource roles from Keycloak access 
-      var clientId = environment.runtime.oauth2.clientId;
+      // Get the resource roles from Keycloak access
+      let clientId = environment.runtime.oauth2.clientId;
       if (clientId) {
         this.member.roles = decodedToken['realm_access']['roles'];
-      }      
+      }
     }
   }
 

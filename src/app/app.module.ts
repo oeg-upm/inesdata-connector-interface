@@ -1,4 +1,4 @@
-import { APP_INITIALIZER, NgModule} from '@angular/core';
+import { NgModule} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -23,7 +23,7 @@ import { SharedModule } from './shared/shared.module';
 
 import { AuthService } from './auth/auth.service';
 import { JwtHelperService, JwtModule, JWT_OPTIONS } from '@auth0/angular-jwt';
-import { OAuthModule, OAuthModuleConfig } from 'angular-oauth2-oidc';
+import { OAuthModule } from 'angular-oauth2-oidc';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { JsonFormsModule } from '@jsonforms/angular';

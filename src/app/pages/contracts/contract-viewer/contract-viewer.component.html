@@ -1,7 +1,7 @@
 <div *ngIf="contracts$ | async as contracts" id="wrapper">
   <div class="container">
     <div fxLayout="row wrap" fxLayoutGap="15px" fxLayoutAlign="start start">
-      <mat-card  *ngFor="let contract of contracts">
+      <mat-card *ngFor="let contract of contracts">
         <mat-card-header>
           <mat-icon mat-card-avatar>attachment</mat-icon>
           <mat-card-title>{{contract.id}}</mat-card-title>
@@ -29,6 +29,15 @@
               <div class="contract-property-value" matListItemLine>{{asDate(contract.mandatoryValue('edc',
                 'contractSigningDate'))}}</div>
             </mat-list-item>
+
+            <mat-divider></mat-divider>
+            <mat-card-actions class="card-actions">
+              <button color="accent" mat-stroked-button
+                (click)="onTransferClicked(contract)">
+                <mat-icon>downloading</mat-icon>
+                Transfer
+              </button>
+            </mat-card-actions>
 
             <mat-card-footer class="contract-card-footer">
               <mat-progress-bar *ngIf="isTransferInProgress(contract.id!)" color="accent" mode="indeterminate">

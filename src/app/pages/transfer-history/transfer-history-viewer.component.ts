@@ -13,7 +13,7 @@ import {MatDialog} from "@angular/material/dialog";
 })
 export class TransferHistoryViewerComponent implements OnInit {
 
-  columns: string[] = ['id', 'state', 'lastUpdated', 'assetId', 'contractId', 'action'];
+  columns: string[] = ['state', 'lastUpdated', 'assetId', 'contractId', 'action'];
   transferProcesses$: Observable<TransferProcess[]> = of([]);
   storageExplorerLinkTemplate: string | undefined;
 
@@ -39,10 +39,6 @@ export class TransferHistoryViewerComponent implements OnInit {
        this.transferProcessService.deprovisionTransferProcess(transferProcess["@id"]!).subscribe(() => this.loadTransferProcesses());
       }
     });
-  }
-
-  showStorageExplorerLink(transferProcess: TransferProcess) {
-    return transferProcess.dataDestination?.properties?.type === 'AzureStorage' && transferProcess.state === 'COMPLETED';
   }
 
   showDeprovisionButton(transferProcess: TransferProcess) {
