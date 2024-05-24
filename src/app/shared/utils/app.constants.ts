@@ -14,3 +14,9 @@ export const DATA_ADDRESS_TYPES = {
   httpData: 'HttpData',
   amazonS3: 'AmazonS3'
 }
+
+export const ASSET_TYPES = {
+  dataset: 'Dataset',
+  service: 'Service',
+  machineLearning: 'Machine learning'
+}
