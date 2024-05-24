@@ -65,12 +65,6 @@ export class ContractOffersViewerComponent {
       policy: contractOffer
     };
 
-    const finishedNegotiationStates = [
-      "VERIFIED",
-      "TERMINATED",
-      "FINALIZED",
-      "ERROR"];
-
     this.apiService.initiateNegotiation(initiateRequest).subscribe(negotiationId => {
       this.finishedNegotiations.delete(initiateRequest.policy["@id"]);
       this.runningNegotiations.set(initiateRequest.policy["@id"], {
@@ -78,32 +72,44 @@ export class ContractOffersViewerComponent {
         offerId: initiateRequest.policy["@id"]
       });
 
-      if (!this.pollingHandleNegotiation) {
-        // there are no active negotiations
-        this.pollingHandleNegotiation = setInterval(() => {
-          for (const negotiation of this.runningNegotiations.values()) {
-            this.apiService.getNegotiationState(negotiation.id).subscribe(updatedNegotiation => {
-              if (finishedNegotiationStates.includes(updatedNegotiation.state)) {
-                let offerId = negotiation.offerId;
-                this.runningNegotiations.delete(offerId);
-                if (updatedNegotiation["state"] === "VERIFIED" || updatedNegotiation["state"] === "FINALIZED") {
-                  this.finishedNegotiations.set(offerId, updatedNegotiation);
-                  this.notificationService.showInfo("Contract Negotiation complete!");
-                }
-              }
 
-              if (this.runningNegotiations.size === 0) {
-                clearInterval(this.pollingHandleNegotiation);
-                this.pollingHandleNegotiation = undefined;
-              }
-            });
-          }
-        }, 1000);
+      if (!this.pollingHandleNegotiation) {
+        this.checkActiveNegotiations();
       }
     }, error => {
       console.error(error);
       this.notificationService.showError("Error starting negotiation");
     });
+  }
+
+  checkActiveNegotiations() {
+     // there are no active negotiations
+     this.pollingHandleNegotiation = setInterval(() => {
+
+      const finishedNegotiationStates = [
+        "VERIFIED",
+        "TERMINATED",
+        "FINALIZED",
+        "ERROR"];
+
+      for (const negotiation of this.runningNegotiations.values()) {
+        this.apiService.getNegotiationState(negotiation.id).subscribe(updatedNegotiation => {
+          if (finishedNegotiationStates.includes(updatedNegotiation.state)) {
+            let offerId = negotiation.offerId;
+            this.runningNegotiations.delete(offerId);
+            if (updatedNegotiation["state"] === "VERIFIED" || updatedNegotiation["state"] === "FINALIZED") {
+              this.finishedNegotiations.set(offerId, updatedNegotiation);
+              this.notificationService.showInfo("Contract Negotiation complete!");
+            }
+          }
+
+          if (this.runningNegotiations.size === 0) {
+            clearInterval(this.pollingHandleNegotiation);
+            this.pollingHandleNegotiation = undefined;
+          }
+        });
+      }
+    }, 1000);
   }
 
   getJsonPolicy(policy: Policy): any {

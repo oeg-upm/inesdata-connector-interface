@@ -1,5 +1,5 @@
-export const runtimeEnvLoader = new Promise<any>((resolve, reject) => {
-  var xmlhttp = new XMLHttpRequest(),
+export const runtimeEnvLoader = new Promise<any>((resolve) => {
+  const xmlhttp = new XMLHttpRequest(),
     method = 'GET',
     url = './assets/config/app.config.json';
     xmlhttp.open(method, url, true);

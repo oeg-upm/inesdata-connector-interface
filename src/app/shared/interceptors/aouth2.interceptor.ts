@@ -1,10 +1,9 @@
 import { Injectable, Injector } from '@angular/core';
 import { HttpEvent, HttpRequest, HttpHandler, HttpInterceptor, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError, defer, from, switchMap } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 import { AuthService } from 'src/app/auth/auth.service';
-//import { NotificationService } from '../services/notifications.service';
 
 @Injectable()
 export class Oauth2Interceptor implements HttpInterceptor {
@@ -65,7 +64,6 @@ export class Oauth2Interceptor implements HttpInterceptor {
         // Token expired. Try to authenticate and retry the request with new token
         console.debug('The request has not been completed because it lacks valid authentication credentials for the requested resource; status code: ' + error.status, request, error)
 
-        // this.notificationService.showError('Lo sentimos, la sesión ha expirado', 'Error en la sesion',);
         this.authService.logout();
         break;
       case 403:

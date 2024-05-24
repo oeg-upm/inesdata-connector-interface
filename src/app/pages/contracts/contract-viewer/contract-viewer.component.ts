@@ -74,7 +74,7 @@ export class ContractViewerComponent implements OnInit {
   }
 
   private createTransferRequest(contract: ContractAgreement, dataAddress: DataAddress): Observable<TransferProcessInput> {
-    return this.getContractOfferForAssetId(contract.assetId!).pipe(map(contractOffer => {
+    return this.getContractOfferForAssetId(contract.assetId).pipe(map(contractOffer => {
 
       const iniateTransfer : TransferProcessInput = {
         assetId: contractOffer.assetId,
@@ -136,7 +136,7 @@ export class ContractViewerComponent implements OnInit {
     return () => {
       from(this.runningTransfers) //create from array
         .pipe(switchMap(runningTransferProcess => this.catalogService.getTransferProcessesById(runningTransferProcess.processId)), // fetch from API
-          filter(transferprocess => ContractViewerComponent.isFinishedState(transferprocess.type, transferprocess.state!)), // only use finished ones
+          filter(transferprocess => ContractViewerComponent.isFinishedState(transferprocess.type, transferprocess.state)), // only use finished ones
           tap(transferProcess => {
             // remove from in-progress
             this.runningTransfers = this.runningTransfers.filter(rtp => rtp.processId !== transferProcess.id)
