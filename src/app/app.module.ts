@@ -6,26 +6,17 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { LayoutModule } from '@angular/cdk/layout';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatButtonModule } from '@angular/material/button';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatIconModule } from '@angular/material/icon';
-import { MatListModule } from '@angular/material/list';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
-import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { CONNECTOR_CATALOG_API, CONNECTOR_MANAGEMENT_API, DATA_ADDRESS_TYPES } from "./shared/utils/app.constants";
 import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { Oauth2Interceptor } from "./shared/interceptors/aouth2.interceptor";
 import { environment } from "../environments/environment";
 import { EdcConnectorClient } from "@think-it-labs/edc-connector-client";
-import { MatCardModule } from '@angular/material/card';
 import { SharedModule } from './shared/shared.module';
 
 import { AuthService } from './auth/auth.service';
 import { JwtHelperService, JwtModule, JWT_OPTIONS } from '@auth0/angular-jwt';
 import { OAuthModule } from 'angular-oauth2-oidc';
-
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { JsonFormsModule } from '@jsonforms/angular';
 import { JsonFormsAngularMaterialModule } from '@jsonforms/angular-material';
 
@@ -60,17 +51,8 @@ import { JsonFormsAngularMaterialModule } from '@jsonforms/angular-material';
     AppRoutingModule,
     BrowserAnimationsModule,
     LayoutModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatSidenavModule,
-    MatIconModule,
-    MatListModule,
-    MatSnackBarModule,
-    MatCardModule,
     SharedModule,
     HttpClientModule,
-    FormsModule,
-    ReactiveFormsModule,
     JsonFormsModule,
     JsonFormsAngularMaterialModule,
     JwtModule.forRoot({
@@ -108,7 +90,7 @@ import { JsonFormsAngularMaterialModule } from '@jsonforms/angular-material';
     },
     {
       provide: 'STORAGE_TYPES',
-      useFactory: () => [{id: DATA_ADDRESS_TYPES.httpData, name: DATA_ADDRESS_TYPES.httpData}, {id: DATA_ADDRESS_TYPES.amazonS3, name: DATA_ADDRESS_TYPES.amazonS3}],
+      useFactory: () => [{id: DATA_ADDRESS_TYPES.httpData, name: DATA_ADDRESS_TYPES.httpData}, {id: DATA_ADDRESS_TYPES.amazonS3, name: DATA_ADDRESS_TYPES.amazonS3}, {id: DATA_ADDRESS_TYPES.inesDataStore, name: DATA_ADDRESS_TYPES.inesDataStore}],
     },
     { provide: HTTP_INTERCEPTORS, useClass: Oauth2Interceptor, multi: true },
     {
