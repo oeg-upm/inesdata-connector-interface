@@ -41,9 +41,8 @@ export class UploaderFileComponent {
    * Convert Files list to normal array list
    * @param files (Files List)
    */
-  prepareFilesList(files: Array<any>) {
+  prepareFilesList(files: Array<File>) {
     for (const item of files) {
-      item.progress = 0;
       this.files.push(item);
     }
     this.filesChange.emit(this.files)

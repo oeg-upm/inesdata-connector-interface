@@ -7,6 +7,7 @@ import {AssetService} from "../../../shared/services/asset.service";
 import {AssetEditorDialog} from "../asset-editor-dialog/asset-editor-dialog.component";
 import {ConfirmationDialogComponent, ConfirmDialogModel} from "../../../shared/components/confirmation-dialog/confirmation-dialog.component";
 import {NotificationService} from "../../../shared/services/notification.service";
+import { DATA_ADDRESS_TYPES } from 'src/app/shared/utils/app.constants';
 
 @Component({
   selector: 'app-asset-viewer',
@@ -72,11 +73,20 @@ export class AssetViewerComponent implements OnInit {
     dialogRef.afterClosed().pipe(first()).subscribe((result: { assetInput?: AssetInput }) => {
       const newAsset = result?.assetInput;
       if (newAsset) {
-        this.assetService.createAsset(newAsset).subscribe({
-          next: ()=> this.fetch$.next(null),
-          error: err => this.showError(err, "This asset cannot be created"),
-          complete: () => this.notificationService.showInfo("Successfully created"),
-        })
+        if(newAsset.dataAddress.type!==DATA_ADDRESS_TYPES.inesDataStore){
+          this.assetService.createAsset(newAsset).subscribe({
+            next: ()=> this.fetch$.next(null),
+            error: err => this.showError(err, "This asset cannot be created"),
+            complete: () => this.notificationService.showInfo("Successfully created"),
+          })
+        }else{
+          this.assetService.createStorageAsset(newAsset).subscribe({
+            next: ()=> this.fetch$.next(null),
+            error: err => this.showError(err, "This asset cannot be created"),
+            complete: () => this.notificationService.showInfo("Successfully created"),
+          })
+        }
+
       }
   })
 }

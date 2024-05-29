@@ -187,6 +187,11 @@ export class AssetEditorDialog implements OnInit {
       dataAddress: dataAddress
     };
 
+    if (this.storageTypeId === DATA_ADDRESS_TYPES.inesDataStore) {
+      assetInput.file = this.inesDataStoreAddress.file
+      assetInput.blob = new Blob([await assetInput.file.arrayBuffer()])
+    }
+
     this.dialogRef.close({ assetInput });
   }
 
