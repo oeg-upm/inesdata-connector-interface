@@ -51,7 +51,7 @@ export class AssetService {
    * Creates a new asset together with a data address
    * @param assetEntryDto
    */
-  public createStorageAsset(assetEntryDto: AssetInput): Observable<any> {
+  public createStorageAsset(assetEntryDto: any): Observable<any> {
 
     const file: File = assetEntryDto?.file
     const blob: Blob = assetEntryDto?.blob
