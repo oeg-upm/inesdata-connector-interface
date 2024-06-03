@@ -53,10 +53,10 @@ export class AssetService {
    */
   public createStorageAsset(assetEntryDto: AssetInput): Observable<any> {
 
-    const file: File = assetEntryDto.file
-    const blob: Blob = assetEntryDto.blob
-    delete assetEntryDto.file
-    delete assetEntryDto.blob
+    const file: File = assetEntryDto?.file
+    const blob: Blob = assetEntryDto?.blob
+    delete assetEntryDto?.file
+    delete assetEntryDto?.blob
     let body = {
       ...assetEntryDto,
       "@context": JSON_LD_DEFAULT_CONTEXT,

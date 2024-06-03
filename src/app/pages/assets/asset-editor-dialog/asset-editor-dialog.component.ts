@@ -181,15 +181,15 @@ export class AssetEditorDialog implements OnInit {
     }
 
     // Create EDC asset
-    const assetInput: AssetInput = {
+    const assetInput: any = {
       "@id": this.id,
       properties: properties,
       dataAddress: dataAddress
     };
 
     if (this.storageTypeId === DATA_ADDRESS_TYPES.inesDataStore) {
-      assetInput.file = this.inesDataStoreAddress.file
-      assetInput.blob = new Blob([await assetInput.file.arrayBuffer()])
+      assetInput.file = this.inesDataStoreAddress?.file
+      assetInput.blob = new Blob([await assetInput?.file.arrayBuffer()])
     }
 
     this.dialogRef.close({ assetInput });
