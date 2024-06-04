@@ -139,7 +139,7 @@ export class AssetEditorDialog implements OnInit {
 
     if (this.vocabularies.length > 0) {
       this.assetType = this.vocabularies[0]['category'];
-      this.selectedVocabularies = this.vocabularies.filter(v => v.category === this.assetType)
+      this.selectedVocabularies = this.vocabularies.filter(v => v.category !== 'default' && v.category === this.assetType)
       this.defaultVocabularies = this.vocabularies.filter(v => v.category === 'default')
     } else {
       this.selectedVocabularies = []
