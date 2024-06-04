@@ -197,6 +197,16 @@
             <input [(ngModel)]="amazonS3DataAddress.endpointOverride" matInput>
           </mat-form-field>
         </div>
+
+
+
+        <div *ngIf="storageTypeId === 'InesDataStore'">
+          <mat-form-field class="form-field" color="accent">
+            <mat-label>Folder</mat-label>
+            <input [(ngModel)]="inesDataStoreAddress.folder" matInput>
+          </mat-form-field>
+          <app-uploader-file (filesChange)="setFiles($event)"></app-uploader-file>
+        </div>
       </div>
     </mat-tab>
   </mat-tab-group>

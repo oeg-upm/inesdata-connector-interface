@@ -19,6 +19,7 @@ export const environment = {
     service: {
       asset: {
         baseUrl: '/v3/assets',
+        storageUrl: '/s3assets',
         get: '/',
         getAll: '/request'
       },

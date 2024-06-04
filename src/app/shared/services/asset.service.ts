@@ -26,6 +26,7 @@ import { CONTEXTS } from '../utils/app.constants';
 export class AssetService {
 
   private readonly BASE_URL = `${environment.runtime.managementApiUrl}${environment.runtime.service.asset.baseUrl}`;
+  private readonly BASE_STORAGE_URL = `${environment.runtime.managementApiUrl}${environment.runtime.service.asset.storageUrl}`;
 
   constructor(private http: HttpClient) {
   }
@@ -47,6 +48,35 @@ export class AssetService {
 
     return from(lastValueFrom(this.http.post<Asset>(
       `${this.BASE_URL}`, body
+    )));
+  }
+
+
+  /**
+   * Creates a new asset together with a data address
+   * @param assetEntryDto
+   */
+  public createStorageAsset(assetEntryDto: any): Observable<any> {
+
+    const file: File = assetEntryDto?.file
+    const blob: Blob = assetEntryDto?.blob
+    delete assetEntryDto?.file
+    delete assetEntryDto?.blob
+    let body = {
+      ...assetEntryDto,
+      "@context": JSON_LD_DEFAULT_CONTEXT,
+    }
+
+    delete body.dataAddress.file
+
+    let formdata: FormData = new FormData();
+
+    let json = new Blob([JSON.stringify(body)], { type: "application/json" })
+    formdata.append('json', json);
+    formdata.append('file', blob, file?.name);
+
+    return from(lastValueFrom(this.http.post<Asset>(
+      `${this.BASE_STORAGE_URL}`, formdata
     )));
   }
 

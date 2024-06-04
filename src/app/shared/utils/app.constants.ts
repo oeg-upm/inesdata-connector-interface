@@ -12,7 +12,8 @@ export const COLLECTION_FORMATS = {
 
 export const DATA_ADDRESS_TYPES = {
   httpData: 'HttpData',
-  amazonS3: 'AmazonS3'
+  amazonS3: 'AmazonS3',
+  inesDataStore: 'InesDataStore'
 }
 
 export const ASSET_TYPES = {
