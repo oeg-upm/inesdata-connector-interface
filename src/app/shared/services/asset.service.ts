@@ -15,7 +15,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, from, lastValueFrom } from 'rxjs';
 
-import { expandArray, Asset, EDC_CONTEXT } from '@think-it-labs/edc-connector-client';
+import { expandArray, Asset, EDC_CONTEXT, JSON_LD_DEFAULT_CONTEXT } from '@think-it-labs/edc-connector-client';
 import { AssetInput,  QuerySpec } from "../models/edc-connector-entities"
 import { environment } from "src/environments/environment";
 import { CONTEXTS } from '../utils/app.constants';
