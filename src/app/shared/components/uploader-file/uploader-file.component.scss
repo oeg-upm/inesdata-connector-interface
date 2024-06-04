@@ -45,6 +45,7 @@
     align-items: center;
     border: dashed 1px #979797;
     margin-bottom: 1rem;
+    flex-grow: 1;
 
     .delete {
       display: flex;
@@ -52,9 +53,6 @@
       cursor: pointer;
       align-self: flex-end;
     }
-
-    display: flex;
-    flex-grow: 1;
 
     .name {
       font-size: 14px;

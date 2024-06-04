@@ -17,6 +17,7 @@ import {Observable, from, lastValueFrom} from 'rxjs';
 import {expandArray, PolicyDefinition, QuerySpec, EDC_CONTEXT} from "@think-it-labs/edc-connector-client";
 import {PolicyDefinitionInput} from "../models/edc-connector-entities"
 import { environment } from 'src/environments/environment';
+import { CONTEXTS } from '../utils/app.constants';
 
 
 @Injectable({
@@ -39,7 +40,7 @@ export class PolicyService {
       ...input,
       "@context": {
         "@vocab": EDC_CONTEXT,
-        "odrl": "http://www.w3.org/ns/odrl/2/"
+        "odrl": CONTEXTS.odrl
       }
     }
 

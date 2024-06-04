@@ -1,5 +1,4 @@
-import {Component, EventEmitter, Inject, Input, Output} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 
 @Component({
   selector: 'app-uploader-file',
