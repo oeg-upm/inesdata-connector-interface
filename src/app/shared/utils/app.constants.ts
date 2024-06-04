@@ -20,3 +20,9 @@ export const ASSET_TYPES = {
   service: 'Service',
   machineLearning: 'Machine learning'
 }
+
+export const CONTEXTS = {
+  dcterms: "http://purl.org/dc/terms/",
+  dcat: "http://www.w3.org/ns/dcat#",
+  odrl: "http://www.w3.org/ns/odrl/2/"
+}

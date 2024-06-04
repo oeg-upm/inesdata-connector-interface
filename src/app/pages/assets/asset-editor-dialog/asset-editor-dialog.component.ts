@@ -63,6 +63,10 @@ export class AssetEditorDialog implements OnInit {
   name: string = '';
   contenttype: string = '';
   storageTypeId: string = '';
+  description: string = '';
+  keywords: string = '';
+  format: string = '';
+  byteSize: string = '';
 
   // Storage information
   amazonS3DataAddress: AmazonS3DataAddress = {
@@ -154,10 +158,9 @@ export class AssetEditorDialog implements OnInit {
     })
 
     properties["assetData"] = assetDataProperty
-    // Add default information
-    properties["name"] = this.name;
-    properties["version"] = this.version;
-    properties["contenttype"] = this.contenttype;
+
+    // Add general information
+    this.addInfoProperties(properties);
 
     // Generate the asset data address
     let dataAddress: DataAddress;
@@ -179,6 +182,16 @@ export class AssetEditorDialog implements OnInit {
     };
 
     this.dialogRef.close({ assetInput });
+  }
+  addInfoProperties(properties: JsonDoc) {
+    // Add default information
+    properties["name"] = this.name;
+    properties["version"] = this.version;
+    properties["contenttype"] = this.contenttype;
+    properties["dcterms:description"] = this.description;
+    properties["dcat:keyword"] = this.keywords;
+    properties["dcat:byteSize"] = this.byteSize;
+    properties["dcterms:format"] = this.format;
   }
 
   initVocabularyForm(vocabulary: Vocabulary, isDefault: boolean) {
@@ -213,7 +226,7 @@ export class AssetEditorDialog implements OnInit {
    * @returns true if required fields have been filled
    */
   private checkRequiredFields(): boolean {
-    if (!this.id || !this.storageTypeId) {
+    if (!this.id || !this.storageTypeId || !this.name || !this.version || !this.description || !this.keywords) {
       return false;
     } else {
       if (this.storageTypeId === DATA_ADDRESS_TYPES.amazonS3 && !this.amazonS3DataAddress.region) {

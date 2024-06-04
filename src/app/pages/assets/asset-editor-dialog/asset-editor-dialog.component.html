@@ -10,7 +10,7 @@
           </mat-form-field>
           <mat-form-field class="form-field" color="accent">
             <mat-label>Name</mat-label>
-            <input [(ngModel)]="name" matInput>
+            <input required [(ngModel)]="name" matInput>
           </mat-form-field>
         </div>
         <div>
@@ -21,7 +21,13 @@
 
           <mat-form-field class="form-field" color="accent">
             <mat-label>Version</mat-label>
-            <input [(ngModel)]="version" matInput [placeholder]="'1.0'">
+            <input required [(ngModel)]="version" matInput [placeholder]="'1.0'">
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field class="form-field-stretch" color="accent">
+            <mat-label>Description</mat-label>
+            <textarea required [(ngModel)]="description" rows=6 matInput [placeholder]="'This is the description'"></textarea>
           </mat-form-field>
         </div>
         <div>
@@ -32,6 +38,20 @@
                 {{ assetType[1] }}
               </mat-option>
             </mat-select>
+          </mat-form-field>
+          <mat-form-field class="form-field" color="accent">
+            <mat-label>Keywords</mat-label>
+            <input required [(ngModel)]="keywords" matInput [placeholder]="'blue,green,red'">
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field class="form-field" color="accent">
+            <mat-label>Byte Size</mat-label>
+            <input [(ngModel)]="byteSize" matInput [placeholder]="'128000'">
+          </mat-form-field>
+          <mat-form-field class="form-field" color="accent">
+            <mat-label>File format</mat-label>
+            <input [(ngModel)]="format" matInput [placeholder]="'html'">
           </mat-form-field>
         </div>
       </div>

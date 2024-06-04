@@ -15,9 +15,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, from, lastValueFrom } from 'rxjs';
 
-import { expandArray, Asset, JSON_LD_DEFAULT_CONTEXT } from '@think-it-labs/edc-connector-client';
+import { expandArray, Asset, EDC_CONTEXT } from '@think-it-labs/edc-connector-client';
 import { AssetInput,  QuerySpec } from "../models/edc-connector-entities"
 import { environment } from "src/environments/environment";
+import { CONTEXTS } from '../utils/app.constants';
 
 @Injectable({
   providedIn: 'root'
@@ -37,7 +38,11 @@ export class AssetService {
 
     let body = {
       ...assetEntryDto,
-      "@context": JSON_LD_DEFAULT_CONTEXT,
+      "@context": {
+        "@vocab": EDC_CONTEXT,
+        "dcterms": CONTEXTS.dcterms,
+        "dcat": CONTEXTS.dcat
+      }
     }
 
     return from(lastValueFrom(this.http.post<Asset>(
