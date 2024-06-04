@@ -7,6 +7,7 @@ import { AmazonS3DataAddress } from "../../../shared/models/amazon-s3-data-addre
 import { Vocabulary } from "../../../shared/models/vocabulary";
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { DATA_ADDRESS_TYPES, ASSET_TYPES } from 'src/app/shared/utils/app.constants';
+import { CKEDITOR_CONFIG } from 'src/app/shared/utils/ckeditor.utils';
 
 import { createAjv } from '@jsonforms/core';
 import { angularMaterialRenderers } from '@jsonforms/angular-material';
@@ -92,21 +93,8 @@ export class AssetEditorDialog implements OnInit {
   inesDataStoreFiles: File[]
 
   // Text Editor
-  public Editor = ClassicEditor;
-
-  public config = {
-    toolbar: [ 'heading', '|',
-      'fontfamily','fontsize',
-      'bold', 'italic', '|',
-      'link','|',
-      'outdent','indent','|',
-      'bulletedList','numberedList','|',
-      'insertTable','|',
-      'blockQuote','|',
-      'undo','redo',
-    ],
-    placeholder: 'Description of the asset'
-  }
+  editor = ClassicEditor;
+  config = CKEDITOR_CONFIG
 
 
   ngOnInit(): void {
