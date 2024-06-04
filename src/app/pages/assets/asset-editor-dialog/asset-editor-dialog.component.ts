@@ -13,6 +13,7 @@ import { angularMaterialRenderers } from '@jsonforms/angular-material';
 import * as jsonld from 'jsonld';
 import { VocabularyService } from 'src/app/shared/services/vocabulary.service';
 import { JsonFormData } from 'src/app/shared/models/json-form-data';
+import { InesDataStoreAddress } from 'src/app/shared/models/ines-data-store-address';
 
 
 @Component({
@@ -74,10 +75,16 @@ export class AssetEditorDialog implements OnInit {
     type: 'HttpData'
   };
 
+  inesDataStoreAddress: InesDataStoreAddress = {
+    type: 'InesDataStore'
+  };
+
   assetType: string = '';
   assetTypes = Object.entries(ASSET_TYPES);
   defaultForms: JsonFormData[]
   selectedForms: JsonFormData[]
+
+  inesDataStoreFiles: File[]
 
 
   ngOnInit(): void {
@@ -166,17 +173,24 @@ export class AssetEditorDialog implements OnInit {
       dataAddress = this.amazonS3DataAddress;
     } else if (this.storageTypeId === DATA_ADDRESS_TYPES.httpData) {
       dataAddress = this.httpDataAddress;
+    }  else if (this.storageTypeId === DATA_ADDRESS_TYPES.inesDataStore) {
+      dataAddress = this.inesDataStoreAddress;
     } else {
       this.notificationService.showError("Incorrect destination value");
       return;
     }
 
     // Create EDC asset
-    const assetInput: AssetInput = {
+    const assetInput: any = {
       "@id": this.id,
       properties: properties,
       dataAddress: dataAddress
     };
+
+    if (this.storageTypeId === DATA_ADDRESS_TYPES.inesDataStore) {
+      assetInput.file = this.inesDataStoreAddress?.file
+      assetInput.blob = new Blob([await assetInput?.file.arrayBuffer()])
+    }
 
     this.dialogRef.close({ assetInput });
   }
@@ -217,6 +231,8 @@ export class AssetEditorDialog implements OnInit {
       return false;
     } else {
       if (this.storageTypeId === DATA_ADDRESS_TYPES.amazonS3 && !this.amazonS3DataAddress.region) {
+        return false;
+      } else if (this.storageTypeId === DATA_ADDRESS_TYPES.inesDataStore && !this.inesDataStoreAddress.file) {
         return false;
       } else {
         return true;
@@ -263,5 +279,15 @@ export class AssetEditorDialog implements OnInit {
    */
   getAssetTypeText(){
     return this.assetType?ASSET_TYPES[this.assetType as keyof typeof ASSET_TYPES]:'';
+  }
+
+  setFiles(event:File[]){
+    if(event?.length>0){
+      this.inesDataStoreAddress.file = event[0]
+    }else{
+      delete this.inesDataStoreAddress.file
+    }
+    console.log('Mira',this.inesDataStoreAddress)
+
   }
 }
