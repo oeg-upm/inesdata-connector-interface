@@ -7,6 +7,8 @@ import { SchemaFormModule } from "ngx-schema-form";
 import { JsonFormsModule } from '@jsonforms/angular';
 import { JsonFormsAngularMaterialModule } from '@jsonforms/angular-material';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+
 
 @NgModule({
   declarations: [
@@ -19,6 +21,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
     SchemaFormModule,
     JsonFormsModule,
     JsonFormsAngularMaterialModule,
+    CKEditorModule
+
   ]
 })
 export class AssetsModule { }

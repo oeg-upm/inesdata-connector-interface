@@ -25,10 +25,7 @@
           </mat-form-field>
         </div>
         <div>
-          <mat-form-field class="form-field-stretch" color="accent">
-            <mat-label>Description</mat-label>
-            <textarea required [(ngModel)]="description" rows=6 matInput [placeholder]="'This is the description'"></textarea>
-          </mat-form-field>
+            <ckeditor [(ngModel)]="description" [config]="config" [editor]="Editor"></ckeditor>
         </div>
         <div>
           <mat-form-field class="form-field" color="accent">

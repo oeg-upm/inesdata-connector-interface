@@ -14,6 +14,7 @@ import * as jsonld from 'jsonld';
 import { VocabularyService } from 'src/app/shared/services/vocabulary.service';
 import { JsonFormData } from 'src/app/shared/models/json-form-data';
 import { InesDataStoreAddress } from 'src/app/shared/models/ines-data-store-address';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 
 @Component({
@@ -89,6 +90,23 @@ export class AssetEditorDialog implements OnInit {
   selectedForms: JsonFormData[]
 
   inesDataStoreFiles: File[]
+
+  // Text Editor
+  public Editor = ClassicEditor;
+
+  public config = {
+    toolbar: [ 'heading', '|',
+      'fontfamily','fontsize',
+      'bold', 'italic', '|',
+      'link','|',
+      'outdent','indent','|',
+      'bulletedList','numberedList','|',
+      'insertTable','|',
+      'blockQuote','|',
+      'undo','redo',
+    ],
+    placeholder: 'Description of the asset'
+  }
 
 
   ngOnInit(): void {
