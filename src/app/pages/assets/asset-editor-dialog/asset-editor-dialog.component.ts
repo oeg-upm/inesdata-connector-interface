@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { AssetInput, HttpDataAddress, DataAddress } from '@think-it-labs/edc-connector-client';
+import { HttpDataAddress, DataAddress } from '@think-it-labs/edc-connector-client';
 import { MatDialogRef } from "@angular/material/dialog";
 import { JsonDoc } from "../../../shared/models/json-doc";
 import { StorageType } from "../../../shared/models/storage-type";

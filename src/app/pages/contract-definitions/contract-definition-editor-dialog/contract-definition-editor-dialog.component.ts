@@ -60,8 +60,8 @@ export class ContractDefinitionEditorDialog implements OnInit {
       return;
     }
 
-    this.contractDefinition.accessPolicyId = this.accessPolicy!['@id']!;
-    this.contractDefinition.contractPolicyId = this.contractPolicy!['@id']!;
+    this.contractDefinition.accessPolicyId = this.accessPolicy['@id']!;
+    this.contractDefinition.contractPolicyId = this.contractPolicy['@id']!;
     this.contractDefinition.assetsSelector = [];
 
     if (this.assets.length > 0) {
