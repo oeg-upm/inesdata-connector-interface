@@ -4,11 +4,11 @@ mat-dialog-content {
 
 .form-field:nth-child(odd) {
     margin-right: 10px;
-    width: calc(50% - 10px)
+    width: calc(50% - 10px);
 }
 
 .form-field:nth-child(even) {
-  width: 50%
+  width: calc(50% - 1px);
 }
 
 mat-card-actions {
@@ -20,3 +20,10 @@ mat-card-actions {
   width: 100%;
 }
 
+:host ::ng-deep .ck-editor__editable_inline {
+  min-height: 300px;
+  color: black;
+  box-sizing: border-box;
+  width: 100%;
+  margin-bottom: 1.5em;
+}

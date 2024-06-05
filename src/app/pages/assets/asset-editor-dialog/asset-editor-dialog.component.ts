@@ -7,6 +7,7 @@ import { AmazonS3DataAddress } from "../../../shared/models/amazon-s3-data-addre
 import { Vocabulary } from "../../../shared/models/vocabulary";
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { DATA_ADDRESS_TYPES, ASSET_TYPES } from 'src/app/shared/utils/app.constants';
+import { CKEDITOR_CONFIG } from 'src/app/shared/utils/ckeditor.utils';
 
 import { createAjv } from '@jsonforms/core';
 import { angularMaterialRenderers } from '@jsonforms/angular-material';
@@ -14,6 +15,7 @@ import * as jsonld from 'jsonld';
 import { VocabularyService } from 'src/app/shared/services/vocabulary.service';
 import { JsonFormData } from 'src/app/shared/models/json-form-data';
 import { InesDataStoreAddress } from 'src/app/shared/models/ines-data-store-address';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 
 @Component({
@@ -89,6 +91,10 @@ export class AssetEditorDialog implements OnInit {
   selectedForms: JsonFormData[]
 
   inesDataStoreFiles: File[]
+
+  // Text Editor
+  editor = ClassicEditor;
+  config = CKEDITOR_CONFIG
 
 
   ngOnInit(): void {
