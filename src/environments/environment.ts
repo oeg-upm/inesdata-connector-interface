@@ -11,8 +11,8 @@ export const environment = {
     disallowedRoutes: [/.\/token\.*/i,/.\/public\.*/i]
   },
   runtime: {
-    managementApiUrl: "http://localhost:29193/management",
-    catalogUrl: "http://localhost:29193/management/federatedcatalog",
+    managementApiUrl: "http://localhost:19193/management",
+    catalogUrl: "http://localhost:19193/management/federatedcatalog",
     storageAccount: "company2assets",
     storageExplorerLinkTemplate: "storageexplorer://v=1",
     theme: "theme-2",
