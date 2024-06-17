@@ -79,7 +79,7 @@ export class ContractDefinitionService {
   public queryAllContractDefinitions(querySpec?: QuerySpec): Observable<Array<ContractDefinition>> {
     let body;
 
-    if(querySpec){
+    if (querySpec) {
       body = {
         ...querySpec,
         "@context": JSON_LD_DEFAULT_CONTEXT,
@@ -96,7 +96,7 @@ export class ContractDefinitionService {
   /**
    * Gets the total number of contract definitions
    */
-   public count(): Observable<number> {
+  public count(): Observable<number> {
     return from(lastValueFrom(this.http.get<number>(
       `${environment.runtime.managementApiUrl}${environment.runtime.service.contractDefinition.count}`
     )));

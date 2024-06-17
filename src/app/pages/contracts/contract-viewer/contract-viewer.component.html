@@ -1,4 +1,4 @@
-<div *ngIf="contracts$ | async as contracts" id="wrapper">
+<div id="wrapper">
   <div class="container">
     <div fxLayout="row wrap" fxLayoutGap="15px" fxLayoutAlign="start start">
       <mat-card *ngFor="let contract of contracts">
@@ -48,5 +48,14 @@
         </mat-card-content>
       </mat-card>
     </div>
+  </div>
+
+  <div fxLayout="row" fxLayoutAlign="center" class="paginator">
+    <mat-paginator
+               (page)="changePage($event)"
+               [pageSize]="pageSize"
+               [length]="paginatorLength"
+               [pageSizeOptions]="[5, 10, 20]">
+    </mat-paginator>
   </div>
 </div>

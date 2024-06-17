@@ -11,7 +11,8 @@ import {TransferProcessStates} from "../../../shared/models/transfer-process-sta
 import { DataOffer } from 'src/app/shared/models/data-offer';
 import { ContractTransferDialog } from '../contract-transfer-dialog/contract-transfer-dialog.component';
 import { TransferProcessService } from 'src/app/shared/services/transferProcess.service';
-import { DataAddress} from '@think-it-labs/edc-connector-client';
+import { DataAddress, QuerySpec} from '@think-it-labs/edc-connector-client';
+import { PageEvent } from '@angular/material/paginator';
 
 interface RunningTransferProcess {
   processId: string;
@@ -26,11 +27,14 @@ interface RunningTransferProcess {
 })
 export class ContractViewerComponent implements OnInit {
 
-  contracts$: Observable<ContractAgreement[]> = of([]);
+  contracts: ContractAgreement[];
   private runningTransfers: RunningTransferProcess[] = [];
   private pollingHandleTransfer?: any;
 
-
+  // Pagination
+  pageSize = 10;
+  currentPage = 0;
+  paginatorLength = 0;
 
   constructor(private contractAgreementService: ContractAgreementService,
               public dialog: MatDialog,
@@ -52,7 +56,8 @@ export class ContractViewerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.contracts$ = this.contractAgreementService.queryAllAgreements();
+    this.countContractAgreements()
+    this.loadContractAgreements(this.currentPage);
   }
 
   onTransferClicked(contract: ContractAgreement) {
@@ -153,5 +158,31 @@ export class ContractViewerComponent implements OnInit {
       }, error => this.notificationService.showError(error))
     }
 
+  }
+
+  changePage(event: PageEvent) {
+    const offset = event.pageIndex * event.pageSize;
+    this.pageSize = event.pageSize;
+    this.currentPage = event.pageIndex;
+    this.loadContractAgreements(offset);
+  }
+
+  loadContractAgreements(offset: number) {
+    const querySpec: QuerySpec = {
+      offset: offset,
+      limit: this.pageSize
+    }
+
+    this.contractAgreementService.queryAllAgreements(querySpec)
+      .subscribe(results => {
+        this.contracts = results;
+      });
+  }
+
+  countContractAgreements() {
+    this.contractAgreementService.count()
+      .subscribe(result => {
+        this.paginatorLength = result;
+      });
   }
 }
