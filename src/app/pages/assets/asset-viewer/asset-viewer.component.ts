@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import { first, map, switchMap } from 'rxjs/operators';
+import { Component, OnInit } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+import { first } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { AssetInput, Asset } from "../../../shared/models/edc-connector-entities";
 import { AssetService } from "../../../shared/services/asset.service";
