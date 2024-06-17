@@ -118,4 +118,13 @@ export class TransferProcessService {
     )));
   }
 
+
+  /**
+  * Gets the total number of transfers
+  */
+  public count(): Observable<number> {
+    return from(lastValueFrom(this.http.get<number>(
+      `${environment.runtime.managementApiUrl}${environment.runtime.service.transferProcess.count}`
+    )));
+  }
 }

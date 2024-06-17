@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ContractAgreementService} from "../../../shared/services/contractAgreement.service";
-import {from, Observable, of} from "rxjs";
+import {from, Observable} from "rxjs";
 import { ContractAgreement, IdResponse, TransferProcessInput } from "../../../shared/models/edc-connector-entities";
 import {filter, first, map, switchMap, tap} from "rxjs/operators";
 import {NotificationService} from"../../../shared/services/notification.service";

@@ -1,12 +1,17 @@
 <div id="wrapper">
 
-    <div *ngIf="transferProcesses$ | async as transferProcesses">
+    <div>
       <div class="table-header-container">
-      <button mat-stroked-button (click)="loadTransferProcesses()" color="accent">
+      <button mat-stroked-button (click)="loadTransferProcesses(pageSize)" color="accent">
         <mat-icon>cached</mat-icon>
         Refresh
       </button>
-      <mat-paginator [length]="transferProcesses.length" pageSize="transferProcesses.length" hidePageSize="true"></mat-paginator>
+      <mat-paginator
+                 (page)="changePage($event)"
+                 [pageSize]="pageSize"
+                 [length]="paginatorLength"
+                 [pageSizeOptions]="[5, 10, 20]">
+      </mat-paginator>
     </div>
 
 

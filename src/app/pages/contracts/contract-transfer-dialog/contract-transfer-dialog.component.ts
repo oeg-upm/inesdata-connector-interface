@@ -27,7 +27,7 @@ export class ContractTransferDialog {
     type: 'HttpData'
   };
 
-  constructor(@Inject('STORAGE_TYPES') public storageTypes: StorageType[],
+  constructor(@Inject('TRANSFER_TYPES') public transferTypes: StorageType[],
     private dialogRef: MatDialogRef<ContractTransferDialog>,
     private notificationService: NotificationService) {
   }
