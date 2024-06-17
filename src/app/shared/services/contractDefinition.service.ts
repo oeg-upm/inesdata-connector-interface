@@ -77,11 +77,28 @@ export class ContractDefinitionService {
    * @param querySpec
    */
   public queryAllContractDefinitions(querySpec?: QuerySpec): Observable<Array<ContractDefinition>> {
+    let body;
+
+    if(querySpec){
+      body = {
+        ...querySpec,
+        "@context": JSON_LD_DEFAULT_CONTEXT,
+      }
+    }
+
     return from(lastValueFrom(this.http.post<Array<ContractDefinition>>(
-      `${this.BASE_URL}${environment.runtime.service.contractDefinition.getAll}`, querySpec
+      `${this.BASE_URL}${environment.runtime.service.contractDefinition.getAll}`, body
     )).then(results => {
       return expandArray(results, () => new ContractDefinition());
     }));
   }
 
+  /**
+   * Gets the total number of contract definitions
+   */
+   public count(): Observable<number> {
+    return from(lastValueFrom(this.http.get<number>(
+      `${environment.runtime.managementApiUrl}${environment.runtime.service.contractDefinition.count}`
+    )));
+  }
 }

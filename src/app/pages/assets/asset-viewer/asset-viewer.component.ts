@@ -8,7 +8,7 @@ import { AssetEditorDialog } from "../asset-editor-dialog/asset-editor-dialog.co
 import { ConfirmationDialogComponent, ConfirmDialogModel } from "../../../shared/components/confirmation-dialog/confirmation-dialog.component";
 import { NotificationService } from "../../../shared/services/notification.service";
 import { DATA_ADDRESS_TYPES } from 'src/app/shared/utils/app.constants';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import { QuerySpec } from '@think-it-labs/edc-connector-client';
 
 @Component({
@@ -45,10 +45,6 @@ export class AssetViewerComponent implements OnInit {
 
   isBusy() {
     return this.isTransferring;
-  }
-
-  onSearch() {
-    this.fetch$.next(null);
   }
 
   onDelete(asset: Asset) {

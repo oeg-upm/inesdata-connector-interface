@@ -24,7 +24,6 @@ export class PolicyViewComponent implements OnInit {
   // Pagination
   pageSize = 10;
   currentPage = 0;
-  hasMoreData = true;
   paginatorLength = 0;
 
   constructor(private policyService: PolicyService,
