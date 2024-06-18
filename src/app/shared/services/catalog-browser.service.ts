@@ -166,12 +166,28 @@ export class CatalogBrowserService {
           contractOffers.push(contractOffer);
       }
 
-      let service = catalog["http://www.w3.org/ns/dcat#service"];
+      let serviceId: string;
+      if (Array.isArray(dataset['http://www.w3.org/ns/dcat#distribution'])) {
+        serviceId =  dataset['http://www.w3.org/ns/dcat#distribution'][0]['http://www.w3.org/ns/dcat#accessService']['@id'];
+      } else {
+        serviceId = dataset['http://www.w3.org/ns/dcat#distribution']['http://www.w3.org/ns/dcat#accessService']['@id'];
+      }
+
+      let endpointUrl;
+      if (Array.isArray(catalog['http://www.w3.org/ns/dcat#service'])) {
+        catalog['http://www.w3.org/ns/dcat#service'].find(service =>{
+          if (service['@id'] == serviceId) {
+            endpointUrl = service['http://www.w3.org/ns/dcat#endpointUrl'];
+          }
+        });
+      } else {
+        endpointUrl = catalog['http://www.w3.org/ns/dcat#service']['http://www.w3.org/ns/dcat#endpointUrl'];
+      }
 
       const dataOffer = {
         assetId: assetId,
         properties: properties,
-        service: service,
+        endpointUrl: endpointUrl,
         contractOffers: contractOffers,
         originator: catalog["originator"],
       }
