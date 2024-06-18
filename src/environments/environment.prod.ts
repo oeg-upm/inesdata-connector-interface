@@ -59,6 +59,10 @@ export const environment = {
       vocabulary: {
         baseUrl: '/vocabularies',
         getAll: '/request'
+      },
+      federatedCatalog: {
+        count: '/pagination/count?type=federatedCatalog',
+        paginationRequest: '/request'
       }
     },
     oauth2: {

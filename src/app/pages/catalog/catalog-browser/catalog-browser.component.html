@@ -1,18 +1,6 @@
-<div *ngIf="filteredDataOffers$ | async as filteredDataOffers" id="wrapper">
-  <div class="container">
-    <mat-form-field class="search-form-field" color="accent">
-      <mat-label>Search catalog</mat-label>
-      <input (input)="onSearch()" [(ngModel)]="searchText" matInput>
-      <mat-icon matPrefix>search</mat-icon>
-      <button (click)="searchText=''; onSearch()" *ngIf="searchText" mat-icon-button matSuffix>
-        <mat-icon>close</mat-icon>
-      </button>
-    </mat-form-field>
-  </div>
-
+<div id="wrapper">
   <div fxLayout="row wrap" fxLayoutGap="15px" fxLayoutAlign="start start">
-
-    <mat-card *ngFor="let dataOffer of filteredDataOffers">
+    <mat-card *ngFor="let dataOffer of dataOffers">
       <mat-card-header>
         <mat-icon mat-card-avatar>sim_card</mat-icon>
         <mat-card-title>{{dataOffer.assetId}}</mat-card-title>
@@ -35,12 +23,22 @@
       <mat-divider></mat-divider>
       <mat-card-actions class="card-actions">
         <button color="accent" mat-stroked-button
-          (click)="viewContractOffers(dataOffer.assetId, dataOffer.contractOffers, dataOffer.originator, dataOffer.properties)">
+          (click)="viewContractOffers(dataOffer.assetId, dataOffer.contractOffers, dataOffer.service.endpointUrl, dataOffer.properties)">
           View details and contract offers
         </button>
       </mat-card-actions>
       <mat-card-footer>
       </mat-card-footer>
     </mat-card>
+  </div>
+
+  <div fxLayout="row" fxLayoutAlign="center" class="paginator">
+    <mat-paginator
+               (page)="changePage($event)"
+               [pageSize]="pageSize"
+               [length]="paginatorLength"
+               [pageIndex]="currentPage"
+               [pageSizeOptions]="[5, 10, 20]">
+    </mat-paginator>
   </div>
 </div>

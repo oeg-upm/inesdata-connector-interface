@@ -83,4 +83,10 @@ export class TransferHistoryViewerComponent implements OnInit {
     this.currentPage = event.pageIndex;
     this.loadTransferProcesses(offset);
   }
+
+  refresh(){
+    this.currentPage = 0;
+    this.countTransferProcesses();
+    this.loadTransferProcesses(0);
+  }
 }

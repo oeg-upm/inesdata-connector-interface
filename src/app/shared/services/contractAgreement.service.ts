@@ -30,31 +30,31 @@ export class ContractAgreementService {
   constructor(private http: HttpClient) {
   }
 
-    /**
-     * Gets all contract agreements according to a particular query
-     * @param querySpec
-     */
-    public queryAllAgreements(querySpec?: QuerySpec): Observable<any> {
-      let body;
+  /**
+   * Gets all contract agreements according to a particular query
+   * @param querySpec
+   */
+  public queryAllAgreements(querySpec?: QuerySpec): Observable<any> {
+    let body;
 
-    if(querySpec){
+    if (querySpec) {
       body = {
         ...querySpec,
         "@context": JSON_LD_DEFAULT_CONTEXT,
       }
     }
 
-      return from(lastValueFrom(this.http.post<Array<ContractAgreement>>(
-        `${this.BASE_URL}${environment.runtime.service.asset.getAll}`, body
-      )).then(results => {
-        return expandArray(results, () => new ContractAgreement());
-      }));
-    }
+    return from(lastValueFrom(this.http.post<Array<ContractAgreement>>(
+      `${this.BASE_URL}${environment.runtime.service.asset.getAll}`, body
+    )).then(results => {
+      return expandArray(results, () => new ContractAgreement());
+    }));
+  }
 
-    /**
-   * Gets the total number of contract agreements
-   */
-   public count(): Observable<number> {
+  /**
+ * Gets the total number of contract agreements
+ */
+  public count(): Observable<number> {
     return from(lastValueFrom(this.http.get<number>(
       `${environment.runtime.managementApiUrl}${environment.runtime.service.contractAgreement.count}`
     )));
