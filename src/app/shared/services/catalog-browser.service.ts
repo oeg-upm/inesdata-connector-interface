@@ -166,23 +166,7 @@ export class CatalogBrowserService {
           contractOffers.push(contractOffer);
       }
 
-      let serviceId: string;
-      if (Array.isArray(dataset['http://www.w3.org/ns/dcat#distribution'])) {
-        serviceId =  dataset['http://www.w3.org/ns/dcat#distribution'][0]['http://www.w3.org/ns/dcat#accessService']['@id'];
-      } else {
-        serviceId = dataset['http://www.w3.org/ns/dcat#distribution']['http://www.w3.org/ns/dcat#accessService']['@id'];
-      }
-
-      let endpointUrl;
-      if (Array.isArray(catalog['http://www.w3.org/ns/dcat#service'])) {
-        catalog['http://www.w3.org/ns/dcat#service'].find(service =>{
-          if (service['@id'] == serviceId) {
-            endpointUrl = service['http://www.w3.org/ns/dcat#endpointUrl'];
-          }
-        });
-      } else {
-        endpointUrl = catalog['http://www.w3.org/ns/dcat#service']['http://www.w3.org/ns/dcat#endpointUrl'];
-      }
+      const endpointUrl = this.findEndpointUrl(dataset, catalog);
 
       const dataOffer = {
         assetId: assetId,
@@ -195,5 +179,24 @@ export class CatalogBrowserService {
       arr.push(dataOffer);
     }
     return arr;
+  }
+  findEndpointUrl(dataset: any, catalog: any) {
+    let serviceId: string;
+      if (Array.isArray(dataset['http://www.w3.org/ns/dcat#distribution'])) {
+        serviceId =  dataset['http://www.w3.org/ns/dcat#distribution'][0]['http://www.w3.org/ns/dcat#accessService']['@id'];
+      } else {
+        serviceId = dataset['http://www.w3.org/ns/dcat#distribution']['http://www.w3.org/ns/dcat#accessService']['@id'];
+      }
+
+
+      if (Array.isArray(catalog['http://www.w3.org/ns/dcat#service'])) {
+        return catalog['http://www.w3.org/ns/dcat#service'].find(service =>{
+          if (service['@id'] == serviceId) {
+            return service['http://www.w3.org/ns/dcat#endpointUrl'];
+          }
+        });
+      } else {
+        return catalog['http://www.w3.org/ns/dcat#service']['http://www.w3.org/ns/dcat#endpointUrl'];
+      }
   }
 }
