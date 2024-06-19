@@ -1,10 +1,10 @@
-<mat-dialog-content *ngIf="storageTypes as storageTypes">
+<mat-dialog-content>
 
   <mat-form-field class="form-field" color="accent" id="form-field-destination">
     <mat-label>Destination</mat-label>
     <mat-select [(ngModel)]="storageTypeId">
-      <mat-option *ngFor="let storageType of storageTypes" [value]="storageType.id">
-        {{storageType.name}}
+      <mat-option *ngFor="let trasnferType of transferTypes" [value]="trasnferType.id">
+        {{trasnferType.name}}
       </mat-option>
     </mat-select>
   </mat-form-field>

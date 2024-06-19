@@ -14,7 +14,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable, from, lastValueFrom} from 'rxjs';
-import {expandArray, PolicyDefinition, QuerySpec, EDC_CONTEXT} from "@think-it-labs/edc-connector-client";
+import {expandArray, PolicyDefinition, QuerySpec, EDC_CONTEXT, JSON_LD_DEFAULT_CONTEXT} from "@think-it-labs/edc-connector-client";
 import {PolicyDefinitionInput} from "../models/edc-connector-entities"
 import { environment } from 'src/environments/environment';
 import { CONTEXTS } from '../utils/app.constants';
@@ -81,11 +81,28 @@ export class PolicyService {
    * @param QuerySpec
    **/
   public queryAllPolicies(querySpec?: QuerySpec): Observable<Array<PolicyDefinition>> {
+    let body;
+
+    if(querySpec){
+      body = {
+        ...querySpec,
+        "@context": JSON_LD_DEFAULT_CONTEXT,
+      }
+    }
 
     return from(lastValueFrom(this.http.post<Array<PolicyDefinition>>(
-      `${this.BASE_URL}${environment.runtime.service.policy.getAll}`, querySpec
+      `${this.BASE_URL}${environment.runtime.service.policy.getAll}`, body
     )).then(results => {
       return expandArray(results, () => new PolicyDefinition());
     }));
+  }
+
+  /**
+   * Gets the total number of policies
+   */
+  public count(): Observable<number> {
+    return from(lastValueFrom(this.http.get<number>(
+      `${environment.runtime.managementApiUrl}${environment.runtime.service.policy.count}`
+    )));
   }
 }

@@ -17,23 +17,27 @@ export const environment = {
         baseUrl: '/v3/assets',
         storageUrl: '/s3assets',
         get: '/',
-        getAll: '/request'
+        getAll: '/request',
+        count: '/pagination/count?type=asset'
       },
       contractAgreement: {
         baseUrl: '/v2/contractagreements',
         get: '/',
         getAll: '/request',
-        getNegotiation: '/negotiation'
+        getNegotiation: '/negotiation',
+        count: '/pagination/count?type=contractAgreement'
       },
       policy: {
         baseUrl: '/v2/policydefinitions',
         get: '/',
-        getAll: '/request'
+        getAll: '/request',
+        count: '/pagination/count?type=policyDefinition'
       },
       contractDefinition: {
         baseUrl: '/v2/contractdefinitions',
         get: '/',
-        getAll: '/request'
+        getAll: '/request',
+        count: '/pagination/count?type=contractDefinition'
       },
       contractNegotiation: {
         baseUrl: '/v2/contractnegotiations',
@@ -49,11 +53,16 @@ export const environment = {
         deprovision: '/deprovision',
         state: '/state',
         terminate: '/terminate',
-        getAll: '/request'
+        getAll: '/request',
+        count: '/pagination/count?type=transferProcess'
       },
       vocabulary: {
         baseUrl: '/vocabularies',
         getAll: '/request'
+      },
+      federatedCatalog: {
+        count: '/pagination/count?type=federatedCatalog',
+        paginationRequest: '/request'
       }
     },
     oauth2: {

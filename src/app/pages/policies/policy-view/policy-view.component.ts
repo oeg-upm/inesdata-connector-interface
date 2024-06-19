@@ -1,13 +1,14 @@
-import {Component, OnInit} from '@angular/core';
-import {PolicyService} from "../../../shared/services/policy.service";
-import {BehaviorSubject, Observable, Observer, of} from "rxjs";
-import {first, map, switchMap} from "rxjs/operators";
-import {MatDialog} from "@angular/material/dialog";
-import {NewPolicyDialogComponent} from "../new-policy-dialog/new-policy-dialog.component";
-import {NotificationService} from "../../../shared/services/notification.service";
-import {ConfirmationDialogComponent, ConfirmDialogModel} from "../../../shared/components/confirmation-dialog/confirmation-dialog.component";
-import {PolicyDefinition, PolicyDefinitionInput, IdResponse} from "../../../shared/models/edc-connector-entities";
+import { Component, OnInit } from '@angular/core';
+import { PolicyService } from "../../../shared/services/policy.service";
+import { BehaviorSubject, Observer } from "rxjs";
+import { first } from "rxjs/operators";
+import { MatDialog } from "@angular/material/dialog";
+import { NewPolicyDialogComponent } from "../new-policy-dialog/new-policy-dialog.component";
+import { NotificationService } from "../../../shared/services/notification.service";
+import { ConfirmationDialogComponent, ConfirmDialogModel } from "../../../shared/components/confirmation-dialog/confirmation-dialog.component";
+import { PolicyDefinition, PolicyDefinitionInput, IdResponse, QuerySpec } from "../../../shared/models/edc-connector-entities";
 import { PolicyRuleViewerComponent } from '../policy-rule-viewer/policy-rule-viewer.component';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-policy-view',
@@ -16,14 +17,18 @@ import { PolicyRuleViewerComponent } from '../policy-rule-viewer/policy-rule-vie
 })
 export class PolicyViewComponent implements OnInit {
 
-  filteredPolicies$: Observable<PolicyDefinition[]> = of([]);
-  searchText: string = '';
+  policies: PolicyDefinition[];
   private fetch$ = new BehaviorSubject(null);
   private readonly errorOrUpdateSubscriber: Observer<IdResponse>;
 
+  // Pagination
+  pageSize = 10;
+  currentPage = 0;
+  paginatorLength = 0;
+
   constructor(private policyService: PolicyService,
-              private notificationService: NotificationService,
-              private readonly dialog: MatDialog) {
+    private notificationService: NotificationService,
+    private readonly dialog: MatDialog) {
 
     this.errorOrUpdateSubscriber = {
       next: x => this.fetch$.next(null),
@@ -36,28 +41,24 @@ export class PolicyViewComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.filteredPolicies$ = this.fetch$.pipe(
-      switchMap(() => {
-        const policyDefinitions = this.policyService.queryAllPolicies();
-        return !!this.searchText ?
-          policyDefinitions.pipe(map(policies => policies.filter(policy => this.isFiltered(policy, this.searchText))))
-          :
-          policyDefinitions;
-      }));
-  }
-
-  onSearch() {
-    this.fetch$.next(null);
+    this.countPolicies();
+    this.loadPolicies(this.currentPage);
   }
 
   onCreate() {
     const dialogRef = this.dialog.open(NewPolicyDialogComponent);
-    dialogRef.afterClosed().pipe(first()).subscribe({ next: (newPolicyDefinition: PolicyDefinitionInput) => {
+    dialogRef.afterClosed().pipe(first()).subscribe({
+      next: (newPolicyDefinition: PolicyDefinitionInput) => {
         if (newPolicyDefinition) {
           this.policyService.createPolicy(newPolicyDefinition).subscribe(
             {
               next: (response: IdResponse) => this.errorOrUpdateSubscriber.next(response),
-              error: (error: Error) => this.showError(error, "An error occurred while creating the policy.")
+              error: (error: Error) => this.showError(error, "An error occurred while creating the policy."),
+              complete: () => {
+                this.countPolicies();
+                this.loadPolicies(this.currentPage);
+                this.notificationService.showInfo("Successfully created");
+              }
             }
           );
         }
@@ -65,20 +66,12 @@ export class PolicyViewComponent implements OnInit {
     });
   }
 
-  /**
-   * simple full-text search - serialize to JSON and see if "searchText"
-   * is contained
-   */
-  private isFiltered(policy: PolicyDefinition, searchText: string) {
-    return JSON.stringify(policy).includes(searchText);
-  }
-
   delete(policy: PolicyDefinition) {
 
     let policyId = policy['@id']!;
     const dialogData = ConfirmDialogModel.forDelete("policy", policyId);
 
-    const ref = this.dialog.open(ConfirmationDialogComponent, {maxWidth: '30%', data: dialogData});
+    const ref = this.dialog.open(ConfirmationDialogComponent, { maxWidth: '30%', data: dialogData });
 
     ref.afterClosed().subscribe({
 
@@ -87,7 +80,12 @@ export class PolicyViewComponent implements OnInit {
           this.policyService.deletePolicy(policyId).subscribe(
             {
               next: (response: IdResponse) => this.errorOrUpdateSubscriber.next(response),
-              error: (error: Error) => this.showError(error, "An error occurred while deleting the policy.")
+              error: (error: Error) => this.showError(error, "An error occurred while deleting the policy."),
+              complete: () => {
+                this.countPolicies();
+                this.loadPolicies(this.currentPage);
+                this.notificationService.showInfo("Successfully deleted");
+              }
             }
           );
         }
@@ -100,12 +98,39 @@ export class PolicyViewComponent implements OnInit {
     this.notificationService.showError(errorMessage);
   }
 
-  viewRules(title: string, rules: any){
+  viewRules(title: string, rules: any) {
     this.dialog.open(PolicyRuleViewerComponent, {
       data: {
         title: title,
         rules: rules
       },
     });
+  }
+
+  changePage(event: PageEvent) {
+    const offset = event.pageIndex * event.pageSize;
+    this.pageSize = event.pageSize;
+    this.currentPage = event.pageIndex;
+    this.loadPolicies(offset);
+  }
+
+  loadPolicies(offset: number) {
+
+    const querySpec: QuerySpec = {
+      offset: offset,
+      limit: this.pageSize
+    }
+
+    this.policyService.queryAllPolicies(querySpec)
+      .subscribe(results => {
+        this.policies = results;
+      });
+  }
+
+  countPolicies() {
+    this.policyService.count()
+      .subscribe(result => {
+        this.paginatorLength = result;
+      });
   }
 }

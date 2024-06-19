@@ -1,14 +1,5 @@
-<div *ngIf="filteredContractDefinitions$ | async as contractDefinitions" id="wrapper">
+<div id="wrapper">
   <div class="container">
-    <mat-form-field appearance="outline" class="search-form-field" color="accent">
-      <mat-label>Search definitions</mat-label>
-      <input (input)="onSearch()" [(ngModel)]="searchText" matInput>
-      <mat-icon matPrefix>search</mat-icon>
-      <button (click)="searchText=''; onSearch()" *ngIf="searchText" mat-icon-button matSuffix>
-        <mat-icon>close</mat-icon>
-      </button>
-    </mat-form-field>
-
     <button (click)="onCreate()" color="accent" mat-stroked-button>
       <mat-icon>add_circle_outline</mat-icon>
       Create contract definition
@@ -55,5 +46,15 @@
         </button>
       </mat-card-actions>
     </mat-card>
+  </div>
+
+  <div fxLayout="row" fxLayoutAlign="center" class="paginator">
+    <mat-paginator
+               (page)="changePage($event)"
+               [pageSize]="pageSize"
+               [length]="paginatorLength"
+               [pageIndex]="currentPage"
+               [pageSizeOptions]="[5, 10, 20]">
+    </mat-paginator>
   </div>
 </div>

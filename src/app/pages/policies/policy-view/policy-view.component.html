@@ -1,24 +1,13 @@
-<div id="wrapper" *ngIf="filteredPolicies$ | async as policyDefinitions">
-  <!--    entry fields for new policy-->
+<div id="wrapper">
   <div class="container">
-    <mat-form-field appearance="outline" class="search-form-field" color="accent">
-      <mat-label>Search policies</mat-label>
-      <input (input)="onSearch()" [(ngModel)]="searchText" matInput>
-      <mat-icon matPrefix>search</mat-icon>
-      <button (click)="searchText=''; onSearch()" *ngIf="searchText" mat-icon-button matSuffix>
-        <mat-icon>close</mat-icon>
-      </button>
-    </mat-form-field>
-
     <button (click)="onCreate()" color="accent" mat-stroked-button>
       <mat-icon>add_circle_outline</mat-icon>
       Create policy
     </button>
-
   </div>
 
   <div fxLayout="row wrap" fxLayoutGap="15px" fxLayoutAlign="start start">
-    <mat-card *ngFor="let policyDef of policyDefinitions">
+    <mat-card *ngFor="let policyDef of policies">
       <mat-card-header>
         <mat-icon mat-card-avatar>policy</mat-icon>
         <mat-card-title><span class="code">{{policyDef.id}}</span></mat-card-title>
@@ -47,5 +36,15 @@
         </button>
       </mat-card-actions>
     </mat-card>
+  </div>
+
+  <div fxLayout="row" fxLayoutAlign="center" class="paginator">
+    <mat-paginator
+               (page)="changePage($event)"
+               [pageSize]="pageSize"
+               [pageIndex]="currentPage"
+               [length]="paginatorLength"
+               [pageSizeOptions]="[5, 10, 20]">
+    </mat-paginator>
   </div>
 </div>

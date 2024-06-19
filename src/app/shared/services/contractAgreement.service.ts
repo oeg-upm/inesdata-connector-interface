@@ -15,7 +15,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, from, lastValueFrom } from 'rxjs';
 
-import { ContractAgreement, expandArray } from '@think-it-labs/edc-connector-client';
+import { ContractAgreement, expandArray, JSON_LD_DEFAULT_CONTEXT } from '@think-it-labs/edc-connector-client';
 import { QuerySpec } from '../models/edc-connector-entities'
 import { environment } from 'src/environments/environment';
 
@@ -30,16 +30,34 @@ export class ContractAgreementService {
   constructor(private http: HttpClient) {
   }
 
-    /**
-     * Gets all contract agreements according to a particular query
-     * @param querySpec
-     */
-    public queryAllAgreements(querySpec?: QuerySpec): Observable<any> {
-      return from(lastValueFrom(this.http.post<Array<ContractAgreement>>(
-        `${this.BASE_URL}${environment.runtime.service.asset.getAll}`, querySpec
-      )).then(results => {
-        return expandArray(results, () => new ContractAgreement());
-      }));
+  /**
+   * Gets all contract agreements according to a particular query
+   * @param querySpec
+   */
+  public queryAllAgreements(querySpec?: QuerySpec): Observable<any> {
+    let body;
+
+    if (querySpec) {
+      body = {
+        ...querySpec,
+        "@context": JSON_LD_DEFAULT_CONTEXT,
+      }
     }
+
+    return from(lastValueFrom(this.http.post<Array<ContractAgreement>>(
+      `${this.BASE_URL}${environment.runtime.service.asset.getAll}`, body
+    )).then(results => {
+      return expandArray(results, () => new ContractAgreement());
+    }));
+  }
+
+  /**
+ * Gets the total number of contract agreements
+ */
+  public count(): Observable<number> {
+    return from(lastValueFrom(this.http.get<number>(
+      `${environment.runtime.managementApiUrl}${environment.runtime.service.contractAgreement.count}`
+    )));
+  }
 
 }

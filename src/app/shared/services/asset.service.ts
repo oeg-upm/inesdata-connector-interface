@@ -113,10 +113,28 @@ export class AssetService {
    * @param querySpec
    */
   public requestAssets(querySpec?: QuerySpec): Observable<Array<Asset>> {
+    let body;
+
+    if(querySpec){
+      body = {
+        ...querySpec,
+        "@context": JSON_LD_DEFAULT_CONTEXT,
+      }
+    }
+
     return from(lastValueFrom(this.http.post<Array<Asset>>(
-      `${this.BASE_URL}${environment.runtime.service.asset.getAll}`, querySpec
+      `${this.BASE_URL}${environment.runtime.service.asset.getAll}`, body
     )).then(results => {
       return expandArray(results, () => new Asset());
     }));
+  }
+
+  /**
+   * Gets the total number of assets
+   */
+   public count(): Observable<number> {
+    return from(lastValueFrom(this.http.get<number>(
+      `${environment.runtime.managementApiUrl}${environment.runtime.service.asset.count}`
+    )));
   }
 }

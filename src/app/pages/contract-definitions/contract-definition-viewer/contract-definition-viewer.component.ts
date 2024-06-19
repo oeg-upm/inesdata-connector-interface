@@ -1,14 +1,16 @@
-import {Component, OnInit} from '@angular/core';
-import {BehaviorSubject, Observable, of} from 'rxjs';
-import {first, map, switchMap} from 'rxjs/operators';
-import {MatDialog} from '@angular/material/dialog';
+import { Component, OnInit } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+import { first } from 'rxjs/operators';
+import { MatDialog } from '@angular/material/dialog';
 import {
   ContractDefinitionEditorDialog
 } from '../contract-definition-editor-dialog/contract-definition-editor-dialog.component';
 import { ContractDefinitionService } from "../../../shared/services/contractDefinition.service";
-import {ConfirmationDialogComponent, ConfirmDialogModel} from "../../../shared/components/confirmation-dialog/confirmation-dialog.component";
-import {NotificationService} from "../../../shared/services/notification.service";
+import { ConfirmationDialogComponent, ConfirmDialogModel } from "../../../shared/components/confirmation-dialog/confirmation-dialog.component";
+import { NotificationService } from "../../../shared/services/notification.service";
 import { ContractDefinition, ContractDefinitionInput } from 'src/app/shared/models/edc-connector-entities';
+import { PageEvent } from '@angular/material/paginator';
+import { QuerySpec } from '@think-it-labs/edc-connector-client';
 
 
 @Component({
@@ -18,40 +20,41 @@ import { ContractDefinition, ContractDefinitionInput } from 'src/app/shared/mode
 })
 export class ContractDefinitionViewerComponent implements OnInit {
 
-  filteredContractDefinitions$: Observable<ContractDefinition[]> = of([]);
-  searchText = '';
+  contractDefinitions: ContractDefinition[];
   private fetch$ = new BehaviorSubject(null);
 
+  // Pagination
+  pageSize = 10;
+  currentPage = 0;
+  paginatorLength = 0;
+
   constructor(private contractDefinitionService: ContractDefinitionService,
-              private notificationService: NotificationService,
-              private readonly dialog: MatDialog) {
+    private notificationService: NotificationService,
+    private readonly dialog: MatDialog) {
   }
 
   ngOnInit(): void {
-    this.filteredContractDefinitions$ = this.fetch$
-      .pipe(
-        switchMap(() => {
-          const contractDefinitions$ = this.contractDefinitionService.queryAllContractDefinitions();
-          return !!this.searchText ?
-            contractDefinitions$.pipe(map(contractDefinitions => contractDefinitions.filter(contractDefinition => contractDefinition['@id']!.toLowerCase().includes(this.searchText))))
-            :
-            contractDefinitions$;
-        }));
-  }
-
-  onSearch() {
-    this.fetch$.next(null);
+    this.countContractDefinitions();
+    this.loadContractDefinitions(this.currentPage);
   }
 
   onDelete(contractDefinition: ContractDefinition) {
     const dialogData = ConfirmDialogModel.forDelete("contract definition", contractDefinition.id);
 
-    const ref = this.dialog.open(ConfirmationDialogComponent, {maxWidth: '30%', data: dialogData});
+    const ref = this.dialog.open(ConfirmationDialogComponent, { maxWidth: '30%', data: dialogData });
 
     ref.afterClosed().subscribe(res => {
       if (res) {
         this.contractDefinitionService.deleteContractDefinition(contractDefinition.id)
-          .subscribe(() => this.fetch$.next(null));
+          .subscribe({
+            next: () => this.fetch$.next(null),
+            error: () => this.notificationService.showError("Contract definition cannot be deleted"),
+            complete: () => {
+              this.countContractDefinitions();
+              this.loadContractDefinitions(this.currentPage);
+              this.notificationService.showInfo("Contract definition deleted")
+            }
+          });
       }
     });
 
@@ -64,11 +67,42 @@ export class ContractDefinitionViewerComponent implements OnInit {
       if (newContractDefinition) {
         this.contractDefinitionService.createContractDefinition(newContractDefinition)
           .subscribe({
-              next: () => this.fetch$.next(null),
-              error: () => this.notificationService.showError("Contract definition cannot be created"),
-              complete: () => this.notificationService.showInfo("Contract definition created")
+            next: () => this.fetch$.next(null),
+            error: () => this.notificationService.showError("Contract definition cannot be created"),
+            complete: () => {
+              this.countContractDefinitions();
+              this.loadContractDefinitions(this.currentPage);
+              this.notificationService.showInfo("Contract definition created")
+            }
           });
       }
     });
+  }
+
+  changePage(event: PageEvent) {
+    const offset = event.pageIndex * event.pageSize;
+    this.pageSize = event.pageSize;
+    this.currentPage = event.pageIndex;
+    this.loadContractDefinitions(offset);
+  }
+
+  loadContractDefinitions(offset: number) {
+
+    const querySpec: QuerySpec = {
+      offset: offset,
+      limit: this.pageSize
+    }
+
+    this.contractDefinitionService.queryAllContractDefinitions(querySpec)
+      .subscribe(results => {
+        this.contractDefinitions = results;
+      });
+  }
+
+  countContractDefinitions() {
+    this.contractDefinitionService.count()
+      .subscribe(result => {
+        this.paginatorLength = result;
+      });
   }
 }

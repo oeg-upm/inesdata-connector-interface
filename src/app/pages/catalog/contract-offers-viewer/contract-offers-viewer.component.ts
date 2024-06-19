@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 export interface ContractOffersDialogData {
   assetId: string;
   contractOffers: Policy[];
-  originator: string;
+  endpointUrl: string;
   properties: any;
 }
 
@@ -61,7 +61,7 @@ export class ContractOffersViewerComponent {
 
   onNegotiateClicked(contractOffer: Policy) {
     const initiateRequest: ContractNegotiationRequest = {
-      counterPartyAddress: this.data.originator,
+      counterPartyAddress: this.data.endpointUrl,
       policy: contractOffer
     };
 
