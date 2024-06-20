@@ -209,6 +209,7 @@ export class AssetEditorDialog implements OnInit {
     properties["name"] = this.name;
     properties["version"] = this.version;
     properties["contenttype"] = this.contenttype;
+    properties["assetType"] = this.assetType;
     properties["shortDescription"] = this.shortDescription;
     properties["dcterms:description"] = this.description;
     properties["dcat:keyword"] = this.keywords;
