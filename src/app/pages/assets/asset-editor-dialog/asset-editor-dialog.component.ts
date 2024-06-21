@@ -66,6 +66,7 @@ export class AssetEditorDialog implements OnInit {
   name: string = '';
   contenttype: string = '';
   storageTypeId: string = '';
+  shortDescription: string = '';
   description: string = '';
   keywords: string = '';
   format: string = '';
@@ -208,6 +209,8 @@ export class AssetEditorDialog implements OnInit {
     properties["name"] = this.name;
     properties["version"] = this.version;
     properties["contenttype"] = this.contenttype;
+    properties["assetType"] = this.assetType;
+    properties["shortDescription"] = this.shortDescription;
     properties["dcterms:description"] = this.description;
     properties["dcat:keyword"] = this.keywords;
     properties["dcat:byteSize"] = this.byteSize;
@@ -246,7 +249,7 @@ export class AssetEditorDialog implements OnInit {
    * @returns true if required fields have been filled
    */
   private checkRequiredFields(): boolean {
-    if (!this.id || !this.storageTypeId || !this.name || !this.version || !this.description || !this.keywords) {
+    if (!this.id || !this.storageTypeId || !this.name || !this.version || !this.description || !this.keywords || !this.shortDescription) {
       return false;
     } else {
       if (this.storageTypeId === DATA_ADDRESS_TYPES.amazonS3 && !this.amazonS3DataAddress.region) {
