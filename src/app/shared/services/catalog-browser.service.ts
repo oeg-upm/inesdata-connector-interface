@@ -180,7 +180,8 @@ export class CatalogBrowserService {
     }
     return arr;
   }
-  findEndpointUrl(dataset: any, catalog: any) {
+
+  private findEndpointUrl(dataset: any, catalog: any) {
     let serviceId: string;
       if (Array.isArray(dataset['http://www.w3.org/ns/dcat#distribution'])) {
         serviceId =  dataset['http://www.w3.org/ns/dcat#distribution'][0]['http://www.w3.org/ns/dcat#accessService']['@id'];

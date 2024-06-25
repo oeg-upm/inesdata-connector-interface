@@ -1,17 +1,17 @@
-import {Component, OnInit} from '@angular/core';
-import {ContractAgreementService} from "../../../shared/services/contractAgreement.service";
-import {from, Observable} from "rxjs";
+import { Component, OnInit } from '@angular/core';
+import { ContractAgreementService } from "../../../shared/services/contractAgreement.service";
+import { firstValueFrom, from, Observable } from "rxjs";
 import { ContractAgreement, IdResponse, TransferProcessInput } from "../../../shared/models/edc-connector-entities";
-import {filter, first, map, switchMap, tap} from "rxjs/operators";
-import {NotificationService} from"../../../shared/services/notification.service";
-import {MatDialog} from "@angular/material/dialog";
-import {CatalogBrowserService} from "../../../shared/services/catalog-browser.service";
-import {Router} from "@angular/router";
-import {TransferProcessStates} from "../../../shared/models/transfer-process-states";
+import { filter, first, map, switchMap, tap } from "rxjs/operators";
+import { NotificationService } from "../../../shared/services/notification.service";
+import { MatDialog } from "@angular/material/dialog";
+import { CatalogBrowserService } from "../../../shared/services/catalog-browser.service";
+import { Router } from "@angular/router";
+import { TransferProcessStates } from "../../../shared/models/transfer-process-states";
 import { DataOffer } from 'src/app/shared/models/data-offer';
 import { ContractTransferDialog } from '../contract-transfer-dialog/contract-transfer-dialog.component';
 import { TransferProcessService } from 'src/app/shared/services/transferProcess.service';
-import { DataAddress, QuerySpec} from '@think-it-labs/edc-connector-client';
+import { DataAddress, QuerySpec } from '@think-it-labs/edc-connector-client';
 import { PageEvent } from '@angular/material/paginator';
 
 interface RunningTransferProcess {
@@ -37,15 +37,15 @@ export class ContractViewerComponent implements OnInit {
   paginatorLength = 0;
 
   constructor(private contractAgreementService: ContractAgreementService,
-              public dialog: MatDialog,
-              private catalogService: CatalogBrowserService,
-              private transferService: TransferProcessService,
-              private router: Router,
-              private notificationService: NotificationService) {
+    public dialog: MatDialog,
+    private catalogService: CatalogBrowserService,
+    private transferService: TransferProcessService,
+    private router: Router,
+    private notificationService: NotificationService) {
   }
 
-  private static isFinishedState(storageType:string, state: string): boolean {
-    if(storageType === 'HttpData' && state === 'STARTED') {
+  private static isFinishedState(storageType: string, state: string): boolean {
+    if (storageType === 'HttpData' && state === 'STARTED') {
       return true;
     } else {
       return [
@@ -63,11 +63,12 @@ export class ContractViewerComponent implements OnInit {
   onTransferClicked(contract: ContractAgreement) {
     const dialogRef = this.dialog.open(ContractTransferDialog);
 
-    dialogRef.afterClosed().pipe(first()).subscribe(result => {
-      if(result !== undefined && result.transferButtonclicked){
+    dialogRef.afterClosed().pipe(first()).subscribe(async result => {
+      if (result !== undefined && result.transferButtonclicked) {
 
-        this.createTransferRequest(contract, result.dataAddress)
-          .pipe(switchMap(trq => this.transferService.initiateTransfer(trq)))
+        const transferRequest = await this.createTransferRequest(contract, result.dataAddress);
+
+        this.transferService.initiateTransfer(transferRequest)
           .subscribe(transferId => {
             this.startPolling(transferId, contract["@id"]!);
           }, error => {
@@ -78,24 +79,22 @@ export class ContractViewerComponent implements OnInit {
     });
   }
 
-  private createTransferRequest(contract: ContractAgreement, dataAddress: DataAddress): Observable<TransferProcessInput> {
-    return this.getContractOfferForAssetId(contract.assetId).pipe(map(contractOffer => {
+  private async createTransferRequest(contract: ContractAgreement, dataAddress: DataAddress): Promise<TransferProcessInput> {
+    const dataOffer = await this.getDatasetFromFederatedCatalog(contract.assetId, contract.providerId);
 
-      const iniateTransfer : TransferProcessInput = {
-        assetId: contractOffer.assetId,
-        counterPartyAddress: contractOffer.originator,
-        contractId: contract.id,
-        transferType: dataAddress.type,
-        dataDestination: dataAddress
-      };
+    const iniateTransfer: TransferProcessInput = {
+      assetId: dataOffer.assetId,
+      counterPartyAddress: dataOffer.endpointUrl,
+      contractId: contract.id,
+      transferType: dataAddress.type,
+      dataDestination: dataAddress
+    };
 
-      return iniateTransfer;
-    }));
-
+    return iniateTransfer;
   }
 
   asDate(epochSeconds?: number): string {
-    if(epochSeconds){
+    if (epochSeconds) {
       const d = new Date(0);
       d.setUTCSeconds(epochSeconds);
       return d.toLocaleDateString();
@@ -109,18 +108,36 @@ export class ContractViewerComponent implements OnInit {
 
   /**
    * This method is used to obtain that URL of the connector that is offering a particular asset from the catalog.
-   * This is a bit of a hack, because currently there is no "clean" way to get the counter-party's URL for a ContractAgreement.
    *
    * @param assetId Asset ID of the asset that is associated with the contract.
+   * @param provider Participant ID of the catalog which owns the asset
    */
-  private getContractOfferForAssetId(assetId: string): Observable<DataOffer> {
-    return this.catalogService.getDataOffers()
-      .pipe(
-        map(offers => offers.find(o => o.assetId === assetId)),
-        map(o => {
-          if (o) return o;
-          else throw new Error(`No offer found for asset ID ${assetId}`);
-        }))
+  private async getDatasetFromFederatedCatalog(assetId: string, provider: string): Promise<DataOffer> {
+
+    const querySpec: QuerySpec = {
+      offset: 0,
+      limit: 1,
+      filterExpression: [
+        {
+          operandLeft: "id",
+          operator: "=",
+          operandRight: assetId
+        },
+        {
+          operandLeft: "properties.'https://w3id.org/edc/v0.0.1/ns/participantId'",
+          operator: "=",
+          operandRight: provider
+        }
+      ]
+    }
+
+    const datasetFound = await firstValueFrom(this.catalogService.getPaginatedDataOffers(querySpec));
+
+    if (datasetFound[0]) {
+      return datasetFound[0];
+    } else {
+      throw new Error(`No offer found for asset ID ${assetId} and provider ID ${provider}`);
+    }
   }
 
   private startPolling(transferProcessId: IdResponse, contractId: string) {
@@ -150,12 +167,12 @@ export class ContractViewerComponent implements OnInit {
             })
           }),
         ).subscribe(() => {
-        // clear interval if necessary
-        if (this.runningTransfers.length === 0) {
-          clearInterval(this.pollingHandleTransfer);
-          this.pollingHandleTransfer = undefined;
-        }
-      }, error => this.notificationService.showError(error))
+          // clear interval if necessary
+          if (this.runningTransfers.length === 0) {
+            clearInterval(this.pollingHandleTransfer);
+            this.pollingHandleTransfer = undefined;
+          }
+        }, error => this.notificationService.showError(error))
     }
 
   }
