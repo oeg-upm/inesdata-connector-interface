@@ -309,7 +309,5 @@ export class AssetEditorDialog implements OnInit {
     }else{
       delete this.inesDataStoreAddress.file
     }
-    console.log('Mira',this.inesDataStoreAddress)
-
   }
 }

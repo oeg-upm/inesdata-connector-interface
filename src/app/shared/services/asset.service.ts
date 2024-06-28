@@ -64,7 +64,11 @@ export class AssetService {
     delete assetEntryDto?.blob
     let body = {
       ...assetEntryDto,
-      "@context": JSON_LD_DEFAULT_CONTEXT,
+      "@context": {
+        "@vocab": EDC_CONTEXT,
+        "dcterms": CONTEXTS.dcterms,
+        "dcat": CONTEXTS.dcat
+      }
     }
 
     delete body.dataAddress.file

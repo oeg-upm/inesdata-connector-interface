@@ -21,26 +21,26 @@ export const environment = {
         count: '/pagination/count?type=asset'
       },
       contractAgreement: {
-        baseUrl: '/v2/contractagreements',
+        baseUrl: '/v3/contractagreements',
         get: '/',
         getAll: '/request',
         getNegotiation: '/negotiation',
         count: '/pagination/count?type=contractAgreement'
       },
       policy: {
-        baseUrl: '/v2/policydefinitions',
+        baseUrl: '/v3/policydefinitions',
         get: '/',
         getAll: '/request',
         count: '/pagination/count?type=policyDefinition'
       },
       contractDefinition: {
-        baseUrl: '/v2/contractdefinitions',
+        baseUrl: '/v3/contractdefinitions',
         get: '/',
         getAll: '/request',
         count: '/pagination/count?type=contractDefinition'
       },
       contractNegotiation: {
-        baseUrl: '/v2/contractnegotiations',
+        baseUrl: '/v3/contractnegotiations',
         get: '/',
         agreement: '/agreement',
         state: '/state',
@@ -48,7 +48,7 @@ export const environment = {
         getAll: '/request'
       },
       transferProcess: {
-        baseUrl: '/v2/transferprocesses',
+        baseUrl: '/v3/transferprocesses',
         get: '/',
         deprovision: '/deprovision',
         state: '/state',
