@@ -105,4 +105,8 @@ export class ContractDefinitionViewerComponent implements OnInit {
         this.paginatorLength = result;
       });
   }
+
+  getCriterionFormat(criterion:any){
+    return criterion['https://w3id.org/edc/v0.0.1/ns/operandRight'].map((c:any)=> c['@value']).join(', ')
+  }
 }
