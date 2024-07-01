@@ -32,7 +32,7 @@
 
             <div matListItemLine *ngIf="contractDefinition.assetsSelector.length == 0; else elseBlock">All assets</div>
             <ng-template #elseBlock>
-              <div matListItemLine *ngFor="let criterion of contractDefinition.assetsSelector">{{criterion.operandRight}}</div>
+              <div matListItemLine *ngFor="let criterion of contractDefinition.assetsSelector">{{getCriterionFormat(criterion)}}</div>
             </ng-template>
           </mat-list-item>
         </mat-list>
