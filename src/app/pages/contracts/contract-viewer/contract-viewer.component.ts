@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ContractAgreementService } from "../../../shared/services/contractAgreement.service";
-import { firstValueFrom, from, Observable } from "rxjs";
+import { firstValueFrom, from } from "rxjs";
 import { ContractAgreement, IdResponse, TransferProcessInput } from "../../../shared/models/edc-connector-entities";
-import { filter, first, map, switchMap, tap } from "rxjs/operators";
+import { filter, first, switchMap, tap } from "rxjs/operators";
 import { NotificationService } from "../../../shared/services/notification.service";
 import { MatDialog } from "@angular/material/dialog";
 import { CatalogBrowserService } from "../../../shared/services/catalog-browser.service";
