@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ContractAgreementService } from "../../../shared/services/contractAgreement.service";
-import { firstValueFrom, from, Observable } from "rxjs";
+import { firstValueFrom, from } from "rxjs";
 import { ContractAgreement, IdResponse, TransferProcessInput } from "../../../shared/models/edc-connector-entities";
-import { filter, first, map, switchMap, tap } from "rxjs/operators";
+import { filter, first, switchMap, tap } from "rxjs/operators";
 import { NotificationService } from "../../../shared/services/notification.service";
 import { MatDialog } from "@angular/material/dialog";
 import { CatalogBrowserService } from "../../../shared/services/catalog-browser.service";
@@ -45,7 +45,7 @@ export class ContractViewerComponent implements OnInit {
   }
 
   private static isFinishedState(storageType: string, state: string): boolean {
-    if (storageType === 'HttpData' && state === 'STARTED') {
+    if (storageType === 'HttpData-PULL' && state === 'STARTED') {
       return true;
     } else {
       return [
@@ -79,20 +79,6 @@ export class ContractViewerComponent implements OnInit {
     });
   }
 
-  private async createTransferRequest(contract: ContractAgreement, dataAddress: DataAddress): Promise<TransferProcessInput> {
-    const dataOffer = await this.getDatasetFromFederatedCatalog(contract.assetId, contract.providerId);
-
-    const iniateTransfer: TransferProcessInput = {
-      assetId: dataOffer.assetId,
-      counterPartyAddress: dataOffer.endpointUrl,
-      contractId: contract.id,
-      transferType: dataAddress.type,
-      dataDestination: dataAddress
-    };
-
-    return iniateTransfer;
-  }
-
   asDate(epochSeconds?: number): string {
     if (epochSeconds) {
       const d = new Date(0);
@@ -106,13 +92,63 @@ export class ContractViewerComponent implements OnInit {
     return !!this.runningTransfers.find(rt => rt.contractId === contractId);
   }
 
+  changePage(event: PageEvent) {
+    const offset = event.pageIndex * event.pageSize;
+    this.pageSize = event.pageSize;
+    this.currentPage = event.pageIndex;
+    this.loadContractAgreements(offset);
+  }
+
+  private loadContractAgreements(offset: number) {
+    const querySpec: QuerySpec = {
+      offset: offset,
+      limit: this.pageSize
+    }
+
+    this.contractAgreementService.queryAllAgreements(querySpec)
+      .subscribe(results => {
+        this.contracts = results;
+      });
+  }
+
+  private countContractAgreements() {
+    this.contractAgreementService.count()
+      .subscribe(result => {
+        this.paginatorLength = result;
+      });
+  }
+
+  private async createTransferRequest(contract: ContractAgreement, dataAddress: DataAddress): Promise<TransferProcessInput> {
+    const dataOffer = await this.getDatasetFromFederatedCatalog(contract.assetId, contract.providerId);
+
+    const transferType = this.getTransferType(dataAddress.type);
+
+    const iniateTransfer: TransferProcessInput = {
+      assetId: dataOffer.assetId,
+      counterPartyAddress: dataOffer.endpointUrl,
+      contractId: contract.id,
+      transferType: transferType,
+      dataDestination: dataAddress
+    };
+
+    return iniateTransfer;
+  }
+
+  private getTransferType(type: string) {
+    if(type === 'HttpData') {
+      return 'HttpData-PULL'
+    } else {
+      return 'AmazonS3-PUSH'
+    }
+  }
+
   /**
    * This method is used to obtain that URL of the connector that is offering a particular asset from the catalog.
    *
    * @param assetId Asset ID of the asset that is associated with the contract.
    * @param provider Participant ID of the catalog which owns the asset
    */
-  private async getDatasetFromFederatedCatalog(assetId: string, provider: string): Promise<DataOffer> {
+   private async getDatasetFromFederatedCatalog(assetId: string, provider: string): Promise<DataOffer> {
 
     const querySpec: QuerySpec = {
       offset: 0,
@@ -158,7 +194,7 @@ export class ContractViewerComponent implements OnInit {
     return () => {
       from(this.runningTransfers) //create from array
         .pipe(switchMap(runningTransferProcess => this.catalogService.getTransferProcessesById(runningTransferProcess.processId)), // fetch from API
-          filter(transferprocess => ContractViewerComponent.isFinishedState(transferprocess.type, transferprocess.state)), // only use finished ones
+          filter(transferprocess => ContractViewerComponent.isFinishedState(transferprocess['https://w3id.org/edc/v0.0.1/ns/transferType'][0]['@value'], transferprocess.state)), // only use finished ones
           tap(transferProcess => {
             // remove from in-progress
             this.runningTransfers = this.runningTransfers.filter(rtp => rtp.processId !== transferProcess.id)
@@ -175,31 +211,5 @@ export class ContractViewerComponent implements OnInit {
         }, error => this.notificationService.showError(error))
     }
 
-  }
-
-  changePage(event: PageEvent) {
-    const offset = event.pageIndex * event.pageSize;
-    this.pageSize = event.pageSize;
-    this.currentPage = event.pageIndex;
-    this.loadContractAgreements(offset);
-  }
-
-  loadContractAgreements(offset: number) {
-    const querySpec: QuerySpec = {
-      offset: offset,
-      limit: this.pageSize
-    }
-
-    this.contractAgreementService.queryAllAgreements(querySpec)
-      .subscribe(results => {
-        this.contracts = results;
-      });
-  }
-
-  countContractAgreements() {
-    this.contractAgreementService.count()
-      .subscribe(result => {
-        this.paginatorLength = result;
-      });
   }
 }
