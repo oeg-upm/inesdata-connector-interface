@@ -123,8 +123,17 @@ export class TransferProcessService {
   * Gets the total number of transfers
   */
   public count(): Observable<number> {
-    return from(lastValueFrom(this.http.get<number>(
-      `${environment.runtime.managementApiUrl}${environment.runtime.service.transferProcess.count}`
+    const querySpec: QuerySpec = {
+      filterExpression: []
+    }
+
+    const body = {
+      "@context": JSON_LD_DEFAULT_CONTEXT,
+      ...querySpec
+    };
+
+    return from(lastValueFrom(this.http.post<number>(
+      `${environment.runtime.managementApiUrl}${environment.runtime.service.transferProcess.count}`, body
     )));
   }
 }

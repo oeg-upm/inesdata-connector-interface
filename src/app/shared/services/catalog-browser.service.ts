@@ -93,8 +93,17 @@ export class CatalogBrowserService {
   * Gets the total number of datasets (federated catalog)
   */
   count(){
-    return from(lastValueFrom(this.httpClient.get<number>(
-      `${environment.runtime.managementApiUrl}${environment.runtime.service.federatedCatalog.count}`
+    const querySpec: QuerySpec = {
+      filterExpression: []
+    }
+
+    const body = {
+      "@context": JSON_LD_DEFAULT_CONTEXT,
+      ...querySpec
+    };
+
+    return from(lastValueFrom(this.httpClient.post<number>(
+      `${environment.runtime.managementApiUrl}${environment.runtime.service.federatedCatalog.count}`, body
     )));
   }
 
