@@ -97,8 +97,17 @@ export class ContractDefinitionService {
    * Gets the total number of contract definitions
    */
   public count(): Observable<number> {
-    return from(lastValueFrom(this.http.get<number>(
-      `${environment.runtime.managementApiUrl}${environment.runtime.service.contractDefinition.count}`
+    const querySpec: QuerySpec = {
+      filterExpression: []
+    }
+
+    const body = {
+      "@context": JSON_LD_DEFAULT_CONTEXT,
+      ...querySpec
+    };
+
+    return from(lastValueFrom(this.http.post<number>(
+      `${environment.runtime.managementApiUrl}${environment.runtime.service.contractDefinition.count}`, body
     )));
   }
 }
