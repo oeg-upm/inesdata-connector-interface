@@ -17,23 +17,31 @@ import { Observable } from 'rxjs';
 
 import { Vocabulary } from "../models/vocabulary";
 import { environment } from "src/environments/environment";
+import { JSON_LD_DEFAULT_CONTEXT } from '@think-it-labs/edc-connector-client';
 
 @Injectable({
   providedIn: 'root'
 })
 export class VocabularyService {
 
-  private readonly BASE_URL = `${environment.runtime.managementApiUrl}${environment.runtime.service.vocabulary.baseUrl}`;
+  private readonly BASE_URL = `${environment.runtime.sharedUrl}${environment.runtime.service.vocabulary.baseUrl}`;
+  private readonly PARTICIPANT_ID = `${environment.runtime.sharedUrl}`;
 
   constructor(private http: HttpClient) {
   }
 
   /**
-   * Gets all vocabularies according to a particular query
+   * Gets all vocabularies according to the connector Id
    */
   public requestVocabularies(): Observable<Array<Vocabulary>> {
+
+      const body = {
+        "@context": JSON_LD_DEFAULT_CONTEXT,
+        "connectorId": this.PARTICIPANT_ID
+      }
+
     return this.http.post<Array<Vocabulary>>(
-      `${this.BASE_URL}${environment.runtime.service.vocabulary.getAll}`, null
+      `${this.BASE_URL}${environment.runtime.service.vocabulary.getAll}`, body
     );
   }
 }

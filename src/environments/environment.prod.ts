@@ -9,6 +9,8 @@ export const environment = {
   runtime: {
     managementApiUrl: '',
     catalogUrl: '',
+    sharedUrl: "",
+    participantId: "",
     storageAccount: '',
     storageExplorerLinkTemplate: '',
     theme: '',
@@ -57,8 +59,8 @@ export const environment = {
         count: '/pagination/count?type=transferProcess'
       },
       vocabulary: {
-        baseUrl: '/vocabularies',
-        getAll: '/request'
+        baseUrl: '/connector-vocabularies',
+        getAll: '/request-by-connector'
       },
       federatedCatalog: {
         count: '/pagination/count?type=federatedCatalog',

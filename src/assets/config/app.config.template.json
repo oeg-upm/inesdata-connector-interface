@@ -1,6 +1,8 @@
 {
   "managementApiUrl": "$MANAGEMENT_API_URL",
   "catalogUrl": "$CATALOG_URL",
+  "sharedUrl": "$SHARED_URL",
+  "participantId": "$PARTICIPANT_ID",
   "storageAccount": "$STORAGE_ACCOUNT",
   "storageExplorerLinkTemplate": "$STORAGE_LINK_TEMPLATE",
   "theme": "$APP_THEME",
@@ -49,8 +51,8 @@
       "count": "/pagination/count?type=transferProcess"
     },
     "vocabulary": {
-      "baseUrl": "/vocabularies",
-      "getAll": "/request"
+      "baseUrl": "/connector-vocabularies",
+      "getAll": "/request-by-connector"
     },
     "federatedCatalog": {
       "count": "/pagination/count?type=federatedCatalog",
