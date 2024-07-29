@@ -25,7 +25,7 @@ import { JSON_LD_DEFAULT_CONTEXT } from '@think-it-labs/edc-connector-client';
 export class VocabularyService {
 
   private readonly BASE_URL = `${environment.runtime.sharedUrl}${environment.runtime.service.vocabulary.baseUrl}`;
-  private readonly PARTICIPANT_ID = `${environment.runtime.sharedUrl}`;
+  private readonly PARTICIPANT_ID = `${environment.runtime.participantId}`;
 
   constructor(private http: HttpClient) {
   }
