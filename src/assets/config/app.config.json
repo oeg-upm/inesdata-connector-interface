@@ -1,6 +1,8 @@
 {
   "managementApiUrl": "http://localhost:19193/management",
   "catalogUrl": "http://localhost:19193/management/federatedcatalog",
+  "sharedUrl": "http://localhost:19196/shared",
+  "participantId": "connector-c1",
   "storageAccount": "company2assets",
   "storageExplorerLinkTemplate": "storageexplorer://v=1",
   "theme": "theme-2",
@@ -49,8 +51,8 @@
       "count": "/pagination/count?type=transferProcess"
     },
     "vocabulary": {
-      "baseUrl": "/vocabularies",
-      "getAll": "/request"
+      "baseUrl": "/connector-vocabularies",
+      "getAll": "/request-by-connector"
     },
     "federatedCatalog": {
       "count": "/pagination/count?type=federatedCatalog",
