@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
-import { AssetInput, Asset } from "../../../shared/models/edc-connector-entities";
 import { ConfirmationDialogComponent, ConfirmDialogModel } from "../../../shared/components/confirmation-dialog/confirmation-dialog.component";
 import { NotificationService } from "../../../shared/services/notification.service";
 import { VocabularyEditorDialog } from '../vocabulary-editor-dialog/vocabulary-editor-dialog.component';

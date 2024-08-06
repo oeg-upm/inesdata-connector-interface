@@ -31,7 +31,7 @@ export class VocabularyEditorDialog {
       return;
     }
 
-    // Create EDC asset
+    // Create Vocabulary
     const vocabulary: Vocabulary = {
       "@id": this.id,
       name: this.name,
