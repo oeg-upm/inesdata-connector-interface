@@ -40,6 +40,12 @@ export const routes: Routes = [
     loadChildren: () => import('./pages/assets/assets.module').then(m => m.AssetsModule)
   },
   {
+    path: 'vocabularies',
+    data: {title: 'Vocabularies', icon: 'book'},
+    canActivate: [AuthUserGuard],
+    loadChildren: () => import('./pages/vocabularies/vocabularies.module').then(m => m.VocabulariesModule)
+  },
+  {
     path: '', redirectTo: 'catalog', pathMatch: 'full'
   }
 ];

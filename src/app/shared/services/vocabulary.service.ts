@@ -13,11 +13,11 @@
 
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, from, lastValueFrom } from 'rxjs';
 
 import { Vocabulary } from "../models/vocabulary";
 import { environment } from "src/environments/environment";
-import { JSON_LD_DEFAULT_CONTEXT } from '@think-it-labs/edc-connector-client';
+import { Asset, JSON_LD_DEFAULT_CONTEXT } from '@think-it-labs/edc-connector-client';
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +25,7 @@ import { JSON_LD_DEFAULT_CONTEXT } from '@think-it-labs/edc-connector-client';
 export class VocabularyService {
 
   private readonly BASE_URL = `${environment.runtime.sharedUrl}${environment.runtime.service.vocabulary.baseUrl}`;
+  private readonly MANAGEMENT_BASE_URL = `${environment.runtime.managementApiUrl}${environment.runtime.service.vocabulary.managementUrl}`;
   private readonly PARTICIPANT_ID = `${environment.runtime.participantId}`;
 
   constructor(private http: HttpClient) {
@@ -43,5 +44,28 @@ export class VocabularyService {
     return this.http.post<Array<Vocabulary>>(
       `${this.BASE_URL}${environment.runtime.service.vocabulary.getAll}`, body
     );
+  }
+
+  /**
+   * Gets all vocabularies according to the connector Id
+   */
+  public requestSharedVocabularies(): Observable<Array<Vocabulary>> {
+  return this.http.post<Array<Vocabulary>>(
+    `${this.BASE_URL}${environment.runtime.service.vocabulary.getAllShared}`, {}
+  );
+}
+
+  /**
+   * Removes an asset with the given ID if possible. Deleting an asset is only possible if that asset is not yet referenced by a contract agreement, in which case an error is returned. DANGER ZONE: Note that deleting assets can have unexpected results, especially for contract offers that have been sent out or ongoing or contract negotiations.
+   * @param id
+   */
+  public removeVocabulary(id: string): Observable<any> {
+    if (id === null || id === undefined) {
+      throw new Error('Required parameter id was null or undefined when calling removeVocabulary.');
+    }
+
+    return from(lastValueFrom(this.http.delete<Vocabulary>(
+      `${this.MANAGEMENT_BASE_URL}${id}`
+    )));
   }
 }
