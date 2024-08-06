@@ -3,4 +3,5 @@ export interface Vocabulary {
     name: string;
     category: string;
     jsonSchema: string;
+    connectorId?: string;
 }

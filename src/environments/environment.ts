@@ -64,7 +64,9 @@ export const environment = {
       },
       vocabulary: {
         baseUrl: '/connector-vocabularies',
-        getAll: '/request-by-connector'
+        getAll: '/request-by-connector',
+        managementUrl:'/vocabularies',
+        getAllShared:'/request'
       },
       federatedCatalog: {
         count: '/pagination/count?type=federatedCatalog',
