@@ -35,7 +35,7 @@ export class VocabularyViewerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadAssets();
+    this.loadVocabularies();
   }
 
   isBusy() {
@@ -53,7 +53,7 @@ export class VocabularyViewerComponent implements OnInit {
             next: () => this.fetch$.next(null),
             error: err => this.showError(err, "This vocabulary cannot be deleted"),
             complete: () => {
-              this.loadAssets();
+              this.loadVocabularies();
               this.notificationService.showInfo("Successfully deleted");
             }
           });
@@ -64,34 +64,23 @@ export class VocabularyViewerComponent implements OnInit {
 
   onCreate() {
     const dialogRef = this.dialog.open(VocabularyEditorDialog);
-    dialogRef.afterClosed().pipe(first()).subscribe((result: { assetInput?: AssetInput }) => {
-      const newAsset = result?.assetInput;
-      // if (newAsset) {
-      //   if (newAsset.dataAddress.type !== DATA_ADDRESS_TYPES.inesDataStore) {
-      //     this.vocabularyService.createAsset(newAsset).subscribe({
-      //       next: () => this.fetch$.next(null),
-      //       error: err => this.showError(err, "This asset cannot be created"),
-      //       complete: () => {
-      //         this.loadAssets();
-      //         this.notificationService.showInfo("Successfully created");
-      //       }
-      //     })
-      //   } else {
-      //     this.vocabularyService.createStorageAsset(newAsset).subscribe({
-      //       next: () => this.fetch$.next(null),
-      //       error: err => this.showError(err, "This asset cannot be created"),
-      //       complete: () => {
-      //         this.loadAssets();
-      //         this.notificationService.showInfo("Successfully created");
-      //       }
-      //     })
-      //   }
+    dialogRef.afterClosed().pipe(first()).subscribe((result: { vocabulary?: Vocabulary }) => {
+      const newVocabulary = result?.vocabulary;
+      if (newVocabulary) {
+        this.vocabularyService.createVocabulary(newVocabulary).subscribe({
+          next: () => this.fetch$.next(null),
+          error: err => this.showError(err, "This vocabulary cannot be created"),
+          complete: () => {
+            this.loadVocabularies();
+            this.notificationService.showInfo("Successfully created");
+          }
+        })
 
-      // }
+      }
     })
   }
 
-  loadAssets() {
+  loadVocabularies() {
 
     this.vocabularyService.requestSharedVocabularies()
       .subscribe(results => {
@@ -109,7 +98,7 @@ export class VocabularyViewerComponent implements OnInit {
     });
   }
 
-  formatAndUnescapeJson(escapedJson:string): string {
+  formatAndUnescapeJson(escapedJson: string): string {
     let jsonObject: any;
     try {
       jsonObject = JSON.parse(escapedJson);

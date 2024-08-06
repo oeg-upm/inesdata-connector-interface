@@ -22,6 +22,13 @@ export const ASSET_TYPES = {
   machineLearning: 'Machine learning'
 }
 
+export const CATEGORIES = {
+  default: 'Default',
+  dataset: 'Dataset',
+  service: 'Service',
+  machineLearning: 'Machine learning'
+}
+
 export const CONTEXTS = {
   dcterms: "http://purl.org/dc/terms/",
   dcat: "http://www.w3.org/ns/dcat#",

@@ -17,7 +17,7 @@ import { Observable, from, lastValueFrom } from 'rxjs';
 
 import { Vocabulary } from "../models/vocabulary";
 import { environment } from "src/environments/environment";
-import { Asset, JSON_LD_DEFAULT_CONTEXT } from '@think-it-labs/edc-connector-client';
+import { Asset, EDC_CONTEXT, JSON_LD_DEFAULT_CONTEXT } from '@think-it-labs/edc-connector-client';
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +29,26 @@ export class VocabularyService {
   private readonly PARTICIPANT_ID = `${environment.runtime.participantId}`;
 
   constructor(private http: HttpClient) {
+  }
+
+
+  /**
+   * Creates a new vocabulary
+   * @param vocabulary
+   */
+  public createVocabulary(vocabulary: Vocabulary): Observable<any> {
+
+    let body = {
+      ...vocabulary,
+      connectorId: this.PARTICIPANT_ID,
+      "@context": {
+        "@vocab": EDC_CONTEXT
+      }
+    }
+
+    return from(lastValueFrom(this.http.post<Vocabulary>(
+      `${this.MANAGEMENT_BASE_URL}`, body
+    )));
   }
 
   /**
@@ -56,7 +76,7 @@ export class VocabularyService {
 }
 
   /**
-   * Removes an asset with the given ID if possible. Deleting an asset is only possible if that asset is not yet referenced by a contract agreement, in which case an error is returned. DANGER ZONE: Note that deleting assets can have unexpected results, especially for contract offers that have been sent out or ongoing or contract negotiations.
+   * Removes a vocabulary with the given ID if possible.
    * @param id
    */
   public removeVocabulary(id: string): Observable<any> {
@@ -65,7 +85,7 @@ export class VocabularyService {
     }
 
     return from(lastValueFrom(this.http.delete<Vocabulary>(
-      `${this.MANAGEMENT_BASE_URL}${id}`
+      `${this.MANAGEMENT_BASE_URL}/${id}`
     )));
   }
 }
