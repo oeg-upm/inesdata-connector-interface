@@ -30,6 +30,10 @@ export class VocabularyEditorDialog {
       this.notificationService.showError("Review the form fields");
       return;
     }
+    if(!this.checkJsonField()){
+      this.notificationService.showError("Schema field must be a JSON");
+      return;
+    }
 
     // Create Vocabulary
     const vocabulary: Vocabulary = {
@@ -51,8 +55,17 @@ export class VocabularyEditorDialog {
   private checkRequiredFields(): boolean {
     if (!this.id || !this.name || !this.jsonSchema || !this.category) {
       return false;
-    }else{
-      return true;
     }
+    return true;
+  }
+
+  private checkJsonField(): boolean {
+    try {
+      JSON.parse(this.jsonSchema);
+    } catch (e) {
+      return false;
+    }
+
+    return true;
   }
 }

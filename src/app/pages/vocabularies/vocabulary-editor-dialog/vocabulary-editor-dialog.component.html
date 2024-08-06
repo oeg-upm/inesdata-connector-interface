@@ -13,7 +13,7 @@
     </div>
     <div>
       <mat-form-field class="form-field" color="accent">
-        <mat-label>Category</mat-label>
+        <mat-label>Asset category</mat-label>
         <mat-select [(ngModel)]="category" required>
           <mat-option *ngFor="let cat of categories" [value]="cat[0]">
             {{ cat[1] }}
