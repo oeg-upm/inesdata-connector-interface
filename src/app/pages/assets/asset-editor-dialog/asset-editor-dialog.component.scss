@@ -1,5 +1,5 @@
 mat-dialog-content {
-    width: 800px;
+    width: 1000px;
 }
 
 .form-field:nth-child(odd) {
@@ -52,4 +52,7 @@ mat-card-actions {
 .custom-expansion{
   border: 1px solid #b2b2b2;
   margin-bottom: 10px;
+}
+.mat-mdc-dialog-content {
+  max-height: 85vh;
 }

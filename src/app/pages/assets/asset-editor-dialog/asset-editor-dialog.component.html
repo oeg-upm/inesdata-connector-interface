@@ -69,7 +69,7 @@
                 <mat-expansion-panel-header>
                   <mat-panel-title> <mat-icon>edit_note</mat-icon>{{defaultForm.name}}</mat-panel-title>
                 </mat-expansion-panel-header>
-                <jsonforms [(data)]="defaultForm.data" [schema]="defaultForm.schema" [uischema]="defaultForm.uischema"
+                <jsonforms class="asset-form" [(data)]="defaultForm.data" [schema]="defaultForm.schema" [uischema]="defaultForm.uischema"
                   [renderers]="defaultForm.renderers" [ajv]="ajv"></jsonforms>
               </mat-expansion-panel>
             </div>
@@ -135,7 +135,7 @@
 
           <mat-form-field class="form-field" color="accent">
             <mat-label>Base URL</mat-label>
-            <input [(ngModel)]="httpDataAddress.baseUrl" matInput>
+            <input [(ngModel)]="httpDataAddress.baseUrl" matInput [pattern]="urlPattern">
           </mat-form-field>
 
           <mat-form-field class="form-field" color="accent">

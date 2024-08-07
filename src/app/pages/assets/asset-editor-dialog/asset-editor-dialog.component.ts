@@ -98,6 +98,7 @@ export class AssetEditorDialog implements OnInit {
   config = CKEDITOR_CONFIG
   selectedAssetTypeVocabularies: Vocabulary[]
 
+  urlPattern = /^((https?|ftp):\/\/)?(localhost|([a-z\d]([a-z\d-]*[a-z\d])*)|(([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|((\d{1,3}\.){3}\d{1,3}))(:\d+)?(\/[-a-z\d%_.~+]*)*(\?[;&a-z\d%_.~+=-]*)?(\#[-a-z\d_]*)?$/i;
 
   ngOnInit(): void {
     this.validator = this.ajv.compile(this.schema);
