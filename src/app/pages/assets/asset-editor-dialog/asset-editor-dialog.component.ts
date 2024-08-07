@@ -86,7 +86,7 @@ export class AssetEditorDialog implements OnInit {
     type: 'InesDataStore'
   };
 
-  assetType: string = '';
+  assetType:any;
   assetTypes = Object.entries(ASSET_TYPES);
   defaultForms: JsonFormData[]
   selectedForms: JsonFormData[]
@@ -96,12 +96,14 @@ export class AssetEditorDialog implements OnInit {
   // Text Editor
   editor = ClassicEditor;
   config = CKEDITOR_CONFIG
+  selectedAssetTypeVocabularies: Vocabulary[]
 
 
   ngOnInit(): void {
     this.validator = this.ajv.compile(this.schema);
     this.defaultForms = []
     this.selectedForms = []
+    this.selectedAssetTypeVocabularies = []
 
     this.vocabularyService.requestVocabularies().subscribe({
       next: (res: Vocabulary[]) => {
@@ -114,7 +116,9 @@ export class AssetEditorDialog implements OnInit {
         }
         if (this.selectedVocabularies?.length > 0) {
           this.selectedVocabularies.forEach(s => {
-            this.initVocabularyForm(s, false)
+            if(this.selectedAssetTypeVocabularies.find(satv=> satv['@id'] === s['@id'])){
+              this.initVocabularyForm(s, false)
+            }
           })
         }
       },
@@ -127,7 +131,7 @@ export class AssetEditorDialog implements OnInit {
   setDefaultVocabularyAndTabs() {
 
     if (this.vocabularies.length > 0) {
-      this.assetType = this.vocabularies[0]['category'];
+      this.assetType = this.assetTypes[0][0];
       this.selectedVocabularies = this.vocabularies.filter(v => v.category !== 'default' && v.category === this.assetType)
       this.defaultVocabularies = this.vocabularies.filter(v => v.category === 'default')
     } else {
@@ -249,7 +253,7 @@ export class AssetEditorDialog implements OnInit {
    * @returns true if required fields have been filled
    */
   private checkRequiredFields(): boolean {
-    if (!this.id || !this.storageTypeId || !this.name || !this.version || !this.description || !this.keywords || !this.shortDescription) {
+    if (!this.id || !this.storageTypeId || !this.name || !this.version || !this.description || !this.keywords || !this.shortDescription || !this.assetType) {
       return false;
     } else {
       if (this.storageTypeId === DATA_ADDRESS_TYPES.amazonS3 && !this.amazonS3DataAddress.region) {
@@ -287,10 +291,13 @@ export class AssetEditorDialog implements OnInit {
     this.selectedVocabularies = []
     this.selectedVocabularies = this.vocabularies.filter(v => v.category === this.assetType)
     this.selectedForms = []
+    this.selectedAssetTypeVocabularies = []
 
     if (this.selectedVocabularies.length > 0) {
       this.selectedVocabularies.forEach(s => {
-        this.initVocabularyForm(s, false)
+        if(this.selectedAssetTypeVocabularies.find(satv=> satv['@id'] === s['@id'])){
+          this.initVocabularyForm(s, false)
+        }
       })
     }
   }
@@ -308,6 +315,18 @@ export class AssetEditorDialog implements OnInit {
       this.inesDataStoreAddress.file = event[0]
     }else{
       delete this.inesDataStoreAddress.file
+    }
+  }
+
+  onSelectionChangeVocabulary(){
+    this.selectedForms = []
+
+    if (this.selectedVocabularies.length > 0) {
+      this.selectedVocabularies.forEach(s => {
+        if(this.selectedAssetTypeVocabularies.find(satv=> satv['@id'] === s['@id'])){
+          this.initVocabularyForm(s, false)
+        }
+      })
     }
   }
 }

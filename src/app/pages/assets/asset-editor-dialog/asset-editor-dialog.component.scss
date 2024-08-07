@@ -31,3 +31,25 @@ mat-card-actions {
 .short-description {
   width: 100%;
 }
+
+:host ::ng-deep .asset-form mat-card:not(.dialog-card) {
+  width: 100% !important;
+}
+
+.p-15{
+  padding:15px;
+}
+
+.full-width{
+  width: 95%;
+}
+
+.form-field-full{
+  width:100% !important;
+  margin-top: 15px;
+}
+
+.custom-expansion{
+  border: 1px solid #b2b2b2;
+  margin-bottom: 10px;
+}
