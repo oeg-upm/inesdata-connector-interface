@@ -36,7 +36,7 @@
         <div>
           <mat-form-field class="form-field" color="accent">
             <mat-label>Asset type</mat-label>
-            <mat-select [(ngModel)]="assetType" (selectionChange)="assetTypeChange()">
+            <mat-select [(ngModel)]="assetType" (selectionChange)="assetTypeChange()" required>
               <mat-option *ngFor="let assetType of assetTypes" [value]="assetType[0]">
                 {{ assetType[1] }}
               </mat-option>
@@ -65,28 +65,43 @@
         <mat-tab label="Default information" *ngIf="defaultVocabularies?.length>0 && defaultForms?.length>0">
           <div class="asset-creation-tab">
             <div *ngFor="let defaultForm of defaultForms">
-              <h3>{{defaultForm.name}}</h3>
-              <jsonforms
-                  [(data)]="defaultForm.data"
-                  [schema]="defaultForm.schema"
-                  [uischema]="defaultForm.uischema"
-                  [renderers]="defaultForm.renderers"
-                  [ajv]="ajv"
-              ></jsonforms>
+              <mat-expansion-panel class="custom-expansion">
+                <mat-expansion-panel-header>
+                  <mat-panel-title> <mat-icon>edit_note</mat-icon>{{defaultForm.name}}</mat-panel-title>
+                </mat-expansion-panel-header>
+                <jsonforms class="asset-form" [(data)]="defaultForm.data" [schema]="defaultForm.schema" [uischema]="defaultForm.uischema"
+                  [renderers]="defaultForm.renderers" [ajv]="ajv"></jsonforms>
+              </mat-expansion-panel>
             </div>
           </div>
         </mat-tab>
-        <mat-tab [label]="getAssetTypeText()+' information'" *ngIf="selectedVocabularies?.length>0 && selectedForms?.length>0">
+        <mat-tab [label]="getAssetTypeText()+' information'" *ngIf="selectedVocabularies?.length>0">
+          <div>
+            <mat-form-field class="form-field-full" color="accent">
+              <mat-label>Vocabularies</mat-label>
+              <mat-select [(ngModel)]="selectedAssetTypeVocabularies" multiple (selectionChange)="onSelectionChangeVocabulary()">
+                <mat-option *ngFor="let v of selectedVocabularies" [value]="v">
+                  {{ v.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
           <div class="asset-creation-tab">
             <div *ngFor="let selectedForm of selectedForms">
-              <h3>{{selectedForm.name}}</h3>
-              <jsonforms
+              <mat-expansion-panel class="custom-expansion">
+                <mat-expansion-panel-header>
+                  <mat-panel-title> <mat-icon>edit_note</mat-icon>{{selectedForm.name}}</mat-panel-title>
+                </mat-expansion-panel-header>
+                <jsonforms class="asset-form"
                   [(data)]="selectedForm.data"
                   [schema]="selectedForm.schema"
                   [uischema]="selectedForm.uischema"
                   [renderers]="selectedForm.renderers"
                   [ajv]="ajv"
-              ></jsonforms>
+                  ></jsonforms>
+              </mat-expansion-panel>
+
+
             </div>
           </div>
         </mat-tab>
@@ -120,7 +135,7 @@
 
           <mat-form-field class="form-field" color="accent">
             <mat-label>Base URL</mat-label>
-            <input [(ngModel)]="httpDataAddress.baseUrl" matInput>
+            <input [(ngModel)]="httpDataAddress.baseUrl" matInput [pattern]="urlPattern">
           </mat-form-field>
 
           <mat-form-field class="form-field" color="accent">
