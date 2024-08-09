@@ -31,6 +31,7 @@ export const environment = {
       },
       policy: {
         baseUrl: '/v3/policydefinitions',
+        complexBaseUrl: '/v3/complexpolicydefinitions',
         get: '/',
         getAll: '/request',
         count: '/pagination/count?type=policyDefinition'

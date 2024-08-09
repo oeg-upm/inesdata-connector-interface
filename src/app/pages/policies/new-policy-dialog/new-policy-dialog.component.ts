@@ -1,69 +1,52 @@
-import { Component, OnInit } from '@angular/core';
-import { PolicyInput } from "../../../shared/models/edc-connector-entities";
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialogRef } from "@angular/material/dialog";
 import { NotificationService } from 'src/app/shared/services/notification.service';
-import { PolicyBuilder } from '@think-it-labs/edc-connector-client';
+import { PolicyDefinitionCreatePageForm } from './policy-definition-create-page-form';
+import { ExpressionFormHandler } from '../policy-editor/editor/expression-form-handler';
+import { ValidationMessages } from 'src/app/shared/validators/validation-messages';
+import { Subject } from 'rxjs';
+import { PolicyDefinitionCreateDto } from '../policy-editor/model/policy-definition-create-dto';
 
 @Component({
   selector: 'app-new-policy-dialog',
   templateUrl: './new-policy-dialog.component.html',
   styleUrls: ['./new-policy-dialog.component.scss']
 })
-export class NewPolicyDialogComponent implements OnInit {
-  editMode: boolean = false;
-  policy: PolicyInput = {
-    "@type": "Set"
-  };
+export class NewPolicyDialogComponent  implements OnInit,OnDestroy {
 
-  policyId: string = '';
-  permissionsJson: string = '';
-  prohibitionsJson: string = '';
-  obligationsJson: string = '';
 
-  constructor(private dialogRef: MatDialogRef<NewPolicyDialogComponent>,
-    private notificationService: NotificationService) {
-  }
+  constructor(
+    public form: PolicyDefinitionCreatePageForm,
+    public expressionFormHandler: ExpressionFormHandler,
+    public validationMessages: ValidationMessages,
+    private dialogRef: MatDialogRef<NewPolicyDialogComponent>,
+    private notificationService: NotificationService
+  ) {}
 
   ngOnInit(): void {
-    this.editMode = true;
+
+    this.expressionFormHandler.reset()
+    this.form.reset()
   }
 
   onSave() {
-    try {
-      this.policy.permission = this.parseAndVerifyJson(this.permissionsJson);
-      this.policy.prohibition = this.parseAndVerifyJson(this.prohibitionsJson);
-      this.policy.obligation = this.parseAndVerifyJson(this.obligationsJson);
-
-      this.dialogRef.close({
-        '@id': this.policyId,
-        policy: new PolicyBuilder()
-        .raw({
-          ...this.policy
-        })
-        .build()
-      });
-
-    } catch (error) {
-      if (error instanceof SyntaxError) {
-        this.notificationService.showError("Error parsing JSON: " + error.message);
-        console.error(error);
-      }
+    const createDto = this.buildPolicyDefinitionCreateDto();
+    if(this.form.group.valid){
+      this.dialogRef.close(createDto);
     }
   }
 
-  /**
-   * Parse and verify a JSON from the policy
-   *
-   * @param json JSON to parse and verify
-   * @returns the parsed JSON or null if it is empty
-   */
-  private parseAndVerifyJson(json: string): any {
-    if (json.trim() != '') {
-      const parsedJson = JSON.parse(json);
-      return parsedJson;
-    }
-
-    return null;
+  buildPolicyDefinitionCreateDto(): PolicyDefinitionCreateDto {
+    return {
+      policyDefinitionId: this.form.group.controls.id.value,
+      expression: this.expressionFormHandler.toUiPolicyExpression(),
+    };
   }
 
+  ngOnDestroy$ = new Subject();
+
+  ngOnDestroy(): void {
+    this.ngOnDestroy$.next(null);
+    this.ngOnDestroy$.complete();
+  }
 }

@@ -1,5 +1,5 @@
 mat-dialog-content {
-  width: 800px;
+  min-width: 1500px;
 }
 
 .form-field-half{
@@ -10,4 +10,8 @@ mat-dialog-content {
 .form-field-stretch{
   box-sizing: border-box;
   width: 100%;
+}
+.mat-mdc-dialog-content {
+  max-height: 85vh;
+  min-height: 65vh;
 }

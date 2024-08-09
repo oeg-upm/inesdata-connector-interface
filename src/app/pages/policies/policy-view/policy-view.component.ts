@@ -9,6 +9,7 @@ import { ConfirmationDialogComponent, ConfirmDialogModel } from "../../../shared
 import { PolicyDefinition, PolicyDefinitionInput, IdResponse, QuerySpec } from "../../../shared/models/edc-connector-entities";
 import { PolicyRuleViewerComponent } from '../policy-rule-viewer/policy-rule-viewer.component';
 import { PageEvent } from '@angular/material/paginator';
+import { PolicyDefinitionCreateDto } from '../policy-editor/model/policy-definition-create-dto';
 
 @Component({
   selector: 'app-policy-view',
@@ -48,9 +49,9 @@ export class PolicyViewComponent implements OnInit {
   onCreate() {
     const dialogRef = this.dialog.open(NewPolicyDialogComponent);
     dialogRef.afterClosed().pipe(first()).subscribe({
-      next: (newPolicyDefinition: PolicyDefinitionInput) => {
+      next: (newPolicyDefinition: PolicyDefinitionCreateDto) => {
         if (newPolicyDefinition) {
-          this.policyService.createPolicy(newPolicyDefinition).subscribe(
+          this.policyService.createComplexPolicy(newPolicyDefinition).subscribe(
             {
               next: (response: IdResponse) => this.errorOrUpdateSubscriber.next(response),
               error: (error: Error) => this.showError(error, "An error occurred while creating the policy."),

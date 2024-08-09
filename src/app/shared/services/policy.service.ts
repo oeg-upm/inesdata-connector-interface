@@ -18,6 +18,7 @@ import {expandArray, PolicyDefinition, QuerySpec, EDC_CONTEXT, JSON_LD_DEFAULT_C
 import {PolicyDefinitionInput} from "../models/edc-connector-entities"
 import { environment } from 'src/environments/environment';
 import { CONTEXTS } from '../utils/app.constants';
+import { PolicyDefinitionCreateDto } from 'src/app/pages/policies/policy-editor/model/policy-definition-create-dto';
 
 
 @Injectable({
@@ -26,6 +27,7 @@ import { CONTEXTS } from '../utils/app.constants';
 export class PolicyService {
 
   private readonly BASE_URL = `${environment.runtime.managementApiUrl}${environment.runtime.service.policy.baseUrl}`;
+  private readonly COMPLEX_BASE_URL = `${environment.runtime.managementApiUrl}${environment.runtime.service.policy.complexBaseUrl}`;
 
   constructor(private http: HttpClient) {
   }
@@ -46,6 +48,17 @@ export class PolicyService {
 
     return from(lastValueFrom(this.http.post<PolicyDefinition>(
       `${this.BASE_URL}`, body
+    )));
+  }
+
+
+  /**
+   * Creates a new policy definition
+   * @param input
+   */
+  public createComplexPolicy(input: PolicyDefinitionCreateDto): Observable<any> {
+    return from(lastValueFrom(this.http.post<PolicyDefinitionCreateDto>(
+      `${this.COMPLEX_BASE_URL}`, input
     )));
   }
 
