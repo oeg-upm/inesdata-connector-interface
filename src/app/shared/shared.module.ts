@@ -27,6 +27,10 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTableModule } from '@angular/material/table';
 import { UploaderFileComponent } from './components/uploader-file/uploader-file.component';
 import { DndDirective } from './directives/dnd.directive';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   imports: [
@@ -52,7 +56,12 @@ import { DndDirective } from './directives/dnd.directive';
     MatTabsModule,
     MatDividerModule,
     MatProgressSpinnerModule,
-    MatTableModule
+    MatTableModule,
+    MatChipsModule,
+    MatTooltipModule,
+    MatDatepickerModule,
+    MatMenuModule,
+    MatTooltipModule
   ],
   declarations: [
     NavigationComponent,
@@ -87,7 +96,12 @@ import { DndDirective } from './directives/dnd.directive';
     MatTabsModule,
     MatDividerModule,
     MatProgressSpinnerModule,
-    MatTableModule
+    MatTableModule,
+    MatChipsModule,
+    MatTooltipModule,
+    MatDatepickerModule,
+    MatMenuModule,
+    MatTooltipModule
   ]
 })
 export class SharedModule {}

@@ -1,38 +1,32 @@
 <mat-dialog-content>
+  <div class="p-10 flex flex-col">
+    <div class="form-section-title">Policy Metadata</div>
+    <!--  ID -->
+    <mat-form-field
+      *ngIf="form.group.controls.id; let ctrl"
+      id="form-field-id"
+      color="accent">
+      <mat-label>ID</mat-label>
+      <input matInput autocomplete="newvalue" [formControl]="ctrl" />
+      <mat-error *ngIf="ctrl.invalid && ctrl.errors?.pattern">{{
+        validationMessages.invalidWhitespacesOrColonsMessage
+      }}</mat-error>
+    </mat-form-field>
 
-  <!--  ID -->
-  <mat-form-field class="form-field-stretch" color="accent" id="form-field-id">
-    <mat-label>ID</mat-label>
-    <input [(ngModel)]="policyId" matInput required>
-  </mat-form-field>
+    <div class="form-section-title">Policy Expression</div>
 
-  <!--  Permissions -->
-  <mat-form-field class="form-field-stretch" color="accent" id="form-field-permissions">
-    <mat-label>Permissions (JSON)</mat-label>
-    <textarea [(ngModel)]="permissionsJson" rows=4 matInput></textarea>
-  </mat-form-field>
+    <policy-form-expression
+      [treeNode]="expressionFormHandler.tree.root"></policy-form-expression>
 
-  <!--  Prohibitions -->
-  <mat-form-field class="form-field-stretch" color="accent" id="form-field-prohibitions">
-    <mat-label>Prohibitions (JSON)</mat-label>
-    <textarea [(ngModel)]="prohibitionsJson" rows=4 matInput></textarea>
-  </mat-form-field>
 
-  <!--  Obligations -->
-  <mat-form-field class="form-field-stretch" color="accent" id="form-field-obligations">
-    <mat-label>Obligations (JSON)</mat-label>
-    <textarea [(ngModel)]="obligationsJson" rows=4 matInput></textarea>
-  </mat-form-field>
+  </div>
+
 
 </mat-dialog-content>
 
 <mat-dialog-actions>
-  <button (click)="onSave()" *ngIf="editMode" color="accent" mat-stroked-button >
-    <mat-icon>save</mat-icon>
-    Save
-  </button>
-
-  <button (click)="onSave()" *ngIf="!editMode" color="accent" mat-stroked-button>
+  <button (click)="onSave()" color="accent" mat-stroked-button
+  [disabled]="this.form.group.invalid">
     <mat-icon>add_circle_outline</mat-icon>
     Create
   </button>

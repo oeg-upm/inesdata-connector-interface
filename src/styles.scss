@@ -53,3 +53,80 @@ mat-card:not(.dialog-card) {
 .paginator {
   margin-top: 1em;
 }
+
+//CREATE POLICY STYLES
+.p-10 {
+  padding: 2.5rem;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.flex {
+  display: flex;
+}
+
+.form-section-title {
+  margin: 16px 3px;
+  text-transform: uppercase;
+  color: #ffffff;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+}
+.items-center {
+  align-items: center;
+}
+
+.gap-4 {
+  gap: 1rem;
+}
+.h-\[4rem\] {
+  height: 4rem;
+}
+.font-medium {
+  font-weight: 500;
+}
+.grow {
+  flex-grow: 1;
+}
+
+.border-gray-500 {
+  --tw-border-opacity: 1;
+  border-color: rgb(107 114 128 / var(--tw-border-opacity));
+}
+.border-solid {
+  border-style: solid;
+}
+.border-l-2 {
+  border-left-width: 2px;
+}
+.border-0 {
+  border-top-width: 0px;
+  border-right-width: 0px;
+  border-bottom-width: 0px;
+}
+.gap-1 {
+  gap: 0.25rem;
+}
+
+.ml-2 {
+  margin-left: 0.5rem;
+}
+.pl-4 {
+  padding-left: 1rem;
+}
+.border-t-2 {
+  border-top-width: 2px;
+}.w-\[1rem\] {
+  width: 1rem;
+}.mr-\[1rem\] {
+  margin-right: 1rem;
+}
+.bg-white {
+  --tw-bg-opacity: 1;
+  background-color: rgb(66 66 66);
+}
+.justify-stretch {
+  justify-content: stretch;
+}
