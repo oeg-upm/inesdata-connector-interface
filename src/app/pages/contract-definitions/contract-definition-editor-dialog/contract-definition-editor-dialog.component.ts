@@ -36,6 +36,8 @@ export class ContractDefinitionEditorDialog implements OnInit {
       this.contractDefinition = contractDefinition;
       this.editMode = true;
     }
+
+    dialogRef.disableClose = true;
   }
 
   ngOnInit(): void {

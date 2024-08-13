@@ -21,7 +21,10 @@ export class NewPolicyDialogComponent  implements OnInit,OnDestroy {
     public validationMessages: ValidationMessages,
     private dialogRef: MatDialogRef<NewPolicyDialogComponent>,
     private notificationService: NotificationService
-  ) {}
+  ) {
+
+    dialogRef.disableClose = true;
+  }
 
   ngOnInit(): void {
 

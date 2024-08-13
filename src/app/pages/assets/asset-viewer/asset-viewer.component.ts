@@ -69,7 +69,7 @@ export class AssetViewerComponent implements OnInit {
   }
 
   onCreate() {
-    const dialogRef = this.dialog.open(AssetEditorDialog);
+    const dialogRef = this.dialog.open(AssetEditorDialog, { disableClose: true });
     dialogRef.afterClosed().pipe(first()).subscribe((result: { assetInput?: AssetInput }) => {
       const newAsset = result?.assetInput;
       if (newAsset) {

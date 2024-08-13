@@ -34,6 +34,7 @@ export class CatalogBrowserComponent implements OnInit {
 
   viewContractOffers(assetId: string, contractOffers: Policy[], endpointUrl: string, properties: any) {
     this.dialog.open(ContractOffersViewerComponent, {
+      disableClose: true,
       data: {
         assetId: assetId,
         contractOffers: contractOffers,

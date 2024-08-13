@@ -145,6 +145,7 @@ export class AssetEditorDialog implements OnInit {
     private vocabularyService: VocabularyService,
     private notificationService: NotificationService,
     @Inject('STORAGE_TYPES') public storageTypes: StorageType[]) {
+    dialogRef.disableClose = true;
   }
 
   async onSave() {

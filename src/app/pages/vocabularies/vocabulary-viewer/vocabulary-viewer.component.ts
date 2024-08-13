@@ -62,7 +62,7 @@ export class VocabularyViewerComponent implements OnInit {
   }
 
   onCreate() {
-    const dialogRef = this.dialog.open(VocabularyEditorDialog);
+    const dialogRef = this.dialog.open(VocabularyEditorDialog, { disableClose: true });
     dialogRef.afterClosed().pipe(first()).subscribe((result: { vocabulary?: Vocabulary }) => {
       const newVocabulary = result?.vocabulary;
       if (newVocabulary) {
@@ -90,6 +90,7 @@ export class VocabularyViewerComponent implements OnInit {
   viewSchema(title: string, schema: any) {
     const json = this.formatAndUnescapeJson(schema)
     this.dialog.open(VocabularySchemaViewerComponent, {
+      disableClose: true,
       data: {
         title: title,
         schema: json
