@@ -61,7 +61,7 @@ export class ContractViewerComponent implements OnInit {
   }
 
   onTransferClicked(contract: ContractAgreement) {
-    const dialogRef = this.dialog.open(ContractTransferDialog);
+    const dialogRef = this.dialog.open(ContractTransferDialog, { disableClose: true });
 
     dialogRef.afterClosed().pipe(first()).subscribe(async result => {
       if (result !== undefined && result.transferButtonclicked) {

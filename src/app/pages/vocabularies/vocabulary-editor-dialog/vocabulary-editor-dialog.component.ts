@@ -22,6 +22,8 @@ export class VocabularyEditorDialog {
 
   constructor(private dialogRef: MatDialogRef<VocabularyEditorDialog>,
     private notificationService: NotificationService) {
+
+      dialogRef.disableClose = true;
   }
 
   async onSave() {

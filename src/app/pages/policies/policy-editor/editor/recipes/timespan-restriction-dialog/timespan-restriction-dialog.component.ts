@@ -26,7 +26,9 @@ export class TimespanRestrictionDialogComponent implements OnDestroy {
     private formBuilder: FormBuilder,
     private dialogRef: MatDialogRef<TimespanRestrictionDialogComponent>,
     public validationMessages: ValidationMessages,
-  ) {}
+  ) {
+    dialogRef.disableClose = true;
+  }
 
   onAdd() {
     const formValue = this.group.value;

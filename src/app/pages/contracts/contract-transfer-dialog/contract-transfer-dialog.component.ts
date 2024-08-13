@@ -30,6 +30,8 @@ export class ContractTransferDialog {
   constructor(@Inject('TRANSFER_TYPES') public transferTypes: StorageType[],
     private dialogRef: MatDialogRef<ContractTransferDialog>,
     private notificationService: NotificationService) {
+
+      dialogRef.disableClose = true;
   }
 
   onTransfer() {

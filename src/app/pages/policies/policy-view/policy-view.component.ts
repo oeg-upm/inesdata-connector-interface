@@ -30,7 +30,6 @@ export class PolicyViewComponent implements OnInit {
   constructor(private policyService: PolicyService,
     private notificationService: NotificationService,
     private readonly dialog: MatDialog) {
-
     this.errorOrUpdateSubscriber = {
       next: x => this.fetch$.next(null),
       error: err => this.showError(err, "An error occurred."),
@@ -47,7 +46,7 @@ export class PolicyViewComponent implements OnInit {
   }
 
   onCreate() {
-    const dialogRef = this.dialog.open(NewPolicyDialogComponent);
+    const dialogRef = this.dialog.open(NewPolicyDialogComponent, { disableClose: true });
     dialogRef.afterClosed().pipe(first()).subscribe({
       next: (newPolicyDefinition: PolicyDefinitionCreateDto) => {
         if (newPolicyDefinition) {
@@ -101,6 +100,7 @@ export class PolicyViewComponent implements OnInit {
 
   viewRules(title: string, rules: any) {
     this.dialog.open(PolicyRuleViewerComponent, {
+      disableClose: true,
       data: {
         title: title,
         rules: rules

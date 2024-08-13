@@ -61,7 +61,7 @@ export class ContractDefinitionViewerComponent implements OnInit {
   }
 
   onCreate() {
-    const dialogRef = this.dialog.open(ContractDefinitionEditorDialog);
+    const dialogRef = this.dialog.open(ContractDefinitionEditorDialog, { disableClose: true });
     dialogRef.afterClosed().pipe(first()).subscribe((result: { contractDefinition?: ContractDefinitionInput }) => {
       const newContractDefinition = result?.contractDefinition;
       if (newContractDefinition) {
