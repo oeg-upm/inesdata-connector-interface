@@ -24,7 +24,7 @@ export class NotificationService {
       action = "Done";
     }
     const config: MatSnackBarConfig = {
-      duration: onAction ? 775000 : 773000, // no auto-cancel if an action was specified
+      duration: onAction ? 5000 : 3000, // no auto-cancel if an action was specified
       verticalPosition: "top",
       politeness: "polite",
       horizontalPosition: "center",
