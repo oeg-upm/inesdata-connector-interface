@@ -39,6 +39,11 @@ export class ContractTransferDialog {
 
     if (this.storageTypeId === DATA_ADDRESS_TYPES.amazonS3) {
       dataAddress = this.amazonS3DataAddress;
+      // Check whether the asset is valid
+      if (!this.checkRequiredFields()) {
+        this.notificationService.showError("Review the form fields");
+        return;
+      }
     } else if (this.storageTypeId === DATA_ADDRESS_TYPES.httpData) {
       dataAddress = this.httpDataAddress;
     } else {
@@ -52,4 +57,20 @@ export class ContractTransferDialog {
     });
   }
 
+    /**
+   * Checks the required fields
+   *
+   * @returns true if required fields have been filled
+   */
+  private checkRequiredFields(): boolean {
+    if (this.storageTypeId === DATA_ADDRESS_TYPES.amazonS3 && (!this.amazonS3DataAddress.region || !this.amazonS3DataAddress.bucketName
+        || !this.amazonS3DataAddress.endpointOverride || !this.amazonS3DataAddress.secretAccessKey || !this.amazonS3DataAddress.accessKeyId)) {
+      return false;
+    }
+    else if (this.storageTypeId === DATA_ADDRESS_TYPES.httpData && (!this.httpDataAddress.name || !this.httpDataAddress.baseUrl)) {
+      return false;
+    }else{
+      return true;
+    }
+  }
 }
