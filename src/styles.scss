@@ -36,6 +36,14 @@ body {
   }
 }
 
+.mat-mdc-snack-bar-container {
+  &.snackbar-warning-style {
+    --mdc-snackbar-container-color: #FEFCE9;
+    --mdc-snackbar-supporting-text-color: #CA8A04;
+    --mat-mdc-snack-bar-button-color: #d19800;
+  }
+}
+
 .break-all{
   word-break: break-all;
 }

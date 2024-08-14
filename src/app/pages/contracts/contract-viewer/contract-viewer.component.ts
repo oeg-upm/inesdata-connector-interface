@@ -51,7 +51,7 @@ export class ContractViewerComponent implements OnInit {
       return [
         "COMPLETED",
         "ERROR",
-        "ENDED"].includes(state);
+        "ENDED","TERMINATED"].includes(state);
     }
   }
 
@@ -198,7 +198,7 @@ export class ContractViewerComponent implements OnInit {
           tap(transferProcess => {
             // remove from in-progress
             this.runningTransfers = this.runningTransfers.filter(rtp => rtp.processId !== transferProcess.id)
-            this.notificationService.showInfo(`Transfer [${transferProcess.id}] complete!`, "Show me!", () => {
+            this.notificationService.showWarning(`Transfer [${transferProcess.id}] complete! Check if the process was successful`, "Show me!", () => {
               this.router.navigate(['/transfer-history'])
             })
           }),
