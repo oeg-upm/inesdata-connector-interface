@@ -52,6 +52,7 @@ export const environment = {
       },
       transferProcess: {
         baseUrl: '/v3/transferprocesses',
+        inesdataBaseUrl: '/v3/inesdatatransferprocesses',
         get: '/',
         deprovision: '/deprovision',
         state: '/state',

@@ -23,6 +23,7 @@ import { expand, IdResponse, JSON_LD_DEFAULT_CONTEXT, TransferProcess, TransferP
 })
 export class TransferProcessService {
   private readonly BASE_URL = `${environment.runtime.managementApiUrl}${environment.runtime.service.transferProcess.baseUrl}`;
+  private readonly INESDATA_BASE_URL = `${environment.runtime.managementApiUrl}${environment.runtime.service.transferProcess.inesdataBaseUrl}`;
 
   constructor(private http: HttpClient) {
   }
@@ -95,6 +96,25 @@ export class TransferProcessService {
 
     return from(lastValueFrom(this.http.post<any>(
       `${this.BASE_URL}`, body
+    )).then(result => {
+      return expand(result, () => new IdResponse());
+    }));
+  }
+
+
+  /**
+   * Initiates a data transfer with the given parameters. Please note that successfully invoking this endpoint only means that the transfer was initiated. Clients must poll the /{id}/state endpoint to track the state
+   * @param transferRequestInput
+   */
+  public initiateInesdataTransfer(transferRequestInput: TransferProcessInput): Observable<any> {
+    let body = {
+      protocol: "dataspace-protocol-http",
+      "@context": JSON_LD_DEFAULT_CONTEXT,
+      ...transferRequestInput
+    }
+
+    return from(lastValueFrom(this.http.post<any>(
+      `${this.INESDATA_BASE_URL}`, body
     )).then(result => {
       return expand(result, () => new IdResponse());
     }));
