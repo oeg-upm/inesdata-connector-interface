@@ -125,7 +125,7 @@
         <div *ngIf="storageTypeId === 'HttpData'">
           <mat-form-field class="form-field" color="accent">
             <mat-label>Name</mat-label>
-            <input [(ngModel)]="httpDataAddress.name" matInput>
+            <input [(ngModel)]="httpDataAddress.name" matInput required>
           </mat-form-field>
 
           <mat-form-field class="form-field" color="accent">
@@ -135,7 +135,7 @@
 
           <mat-form-field class="form-field" color="accent">
             <mat-label>Base URL</mat-label>
-            <input [(ngModel)]="httpDataAddress.baseUrl" matInput [pattern]="urlPattern">
+            <input [(ngModel)]="httpDataAddress.baseUrl" [pattern]="urlPattern" matInput required>
           </mat-form-field>
 
           <mat-form-field class="form-field" color="accent">

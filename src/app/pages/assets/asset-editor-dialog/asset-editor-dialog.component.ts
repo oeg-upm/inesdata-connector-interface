@@ -98,7 +98,7 @@ export class AssetEditorDialog implements OnInit {
   config = CKEDITOR_CONFIG
   selectedAssetTypeVocabularies: Vocabulary[]
 
-  urlPattern = /^((https?|ftp):\/\/)?(localhost|([a-z\d]([a-z\d-]*[a-z\d])*)|(([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|((\d{1,3}\.){3}\d{1,3}))(:\d+)?(\/[-a-z\d%_.~+]*)*(\?[;&a-z\d%_.~+=-]*)?(\#[-a-z\d_]*)?$/i;
+  urlPattern: RegExp = /^(file|ftp|http|https|imap|irc|nntp|acap|icap|mtqp|wss):\/\/(localhost|([a-z\d]([a-z\d-]*[a-z\d])*)|(([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|((\d{1,3}\.){3}\d{1,3}))(:\d+)?(\/[-a-z\d%_.~+]*)*(\?[;&a-z\d%_.~+=-]*)?(\#[-a-z\d_]*)?$/i;
 
   ngOnInit(): void {
     this.validator = this.ajv.compile(this.schema);
@@ -258,6 +258,9 @@ export class AssetEditorDialog implements OnInit {
     if (!this.id || !this.storageTypeId || !this.name || !this.version || !this.description || !this.keywords || !this.shortDescription || !this.assetType) {
       return false;
     } else {
+      if (this.storageTypeId === DATA_ADDRESS_TYPES.httpData && (!this.httpDataAddress.name || !this.httpDataAddress.baseUrl  || !this.validateUrl())) {
+        return false;
+      }
       if (this.storageTypeId === DATA_ADDRESS_TYPES.amazonS3 && !this.amazonS3DataAddress.region) {
         return false;
       } else if (this.storageTypeId === DATA_ADDRESS_TYPES.inesDataStore && !this.inesDataStoreAddress.file) {
@@ -331,4 +334,9 @@ export class AssetEditorDialog implements OnInit {
       })
     }
   }
+
+  validateUrl(): boolean {
+    const regex = new RegExp(this.urlPattern);
+    return regex.test(this.httpDataAddress.baseUrl);
+}
 }
