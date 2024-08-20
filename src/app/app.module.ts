@@ -20,30 +20,41 @@ import { OAuthModule } from 'angular-oauth2-oidc';
 import { JsonFormsModule } from '@jsonforms/angular';
 import { JsonFormsAngularMaterialModule } from '@jsonforms/angular-material';
 
-
-/**
- * JWT options factory
- * @param authService Auth service
- * @returns jwtOptions factory
- */
- export function jwtOptionsFactory(authService: AuthService){
-  const jwtHelper: JwtHelperService = new JwtHelperService;
+export function jwtOptionsFactory(authService: AuthService) {
+  const jwtHelper: JwtHelperService = new JwtHelperService();
   return {
-      tokenGetter: (): Promise<string> => {
-          let accessToken = authService.getAccessToken();
-          if (accessToken !== null && jwtHelper.isTokenExpired(accessToken)) {
-              return new Promise((resolve) => {
-                  authService.refreshToken().then(token => {
-                    return resolve(token.access_token);
-                  })
-              });
+    tokenGetter: async (): Promise<string> => {
+      let accessToken = authService.getAccessToken();
+
+      // Si el accessToken existe y está expirado
+      if (accessToken !== null && jwtHelper.isTokenExpired(accessToken)) {
+        try {
+          // Intentar refrescar el token
+          const token = await authService.refreshToken();
+
+          if (token && token.access_token) {
+            // Retornar el nuevo access token
+            return token.access_token;
+          } else {
+            // Si no se obtiene un nuevo token, lanzar un error o redirigir al login
+            authService.login();
+            return '';
           }
-          return Promise.resolve(accessToken);
-      },
-      allowedDomains: environment.jwt.allowedDomains,
-      disallowedRoutes: environment.jwt.disallowedRoutes
-  }
+        } catch (error) {
+          console.error('Error refreshing token:', error);
+          authService.login();
+          return '';
+        }
+      }
+
+      // Si el accessToken es válido, retornarlo
+      return accessToken || '';
+    },
+    allowedDomains: environment.jwt.allowedDomains,
+    disallowedRoutes: environment.jwt.disallowedRoutes
+  };
 }
+
 
 @NgModule({
   imports: [
