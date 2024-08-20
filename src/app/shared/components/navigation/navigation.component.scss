@@ -15,3 +15,26 @@
   top: 0;
   z-index: 1;
 }
+.logout {
+  width: 100%;
+  text-align: right;
+  display: flex;
+  justify-content: flex-end;
+  font-size: 16px;
+}
+
+.logout span {
+  display: flex;
+  align-items: center; /* Alinea verticalmente el ícono y el texto */
+  cursor: pointer; /* Cursor tipo pointer solo para el span contenedor */
+  transition: color 0.3s; /* Transición suave para el cambio de color */
+}
+
+.logout span:hover {
+  color: #ffab40; /* Cambia el color de ambos al hacer hover */
+}
+
+.logout mat-icon {
+  font-size: 24px;
+  margin-right: 3px;
+}

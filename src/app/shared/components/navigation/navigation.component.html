@@ -24,6 +24,12 @@
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
       <span>{{titleService.getTitle()}}</span>
+      <div class="logout">
+        <span (click)="logout()">
+          <mat-icon aria-label="Side nav toggle icon">exit_to_app</mat-icon>
+          <div>Log out</div>
+        </span>
+      </div>
     </mat-toolbar>
     <router-outlet></router-outlet>
   </mat-sidenav-content>
