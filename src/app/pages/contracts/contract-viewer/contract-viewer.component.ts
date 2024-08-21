@@ -13,6 +13,7 @@ import { ContractTransferDialog } from '../contract-transfer-dialog/contract-tra
 import { TransferProcessService } from 'src/app/shared/services/transferProcess.service';
 import { DataAddress, QuerySpec } from '@think-it-labs/edc-connector-client';
 import { PageEvent } from '@angular/material/paginator';
+import { DATA_ADDRESS_TYPES } from 'src/app/shared/utils/app.constants';
 
 interface RunningTransferProcess {
   processId: string;
@@ -68,13 +69,23 @@ export class ContractViewerComponent implements OnInit {
 
         const transferRequest = await this.createTransferRequest(contract, result.dataAddress);
 
-        this.transferService.initiateTransfer(transferRequest)
+        if(result.dataAddress.type === DATA_ADDRESS_TYPES.inesDataStore){
+          this.transferService.initiateInesdataTransfer(transferRequest)
           .subscribe(transferId => {
             this.startPolling(transferId, contract["@id"]!);
           }, error => {
             console.error(error);
             this.notificationService.showError("Error initiating transfer");
           });
+        }else{
+          this.transferService.initiateTransfer(transferRequest)
+          .subscribe(transferId => {
+            this.startPolling(transferId, contract["@id"]!);
+          }, error => {
+            console.error(error);
+            this.notificationService.showError("Error initiating transfer");
+          });
+        }
       }
     });
   }

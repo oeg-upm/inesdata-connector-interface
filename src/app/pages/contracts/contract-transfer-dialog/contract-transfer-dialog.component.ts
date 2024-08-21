@@ -16,10 +16,15 @@ export class ContractTransferDialog {
 
   name: string = '';
   storageTypeId = '';
-
    // Storage information
    amazonS3DataAddress: AmazonS3DataAddress = {
     type: 'AmazonS3',
+    region: ''
+  };
+
+   // Storage information
+   inesDataDataAddress: any = {
+    type: 'InesDataStore',
     region: ''
   };
 
@@ -46,6 +51,8 @@ export class ContractTransferDialog {
       }
     } else if (this.storageTypeId === DATA_ADDRESS_TYPES.httpData) {
       dataAddress = this.httpDataAddress;
+    } else if (this.storageTypeId === DATA_ADDRESS_TYPES.inesDataStore) {
+      dataAddress = this.inesDataDataAddress;
     } else {
       this.notificationService.showError("Incorrect destination value");
       return;
