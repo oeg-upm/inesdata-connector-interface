@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { routes } from '../../../app-routing.module';
 import { Title } from '@angular/platform-browser';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-navigation',
@@ -22,6 +23,11 @@ export class NavigationComponent {
 
   constructor(
     public titleService: Title,
-    private breakpointObserver: BreakpointObserver) {
+    private breakpointObserver: BreakpointObserver,
+    private authService: AuthService) {
+  }
+
+  logout(){
+    this.authService.logout()
   }
 }
