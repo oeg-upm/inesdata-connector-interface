@@ -138,12 +138,18 @@ export class CatalogBrowserService {
 
     for (const dataset of datasets) {
       const properties: { [key: string]: string; } = {
-        id: dataset["id"],
-        name: dataset["name"],
-        version: dataset["version"],
-        type: dataset["type"],
-        contentType: dataset["contenttype"]
-      }
+				id: dataset["id"],
+				name: dataset["name"],
+				version: dataset["version"],
+				assetType: dataset["assetType"],
+				contentType: dataset["contenttype"],
+				assetData: dataset["assetData"],
+				description: dataset["http://purl.org/dc/terms/description"],
+				shortDescription: dataset["shortDescription"],
+				byteSyze: dataset["http://www.w3.org/ns/dcat#byteSize"],
+				format: dataset["http://purl.org/dc/terms/format"],
+				keywords: dataset["http://www.w3.org/ns/dcat#keyword"]
+			}
       const assetId = dataset["@id"];
 
       const hasPolicy = dataset["odrl:hasPolicy"];
