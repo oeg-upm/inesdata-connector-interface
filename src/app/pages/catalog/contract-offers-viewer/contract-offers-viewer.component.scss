@@ -18,6 +18,7 @@ mat-list-item:hover .property-title,
 
 .property-value{
   font-size: 14px;
+  color: #adadad;
 }
 
 .property-icon {
@@ -34,4 +35,100 @@ mat-list-item:hover .property-title,
 
 .dialog-card {
   width: 750px;
+}
+
+:host ::ng-deep .grey .detail-item {
+	background: #474747;
+	padding: 1rem 1.25rem;
+	border-radius: 16px;
+}
+
+.details {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 20px;
+}
+
+.detail-item {
+	flex: 1 1 calc((100% / 2) - 20px);
+	min-width: calc((100% / 2) - 20px);
+	box-sizing: border-box;
+}
+
+@media (max-width: 480px) {
+	.detail-item {
+		flex: 1 1 100%;
+		min-width: 100%;
+	}
+}
+
+.detail-title {
+	font-family: "Baloo 2", Helvetica, Arial, sans-serif;
+	font-weight: bold;
+	color: #333;
+	display: block;
+
+	&-inline {
+		font-family: "Baloo 2", Helvetica, Arial, sans-serif;
+		font-weight: bold;
+		color: #333;
+		display: inline;
+	}
+}
+
+.detail-value {
+	font-size: 14px;
+	color: #555;
+	display: block;
+
+	&-inline {
+		font-size: 14px;
+		color: #555;
+		display: inline;
+	}
+}
+
+ul {
+	margin: 0px;
+}
+
+.property-value.description{
+  white-space: normal;
+}
+
+.mdc-card.vocabulary{
+  padding: 20px 20px 0px 20px;
+}
+
+.mdc-card:not(.vocabulary){
+  padding: 20px;
+}
+
+.property-value{
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.grey{
+  margin-bottom: 15px;
+}
+
+mat-expansion-panel-header{
+  font-size: 16px;
+}
+
+.contract-offer{
+  margin-bottom: 20px;
+}
+
+.value-not-available{
+  font-style: italic;
+}
+
+:host ::ng-deep td {
+  border: 1px solid white;
+}
+
+:host ::ng-deep a {
+  color: white;
 }

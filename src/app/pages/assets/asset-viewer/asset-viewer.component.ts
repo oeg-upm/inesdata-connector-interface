@@ -7,9 +7,11 @@ import { AssetService } from "../../../shared/services/asset.service";
 import { AssetEditorDialog } from "../asset-editor-dialog/asset-editor-dialog.component";
 import { ConfirmationDialogComponent, ConfirmDialogModel } from "../../../shared/components/confirmation-dialog/confirmation-dialog.component";
 import { NotificationService } from "../../../shared/services/notification.service";
-import { DATA_ADDRESS_TYPES } from 'src/app/shared/utils/app.constants';
+import { CONTEXTS, DATA_ADDRESS_TYPES } from 'src/app/shared/utils/app.constants';
 import { PageEvent } from '@angular/material/paginator';
-import { QuerySpec } from '@think-it-labs/edc-connector-client';
+import { EDC_CONTEXT, QuerySpec, DataAddress } from '@think-it-labs/edc-connector-client';
+import { ContractOffersViewerComponent } from '../../catalog/contract-offers-viewer/contract-offers-viewer.component';
+import { compact } from 'jsonld';
 
 @Component({
   selector: 'app-asset-viewer',
@@ -27,6 +29,14 @@ export class AssetViewerComponent implements OnInit {
   pageSize = 10;
   currentPage = 0;
   paginatorLength = 0;
+
+  CONTEXT = {
+    "@vocab": EDC_CONTEXT,
+    "description": "http://purl.org/dc/terms/description",
+    "format": "http://purl.org/dc/terms/format",
+    "byteSize": "http://www.w3.org/ns/dcat#byteSize",
+    "keywords": "http://www.w3.org/ns/dcat#keyword"
+  }
 
   constructor(private assetService: AssetService,
     private notificationService: NotificationService,
@@ -66,6 +76,25 @@ export class AssetViewerComponent implements OnInit {
         }
       }
     });
+  }
+
+  viewAsset(asset: Asset) {
+    compact(asset, this.CONTEXT).then(compactedAsset => {
+      this.dialog.open(ContractOffersViewerComponent, {
+        data: {
+          assetId: compactedAsset['@id'],
+          properties: compactedAsset.properties,
+          privateProperties: compactedAsset.privateProperties,
+          dataAddress: compactedAsset.dataAddress,
+          isCatalogView: false
+        },
+        disableClose: true
+      });
+    })
+    .catch(error => {
+      this.notificationService.showError("Error compacting JsonLD");
+  });
+
   }
 
   onCreate() {

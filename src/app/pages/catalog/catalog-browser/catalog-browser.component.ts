@@ -39,7 +39,8 @@ export class CatalogBrowserComponent implements OnInit {
         assetId: assetId,
         contractOffers: contractOffers,
         endpointUrl: endpointUrl,
-        properties: properties
+        properties: properties,
+        isCatalogView: true
       },
     });
   }
