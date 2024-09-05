@@ -1,15 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { PolicyService } from "../../../shared/services/policy.service";
 import { BehaviorSubject, Observer } from "rxjs";
 import { first } from "rxjs/operators";
-import { MatDialog } from "@angular/material/dialog";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { NewPolicyDialogComponent } from "../new-policy-dialog/new-policy-dialog.component";
 import { NotificationService } from "../../../shared/services/notification.service";
 import { ConfirmationDialogComponent, ConfirmDialogModel } from "../../../shared/components/confirmation-dialog/confirmation-dialog.component";
-import { PolicyDefinition, PolicyDefinitionInput, IdResponse, QuerySpec } from "../../../shared/models/edc-connector-entities";
+import { PolicyDefinition, IdResponse, QuerySpec } from "../../../shared/models/edc-connector-entities";
 import { PolicyRuleViewerComponent } from '../policy-rule-viewer/policy-rule-viewer.component';
 import { PageEvent } from '@angular/material/paginator';
-import { PolicyDefinitionCreateDto } from '../policy-editor/model/policy-definition-create-dto';
+import { PolicyDefinitionCreateDto } from '../../../shared/models/policy/policy-definition-create-dto';
+import { PolicyCard } from '../../../shared/models/policy/policy-card';
+import { PolicyCardBuilder } from '../../../shared/models/policy/policy-card-builder';
+import { JsonDialogData } from '../../json-dialog/json-dialog/json-dialog.data';
+import { JsonDialogComponent } from '../../json-dialog/json-dialog/json-dialog.component'
 
 @Component({
   selector: 'app-policy-view',
@@ -18,7 +22,11 @@ import { PolicyDefinitionCreateDto } from '../policy-editor/model/policy-definit
 })
 export class PolicyViewComponent implements OnInit {
 
+  @Output()
+  deleteDone = new EventEmitter();
+
   policies: PolicyDefinition[];
+  policyCards: PolicyCard[];
   private fetch$ = new BehaviorSubject(null);
   private readonly errorOrUpdateSubscriber: Observer<IdResponse>;
 
@@ -29,7 +37,8 @@ export class PolicyViewComponent implements OnInit {
 
   constructor(private policyService: PolicyService,
     private notificationService: NotificationService,
-    private readonly dialog: MatDialog) {
+    private readonly dialog: MatDialog,
+    private policyCardBuilder: PolicyCardBuilder) {
     this.errorOrUpdateSubscriber = {
       next: x => this.fetch$.next(null),
       error: err => this.showError(err, "An error occurred."),
@@ -42,7 +51,7 @@ export class PolicyViewComponent implements OnInit {
 
   ngOnInit(): void {
     this.countPolicies();
-    this.loadPolicies(this.currentPage);
+    this.loadComplexPolicies(this.currentPage);
   }
 
   onCreate() {
@@ -56,7 +65,7 @@ export class PolicyViewComponent implements OnInit {
               error: (error: Error) => this.showError(error, "An error occurred while creating the policy."),
               complete: () => {
                 this.countPolicies();
-                this.loadPolicies(this.currentPage);
+                this.loadComplexPolicies(this.currentPage);
                 this.notificationService.showInfo("Successfully created");
               }
             }
@@ -66,9 +75,8 @@ export class PolicyViewComponent implements OnInit {
     });
   }
 
-  delete(policy: PolicyDefinition) {
+  delete(policyId: string) {
 
-    let policyId = policy['@id']!;
     const dialogData = ConfirmDialogModel.forDelete("policy", policyId);
 
     const ref = this.dialog.open(ConfirmationDialogComponent, { maxWidth: '30%', data: dialogData });
@@ -83,7 +91,7 @@ export class PolicyViewComponent implements OnInit {
               error: (error: Error) => this.showError(error, "An error occurred while deleting the policy."),
               complete: () => {
                 this.countPolicies();
-                this.loadPolicies(this.currentPage);
+                this.loadComplexPolicies(this.currentPage);
                 this.notificationService.showInfo("Successfully deleted");
               }
             }
@@ -112,7 +120,7 @@ export class PolicyViewComponent implements OnInit {
     const offset = event.pageIndex * event.pageSize;
     this.pageSize = event.pageSize;
     this.currentPage = event.pageIndex;
-    this.loadPolicies(offset);
+    this.loadComplexPolicies(offset);
   }
 
   loadPolicies(offset: number) {
@@ -133,5 +141,29 @@ export class PolicyViewComponent implements OnInit {
       .subscribe(result => {
         this.paginatorLength = result;
       });
+  }
+
+  loadComplexPolicies(offset: number) {
+    const querySpec: QuerySpec = {
+      offset: offset,
+      limit: this.pageSize
+    }
+
+    this.policyService.queryAllComplexPolicies(querySpec)
+      .subscribe(result => {
+        this.policyCards = this.policyCardBuilder.buildPolicyCardsFromPolicyDefinitions(result);
+      });
+  }
+
+  onPolicyDetailClick(policyCard: PolicyCard) {
+    let dialogRef: MatDialogRef<any>;
+    const data: JsonDialogData = {
+      title: policyCard.id,
+      subtitle: 'Policy',
+      icon: 'policy',
+      objectForJson: policyCard.objectForJson
+    };
+
+    dialogRef = this.dialog.open(JsonDialogComponent, {data});
   }
 }

@@ -3,11 +3,11 @@ import {Subject} from 'rxjs';
 import {
   PolicyMultiExpressionConfig,
   SUPPORTED_MULTI_EXPRESSIONS,
-} from '../../model/policy-multi-expressions';
+} from '../../../../../shared/models/policy/policy-multi-expressions';
 import {
   PolicyVerbConfig,
   SUPPORTED_POLICY_VERBS,
-} from '../../model/policy-verbs';
+} from '../../../../../shared/models/policy/policy-verbs';
 import {ExpressionFormHandler} from '../expression-form-handler';
 import {ExpressionFormValue} from '../expression-form-value';
 import {

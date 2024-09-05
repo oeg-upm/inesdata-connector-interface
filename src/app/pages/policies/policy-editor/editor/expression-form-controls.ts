@@ -4,10 +4,10 @@ import {
   UntypedFormControl,
   UntypedFormGroup,
 } from '@angular/forms';
-import {PolicyOperatorConfig} from '../model/policy-operators';
+import {PolicyOperatorConfig} from '../../../../shared/models/policy/policy-operators';
 import {ExpressionFormValue} from './expression-form-value';
 import {TreeNode} from './tree';
-import { OperatorDto, UiPolicyLiteral } from '../model/ui-policy-constraint';
+import { OperatorDto, UiPolicyLiteral } from '../../../../shared/models/policy/ui-policy-constraint';
 
 /**
  * Manages the FormGroup across the expression tree

@@ -2,7 +2,7 @@ import {COMMA, ENTER, SEMICOLON} from '@angular/cdk/keycodes';
 import {Component, HostBinding, Input} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {MatChipInputEvent} from '@angular/material/chips';
-import { removeOnce } from './array-utils';
+import { removeOnce } from '../../../../../../shared/utils/array-utils';
 
 @Component({
   selector: 'participant-id-select',

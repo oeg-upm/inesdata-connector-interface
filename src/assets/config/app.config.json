@@ -1,8 +1,8 @@
 {
-  "managementApiUrl": "http://localhost:19193/management",
-  "catalogUrl": "http://localhost:19193/management/federatedcatalog",
-  "sharedUrl": "http://localhost:19196/shared",
-  "participantId": "connector-c1",
+  "managementApiUrl": "http://localhost:29193/management",
+  "catalogUrl": "http://localhost:29193/management/federatedcatalog",
+  "sharedUrl": "http://localhost:29196/shared",
+  "participantId": "connector-c2",
   "storageAccount": "company2assets",
   "storageExplorerLinkTemplate": "storageexplorer://v=1",
   "theme": "theme-2",

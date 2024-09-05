@@ -1,13 +1,13 @@
 import {Injectable} from '@angular/core';
-import {PolicyExpressionMapped} from '../model/policy-expression-mapped';
-import {PolicyMapper} from '../model/policy-mapper';
-import {PolicyMultiExpressionConfig} from '../model/policy-multi-expressions';
-import {SUPPORTED_POLICY_OPERATORS} from '../model/policy-operators';
-import {PolicyVerbConfig} from '../model/policy-verbs';
+import {PolicyExpressionMapped} from '../../../../shared/models/policy/policy-expression-mapped';
+import {PolicyMapper} from '../../../../shared/models/policy/policy-mapper';
+import {PolicyMultiExpressionConfig} from '../../../../shared/models/policy/policy-multi-expressions';
+import {SUPPORTED_POLICY_OPERATORS} from '../../../../shared/models/policy/policy-operators';
+import {PolicyVerbConfig} from '../../../../shared/models/policy/policy-verbs';
 import {ExpressionFormControls} from './expression-form-controls';
 import {ExpressionFormValue} from './expression-form-value';
 import {Tree, TreeGeneratorFn, TreeNode} from './tree';
-import { UiPolicyExpression } from '../model/ui-policy-expression';
+import { UiPolicyExpression } from '../../../../shared/models/policy/ui-policy-expression';
 
 /**
  * Central service for interacting with the policy expression form.

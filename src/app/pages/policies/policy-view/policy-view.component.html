@@ -7,31 +7,24 @@
   </div>
 
   <div fxLayout="row wrap" fxLayoutGap="15px" fxLayoutAlign="start start">
-    <mat-card *ngFor="let policyDef of policies">
+    <mat-card *ngFor="let policyCard of policyCards">
       <mat-card-header>
         <mat-icon mat-card-avatar>policy</mat-icon>
-        <mat-card-title><span class="code">{{policyDef.id}}</span></mat-card-title>
+        <mat-card-title><span class="code">{{policyCard.id}}</span></mat-card-title>
       </mat-card-header>
 
       <mat-card-content>
-        <div fxlayout="row wrap" fxLayoutGap="15px" fxLayoutAlign="center">
-          <!-- Permissions-->
-          <button fxFlex="0 1 calc(33.3% - 15px)" mat-raised-button (click)="viewRules('Permissions', policyDef.policy.permissions)"
-            [disabled]="policyDef.policy.permissions.length === 0">Permissions</button>
-
-          <!-- Obligations-->
-          <button fxFlex="0 1 calc(33.3% - 15px)" mat-raised-button (click)="viewRules('Obligations', policyDef.policy.obligations)"
-            [disabled]="policyDef.policy.obligations.length === 0">Obligations</button>
-
-          <!-- Prohibitions-->
-          <button fxFlex="0 1 calc(33.3% - 15px)" mat-raised-button (click)="viewRules('Prohibitions', policyDef.policy.prohibitions)"
-            [disabled]="policyDef.policy.prohibitions.length === 0">Prohibitions</button>
-        </div>
+        <app-policy-renderer
+            [expression]="policyCard.expression"
+            [errors]="policyCard.irregularities"></app-policy-renderer>
       </mat-card-content>
 
       <mat-divider></mat-divider>
       <mat-card-actions class="card-actions">
-        <button (click)="delete(policyDef)" color="warn" mat-stroked-button>
+        <button (click)="onPolicyDetailClick(policyCard)" color="info" mat-stroked-button>
+          <mat-icon>info</mat-icon> View JSON-LD
+        </button>
+        <button (click)="delete(policyCard.id)" color="warn" mat-stroked-button>
           <mat-icon>delete_sweep</mat-icon> Delete
         </button>
       </mat-card-actions>

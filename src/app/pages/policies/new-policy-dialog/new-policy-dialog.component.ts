@@ -5,7 +5,7 @@ import { PolicyDefinitionCreatePageForm } from './policy-definition-create-page-
 import { ExpressionFormHandler } from '../policy-editor/editor/expression-form-handler';
 import { ValidationMessages } from 'src/app/shared/validators/validation-messages';
 import { Subject } from 'rxjs';
-import { PolicyDefinitionCreateDto } from '../policy-editor/model/policy-definition-create-dto';
+import { PolicyDefinitionCreateDto } from '../../../shared/models/policy/policy-definition-create-dto';
 
 @Component({
   selector: 'app-new-policy-dialog',

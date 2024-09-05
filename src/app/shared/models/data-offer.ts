@@ -1,10 +1,9 @@
-import { DataService } from "./data-service";
-import { Policy } from './edc-connector-entities';
+import { ContractOffer } from './contract-offer';
 
 export interface DataOffer {
   assetId: string;
   properties: any;
   endpointUrl: string;
-  contractOffers: Policy[];
+  contractOffers: ContractOffer[];
   originator: string;
 }

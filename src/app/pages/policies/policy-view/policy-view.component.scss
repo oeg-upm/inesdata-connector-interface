@@ -21,6 +21,33 @@ mat-card-content {
   align-items: center;
   gap: 10px;
 }
+
 button {
   --mdc-protected-button-container-color: #3b3939 !important;
 }
+
+.mat-mdc-card-avatar {
+  height: 24px;
+}
+
+mat-card {
+  font-family: "Open Sans";
+}
+
+:host ::ng-deep policy-expression {
+  font-size: 14px;
+}
+
+.card-actions button{
+  margin-right: 10px;
+}
+
+.mat-mdc-card-content {
+  height: 100%;
+}
+
+mat-card{
+  place-self: normal;
+}
+
+

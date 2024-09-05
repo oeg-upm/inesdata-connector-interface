@@ -1,15 +1,22 @@
 import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TransferProcessStates } from "../../../shared/models/transfer-process-states";
 import { NegotiationResult } from "../../../shared/models/negotiation-result";
 import { ContractNegotiation, ContractNegotiationRequest, Policy } from "../../../shared/models/edc-connector-entities";
 import { CatalogBrowserService } from 'src/app/shared/services/catalog-browser.service';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { StorageType } from 'src/app/shared/models/storage-type';
+import { PolicyCard } from '../../../shared/models/policy/policy-card';
+import { DATA_ADDRESS_TYPES } from '../../../shared/utils/app.constants';
+import { ContractOffer } from 'src/app/shared/models/contract-offer';
+import { PolicyCardBuilder } from 'src/app/shared/models/policy/policy-card-builder';
+import { JsonDialogData } from '../../json-dialog/json-dialog/json-dialog.data';
+import { JsonDialogComponent } from '../../json-dialog/json-dialog/json-dialog.component'
+import { PolicyBuilder } from '@think-it-labs/edc-connector-client';
 
 export interface ContractOffersDialogData {
   assetId: string;
-  contractOffers?: Policy[];
+  contractOffers?: any;
   endpointUrl?: string;
   properties: any;
   privateProperties: any;
@@ -21,6 +28,11 @@ interface RunningTransferProcess {
   processId: string;
   assetId?: string;
   state: TransferProcessStates;
+}
+
+interface Offer {
+  policyCard: PolicyCard,
+  policy: Policy;
 }
 
 @Component({
@@ -36,24 +48,61 @@ export class ContractOffersViewerComponent {
   assetDataKeys: string[];
   assetDataEntries: { [key: string]: any[] } = {};
   dataAddressType: string;
+  policyCards: PolicyCard[] = [];
+  offers: Offer[] = [];
 
   private pollingHandleNegotiation?: any;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: ContractOffersDialogData,
     @Inject('STORAGE_TYPES') public storageTypes: StorageType[],
-    private apiService: CatalogBrowserService, private notificationService: NotificationService) {
+    private apiService: CatalogBrowserService, private notificationService: NotificationService,
+    private policyCardBuilder: PolicyCardBuilder,
+    private readonly dialog: MatDialog) {
     this.assetDataKeys = Object.keys(data.properties.assetData);
     this.processAssetData();
+    if(this.data.contractOffers){
+      this.processPolicies();
+    }
 
     if(data.dataAddress) {
       if(data.privateProperties) {
-        this.dataAddressType = 'InesDataStore';
+        this.dataAddressType = DATA_ADDRESS_TYPES.inesDataStore;
       } else {
         this.dataAddressType = this.getDataAddressName(data.dataAddress.type);
         delete data.dataAddress['@type'];
       }
-
     }
+
+  }
+  processPolicies() {
+    if(this.isArray(this.data.contractOffers)) {
+      for (const contractOffer of this.data.contractOffers) {
+        const parsedComplexPolicy = this.convertExpressionsToArray(contractOffer.complexPolicy);
+        this.offers.push({
+          policyCard: this.policyCardBuilder.buildPolicyCardFromContractOffer(parsedComplexPolicy),
+          policy: new PolicyBuilder()
+              .raw({
+                ...contractOffer.offer,
+                target: this.data.assetId,
+                assigner: this.data.properties.participantId
+              })
+              .build()
+        })
+      }
+    } else {
+      const parsedComplexPolicy = this.convertExpressionsToArray(this.data.contractOffers.complexPolicy);
+      this.offers.push({
+        policyCard: this.policyCardBuilder.buildPolicyCardFromContractOffer(parsedComplexPolicy),
+        policy: new PolicyBuilder()
+            .raw({
+              ...this.data.contractOffers.offer,
+              target: this.data.assetId,
+              assigner: this.data.properties.participantId
+            })
+            .build()
+      })
+    }
+
   }
 
   getDataAddressName(dataAddressTypeId: string) {
@@ -184,4 +233,44 @@ export class ContractOffersViewerComponent {
       obligation: policy['odrl:obligation']
     }
   }
+
+  onPolicyDetailClick(policyCard: PolicyCard) {
+    let dialogRef: MatDialogRef<any>;
+    const data: JsonDialogData = {
+      title: "Contract Policy JSON-LD",
+      subtitle: this.data.assetId,
+      icon: 'policy',
+      objectForJson: policyCard.objectForJson
+    };
+
+    dialogRef = this.dialog.open(JsonDialogComponent, {data});
+  }
+
+  convertExpressionsToArray(obj: any): any {
+    if (Array.isArray(obj)) {
+      return obj.map((element) => this.convertExpressionsToArray(element));
+    } else if (obj !== null && typeof obj === 'object') {
+      const newObj: any = {};
+
+      for (const key in obj) {
+        if (obj.hasOwnProperty(key)) {
+          if (key === 'expressions') {
+            if (!Array.isArray(obj[key])) {
+              newObj[key] = [this.convertExpressionsToArray(obj[key])];
+            } else {
+              newObj[key] = obj[key].map((item: any) => this.convertExpressionsToArray(item));
+            }
+          } else {
+            newObj[key] = this.convertExpressionsToArray(obj[key]);
+          }
+        }
+      }
+
+      return newObj;
+    } else {
+      return obj;
+    }
+  }
+
+
 }

@@ -1,5 +1,5 @@
 import {Component, HostBinding, Input} from '@angular/core';
-import {PolicyExpressionMapped} from '../../model/policy-expression-mapped';
+import {PolicyExpressionMapped} from '../../../../../shared/models/policy/policy-expression-mapped';
 
 @Component({
   selector: 'policy-expression',

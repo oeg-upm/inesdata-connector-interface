@@ -6,6 +6,7 @@ import { ContractOffersViewerComponent } from '../contract-offers-viewer/contrac
 import { Policy } from 'src/app/shared/models/edc-connector-entities';
 import { PageEvent } from '@angular/material/paginator';
 import { QuerySpec } from '@think-it-labs/edc-connector-client';
+import { ContractOffer } from 'src/app/shared/models/contract-offer';
 
 
 
@@ -32,7 +33,7 @@ export class CatalogBrowserComponent implements OnInit {
     this.loadDataOffers(this.currentPage);
   }
 
-  viewContractOffers(assetId: string, contractOffers: Policy[], endpointUrl: string, properties: any) {
+  viewContractOffers(assetId: string, contractOffers: any, endpointUrl: string, properties: any) {
     this.dialog.open(ContractOffersViewerComponent, {
       disableClose: true,
       data: {
