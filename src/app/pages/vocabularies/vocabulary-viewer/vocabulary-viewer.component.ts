@@ -8,7 +8,8 @@ import { VocabularyEditorDialog } from '../vocabulary-editor-dialog/vocabulary-e
 import { VocabularyService } from 'src/app/shared/services/vocabulary.service';
 import { Vocabulary } from 'src/app/shared/models/vocabulary';
 import { environment } from 'src/environments/environment';
-import { VocabularySchemaViewerComponent } from '../vocabulary-schema-viewer/vocabulary-schema-viewer.component';
+import { JsonDialogData } from '../../json-dialog/json-dialog/json-dialog.data';
+import { JsonDialogComponent } from '../../json-dialog/json-dialog/json-dialog.component';
 
 @Component({
   selector: 'app-vocabulary-viewer',
@@ -88,24 +89,17 @@ export class VocabularyViewerComponent implements OnInit {
   }
 
   viewSchema(title: string, schema: any) {
-    const json = this.formatAndUnescapeJson(schema)
-    this.dialog.open(VocabularySchemaViewerComponent, {
-      disableClose: true,
-      data: {
-        title: title,
-        schema: json
-      },
-    });
-  }
-
-  formatAndUnescapeJson(escapedJson: string): string {
-    let jsonObject: any;
     try {
-      jsonObject = JSON.parse(escapedJson);
-    } catch (error) {
-      console.error("Error parsing JSON", error);
-    }
+      const data: JsonDialogData = {
+        title: title,
+        subtitle: 'JSON Schema',
+        icon: 'book',
+        objectForJson: JSON.parse(schema)
+      };
 
-    return JSON.stringify(jsonObject, null, 2);
+      this.dialog.open(JsonDialogComponent, {data});
+    } catch (error) {
+      this.notificationService.showError("Error parsing JSON schema");
+    }
   }
 }
