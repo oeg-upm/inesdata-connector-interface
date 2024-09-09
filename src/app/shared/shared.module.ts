@@ -31,6 +31,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { FooterComponent } from './components/footer/footer.component';
 
 @NgModule({
   imports: [
@@ -68,6 +69,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     ConfirmationDialogComponent,
     UploaderFileComponent,
     DndDirective,
+    FooterComponent
   ],
   exports: [
     NavigationComponent,
@@ -101,7 +103,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatTooltipModule,
     MatDatepickerModule,
     MatMenuModule,
-    MatTooltipModule
+    MatTooltipModule,
+    FooterComponent
   ]
 })
 export class SharedModule {}

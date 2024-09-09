@@ -1,3 +1,4 @@
+<div class="container">
 <mat-sidenav-container class="sidenav-container">
   <mat-sidenav #drawer class="sidenav" fixedInViewport
       [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
@@ -31,6 +32,10 @@
         </span>
       </div>
     </mat-toolbar>
-    <router-outlet></router-outlet>
+    <div class="scrollable-content">
+      <router-outlet></router-outlet>
+    </div>
   </mat-sidenav-content>
 </mat-sidenav-container>
+<app-footer></app-footer>
+</div>
