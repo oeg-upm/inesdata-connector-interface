@@ -38,3 +38,29 @@
   font-size: 24px;
   margin-right: 3px;
 }
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.sidenav-container {
+  display: flex;
+  flex-grow: 1;
+}
+
+mat-sidenav-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.scrollable-content {
+  flex-grow: 1;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+mat-toolbar {
+  min-height: 64px;
+}
