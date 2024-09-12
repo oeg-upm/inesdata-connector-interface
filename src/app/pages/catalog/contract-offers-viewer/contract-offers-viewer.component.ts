@@ -235,7 +235,6 @@ export class ContractOffersViewerComponent {
   }
 
   onPolicyDetailClick(policyCard: PolicyCard) {
-    let dialogRef: MatDialogRef<any>;
     const data: JsonDialogData = {
       title: "Contract Policy JSON-LD",
       subtitle: this.data.assetId,
@@ -243,7 +242,7 @@ export class ContractOffersViewerComponent {
       objectForJson: policyCard.objectForJson
     };
 
-    dialogRef = this.dialog.open(JsonDialogComponent, {data});
+    this.dialog.open(JsonDialogComponent, {data});
   }
 
   convertExpressionsToArray(obj: any): any {

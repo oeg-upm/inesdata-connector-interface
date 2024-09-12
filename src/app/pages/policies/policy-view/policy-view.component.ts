@@ -156,7 +156,6 @@ export class PolicyViewComponent implements OnInit {
   }
 
   onPolicyDetailClick(policyCard: PolicyCard) {
-    let dialogRef: MatDialogRef<any>;
     const data: JsonDialogData = {
       title: policyCard.id,
       subtitle: 'Policy',
@@ -164,6 +163,6 @@ export class PolicyViewComponent implements OnInit {
       objectForJson: policyCard.objectForJson
     };
 
-    dialogRef = this.dialog.open(JsonDialogComponent, {data});
+    this.dialog.open(JsonDialogComponent, {data});
   }
 }
