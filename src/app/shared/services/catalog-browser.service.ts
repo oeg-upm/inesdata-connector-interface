@@ -15,6 +15,7 @@ import {
   Policy,
 } from "../models/edc-connector-entities";
 import { JSON_LD_DEFAULT_CONTEXT, PolicyBuilder, QuerySpec } from '@think-it-labs/edc-connector-client';
+import { ContractOffer } from '../models/contract-offer';
 
 
 
@@ -148,38 +149,39 @@ export class CatalogBrowserService {
 				shortDescription: dataset["shortDescription"],
 				byteSyze: dataset["http://www.w3.org/ns/dcat#byteSize"],
 				format: dataset["http://purl.org/dc/terms/format"],
-				keywords: dataset["http://www.w3.org/ns/dcat#keyword"]
+				keywords: dataset["http://www.w3.org/ns/dcat#keyword"],
+        participantId: dataset["participantId"]
 			}
       const assetId = dataset["@id"];
 
       const hasPolicy = dataset["odrl:hasPolicy"];
-      const contractOffers = Array<Policy>();
+      const contractOffers = dataset["odrl:hasPolicy"];
 
-      if (Array.isArray(hasPolicy)) {
-        for (const offer of hasPolicy) {
+      // if (Array.isArray(hasPolicy)) {
+      //   for (const offer of hasPolicy) {
 
-          const contractOffer = new PolicyBuilder()
-          .raw({
-            ...offer,
-            assigner: catalog.participantId,
-            target: assetId
-          })
-          .build();
+      //     const contractOffer = new PolicyBuilder()
+      //     .raw({
+      //       ...offer,
+      //       assigner: catalog.participantId,
+      //       target: assetId
+      //     })
+      //     .build();
 
-          contractOffers.push(contractOffer);
-        }
-      } else {
+      //     contractOffers.push(contractOffer);
+      //   }
+      // } else {
 
-        const contractOffer = new PolicyBuilder()
-          .raw({
-            ...hasPolicy,
-            assigner: catalog.participantId,
-            target: assetId
-          })
-          .build();
+      //   const contractOffer = new PolicyBuilder()
+      //     .raw({
+      //       ...hasPolicy,
+      //       assigner: catalog.participantId,
+      //       target: assetId
+      //     })
+      //     .build();
 
-          contractOffers.push(contractOffer);
-      }
+      //     contractOffers.push(contractOffer);
+      // }
 
       const endpointUrl = this.findEndpointUrl(dataset, catalog);
 

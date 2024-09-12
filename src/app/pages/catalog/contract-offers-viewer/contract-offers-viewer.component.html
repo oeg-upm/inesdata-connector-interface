@@ -52,13 +52,13 @@
               <mat-list-item class="property" fxFlex="50">
                 <div class="property-title" matListItemTitle>Byte size</div>
                 <div class="property-value"
-                  [ngClass]="{'value-not-available': data.properties.byteSize === undefined || data.properties.contentType === ''}"
+                  [ngClass]="{'value-not-available': data.properties.byteSize === undefined || data.properties.byteSize === ''}"
                   matListItemLine>{{data.properties.byteSize ? data.properties.byteSize : 'Not available'}}</div>
               </mat-list-item>
               <mat-list-item class="property" fxFlex="50">
                 <div class="property-title" matListItemTitle>File format</div>
                 <div class="property-value"
-                  [ngClass]="{'value-not-available': data.properties.fileFormat === undefined || data.properties.contentType === ''}"
+                  [ngClass]="{'value-not-available': data.properties.fileFormat === undefined || data.properties.fileFormat === ''}"
                   matListItemLine>{{data.properties.fileFormat ? data.properties.fileFormat : 'Not available'}}</div>
               </mat-list-item>
             </div>
@@ -158,19 +158,25 @@
     </mat-tab>
     <ng-container *ngIf="data.isCatalogView">
       <mat-tab label="Contract Offers">
-        <mat-card class="dialog-card contract-offer" *ngFor="let contractOffer of data.contractOffers" >
+        <mat-card class="dialog-card contract-offer" *ngFor="let offer of offers">
+          <mat-card-header>
+            <mat-card-title>Contract offer</mat-card-title>
+          </mat-card-header>
           <mat-card-content>
-            <pre class="json-policy break-all">{{ getJsonPolicy(contractOffer) | json }}</pre>
+            <app-policy-renderer [expression]="offer.policyCard.expression" [errors]="offer.policyCard.irregularities">
+            </app-policy-renderer>
           </mat-card-content>
           <mat-card-actions align="end">
-            <button mat-stroked-button color="accent" [disabled]="isBusy(contractOffer) || isNegotiated(contractOffer)"
-              (click)="onNegotiateClicked(contractOffer)">
-              <mat-icon>drive_file_rename_outline</mat-icon>
-              Negotiate Contract
+            <button (click)="onPolicyDetailClick(offer.policyCard)" color="info" mat-stroked-button>
+              <mat-icon>info</mat-icon> View JSON-LD
+            </button>
+            <button (click)="onNegotiateClicked(offer.policy)" color="accent" mat-stroked-button
+              [disabled]="isBusy(offer.policy) || isNegotiated(offer.policy)">
+              <mat-icon>drive_file_rename_outline</mat-icon> Negotiate Contract
             </button>
           </mat-card-actions>
           <mat-card-footer>
-            <mat-progress-bar diameter="10" mode="indeterminate" color="accent" *ngIf="isBusy(contractOffer)">
+            <mat-progress-bar diameter="10" mode="indeterminate" color="accent" *ngIf="isBusy(offer.policy)">
             </mat-progress-bar>
           </mat-card-footer>
         </mat-card>

@@ -1,5 +1,5 @@
 import {Component, HostBinding, Input} from '@angular/core';
-import {PolicyVerbConfig} from '../../model/policy-verbs';
+import {PolicyVerbConfig} from '../../../../../shared/models/policy/policy-verbs';
 import {ExpressionFormHandler} from '../expression-form-handler';
 import {ExpressionFormValue} from '../expression-form-value';
 import {TreeNode} from '../tree';

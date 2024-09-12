@@ -1,9 +1,9 @@
 
 import {addDays} from 'date-fns';
-import {policyLeftExpressions} from '../../../model/policy-left-expressions';
-import {constraint, multi} from '../../../model/ui-policy-expression-utils';
-import { UiPolicyExpression } from '../../../model/ui-policy-expression';
-import { OperatorDto } from '../../../model/ui-policy-constraint';
+import {policyLeftExpressions} from '../../../../../../shared/models/policy/policy-left-expressions';
+import {constraint, multi} from '../../../../../../shared/models/policy/ui-policy-expression-utils';
+import { UiPolicyExpression } from '../../../../../../shared/models/policy/ui-policy-expression';
+import { OperatorDto } from '../../../../../../shared/models/policy/ui-policy-constraint';
 
 export const buildTimespanRestriction = (
   firstDay: Date,

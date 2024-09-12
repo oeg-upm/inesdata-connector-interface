@@ -36,16 +36,19 @@
     "@jsonforms/angular-material": "^3.2.1",
     "@jsonforms/core": "^3.2.1",
     "@think-it-labs/edc-connector-client": "0.5.0",
+    "angular-oauth2-oidc": "^17.0.2",
     "date-fns": "^2.30.0",
     "date-fns-tz": "^2.0.1",
-    "angular-oauth2-oidc": "^17.0.2",
     "install": "^0.13.0",
     "jexl": "^2.3.0",
     "jsonld": "^8.3.2",
+    "ngx-json-viewer": "~3.2.1",
     "ngx-schema-form": "^2.11.0",
     "rxjs": "~7.8.1",
     "z-schema": "^6.0.1",
-    "zone.js": "~0.14.2"
+    "zone.js": "~0.14.2",
+    "clean-deep": "^3.4.0",
+    "json-stable-stringify": "^1.0.2"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^17.1.2",

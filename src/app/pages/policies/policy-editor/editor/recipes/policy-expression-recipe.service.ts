@@ -3,7 +3,7 @@ import {Injectable} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {Observable} from 'rxjs';
 import {TimespanRestrictionDialogComponent} from './timespan-restriction-dialog/timespan-restriction-dialog.component';
-import { UiPolicyExpression } from '../../model/ui-policy-expression';
+import { UiPolicyExpression } from '../../../../../shared/models/policy/ui-policy-expression';
 import { showDialogUntil } from 'src/app/shared/utils/mat-dialog-utils';
 import { filterNotNull } from 'src/app/shared/utils/rxjs-utils';
 

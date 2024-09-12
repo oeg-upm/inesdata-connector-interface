@@ -18,7 +18,8 @@ import {expandArray, PolicyDefinition, QuerySpec, EDC_CONTEXT, JSON_LD_DEFAULT_C
 import {PolicyDefinitionInput} from "../models/edc-connector-entities"
 import { environment } from 'src/environments/environment';
 import { CONTEXTS } from '../utils/app.constants';
-import { PolicyDefinitionCreateDto } from 'src/app/pages/policies/policy-editor/model/policy-definition-create-dto';
+import { PolicyDefinitionCreateDto } from '../models/policy/policy-definition-create-dto';
+import { PolicyDefinitionDto } from '../models/policy/policy-definition-dto';
 
 
 @Injectable({
@@ -126,5 +127,26 @@ export class PolicyService {
     return from(lastValueFrom(this.http.post<number>(
       `${environment.runtime.managementApiUrl}${environment.runtime.service.policy.count}`, body
     )));
+  }
+
+  /**
+   * Returns all complex policy definitions according to a query
+   * @param QuerySpec
+   **/
+   public queryAllComplexPolicies(querySpec?: QuerySpec): Observable<Array<PolicyDefinitionDto>> {
+    let body;
+
+    if(querySpec){
+      body = {
+        ...querySpec,
+        "@context": JSON_LD_DEFAULT_CONTEXT,
+      }
+    }
+
+    return from(lastValueFrom(this.http.post<Array<PolicyDefinitionDto>>(
+      `${this.COMPLEX_BASE_URL}${environment.runtime.service.policy.getAll}`, body
+    )).then(results => {
+      return results;
+    }));
   }
 }

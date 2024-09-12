@@ -3,7 +3,7 @@ import {FormBuilder} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 import {Subject} from 'rxjs';
 import {buildTimespanRestriction} from './timespan-restriction-expression';
-import { UiPolicyExpression } from '../../../model/ui-policy-expression';
+import { UiPolicyExpression } from '../../../../../../shared/models/policy/ui-policy-expression';
 import { ValidationMessages } from 'src/app/shared/validators/validation-messages';
 import { validDateRange } from 'src/app/shared/validators/valid-date-range-optional-end';
 

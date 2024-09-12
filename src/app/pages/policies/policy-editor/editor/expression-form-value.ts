@@ -1,6 +1,6 @@
-import {PolicyMultiExpressionConfig} from '../model/policy-multi-expressions';
-import {PolicyOperatorConfig} from '../model/policy-operators';
-import {PolicyVerbConfig} from '../model/policy-verbs';
+import {PolicyMultiExpressionConfig} from '../../../../shared/models/policy/policy-multi-expressions';
+import {PolicyOperatorConfig} from '../../../../shared/models/policy/policy-operators';
+import {PolicyVerbConfig} from '../../../../shared/models/policy/policy-verbs';
 
 export interface ExpressionFormValue {
   type: 'CONSTRAINT' | 'MULTI' | 'EMPTY';

@@ -3,7 +3,7 @@
 }
 
 mat-card-title{
-  padding: 20px;
+  margin-bottom: 10px;
   color: white;
 }
 
@@ -100,7 +100,7 @@ ul {
   padding: 20px 20px 0px 20px;
 }
 
-.mdc-card:not(.vocabulary){
+.mdc-card:not(.vocabulary):not(.contract-offer){
   padding: 20px;
 }
 
@@ -131,4 +131,24 @@ mat-expansion-panel-header{
 
 :host ::ng-deep a {
   color: white;
+}
+
+.mat-mdc-card-actions {
+  padding: 16px;
+}
+
+.mat-mdc-card-actions button:first-child{
+  margin-right: 10px;
+}
+
+.mdc-linear-progress {
+  margin-top: var(--mdc-linear-progress-track-height, -4px);
+}
+
+:host ::ng-deep .bg-white {
+  background-color: rgb(71 71 71);
+}
+
+:host ::ng-deep policy-expression {
+  font-size: 14px;
 }

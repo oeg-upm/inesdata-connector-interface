@@ -1,6 +1,6 @@
 import {Component, HostBinding, Input} from '@angular/core';
 import {UntypedFormControl} from '@angular/forms';
-import {PolicyOperatorConfig} from '../../model/policy-operators';
+import {PolicyOperatorConfig} from '../../../../../shared/models/policy/policy-operators';
 
 @Component({
   selector: 'policy-operator-select',

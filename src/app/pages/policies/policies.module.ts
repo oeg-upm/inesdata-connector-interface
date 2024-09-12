@@ -9,6 +9,7 @@ import { PolicyEditorModule } from './policy-editor/policy-editor.module';
 import { PolicyDefinitionCreatePageForm } from './new-policy-dialog/policy-definition-create-page-form';
 import { ExpressionFormControls } from './policy-editor/editor/expression-form-controls';
 import { ExpressionFormHandler } from './policy-editor/editor/expression-form-handler';
+import {JsonDialogModule} from '../json-dialog/json-dialog.module';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { ExpressionFormHandler } from './policy-editor/editor/expression-form-ha
   imports: [
     PoliciesRoutingModule,
     SharedModule,
-    PolicyEditorModule
+    PolicyEditorModule,
+    JsonDialogModule
   ]
 })
 export class PoliciesModule { }

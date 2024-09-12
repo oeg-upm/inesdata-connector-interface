@@ -2,7 +2,7 @@ import {UntypedFormControl, Validators} from '@angular/forms';
 import {format} from 'date-fns-tz';
 import {PolicyOperatorConfig} from './policy-operators';
 import { UiPolicyConstraint, UiPolicyLiteral } from './ui-policy-constraint';
-import { filterNonNull } from '../editor/controls/participant-id-select/array-utils';
+import { filterNonNull } from '../../utils/array-utils';
 import { jsonValidator } from 'src/app/shared/validators/json-validator';
 
 export interface PolicyFormAdapter<T> {
