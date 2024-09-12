@@ -218,9 +218,16 @@ export class AssetEditorDialog implements OnInit {
     properties["assetType"] = this.assetType;
     properties["shortDescription"] = this.shortDescription;
     properties["dcterms:description"] = this.description;
-    properties["dcat:keyword"] = this.keywords;
     properties["dcat:byteSize"] = this.byteSize;
     properties["dcterms:format"] = this.format;
+
+    this.addKeywords(properties);
+  }
+
+  addKeywords(properties: JsonDoc){
+    const parsedKeywords: string[] = [];
+    this.keywords.split(",").forEach(keyword => parsedKeywords.push(keyword.trim()));
+    properties["dcat:keyword"] = parsedKeywords;
   }
 
   initVocabularyForm(vocabulary: Vocabulary, isDefault: boolean) {
