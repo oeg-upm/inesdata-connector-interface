@@ -60,7 +60,11 @@ export class ContractOffersViewerComponent {
     private policyCardBuilder: PolicyCardBuilder,
     private readonly dialog: MatDialog,
     private router: Router) {
-    this.data = this.router.getCurrentNavigation().extras.state.assetDetailData;
+    this.data =undefined
+    this.data = this.router.getCurrentNavigation()?.extras.state.assetDetailData;
+    if(!this.data){
+      this.router.navigate(['/'])
+    }
     this.assetDataKeys = Object.keys(this.data.properties.assetData);
     this.processAssetData();
     if(this.data.contractOffers){
