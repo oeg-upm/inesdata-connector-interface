@@ -7,6 +7,7 @@ import { Policy } from 'src/app/shared/models/edc-connector-entities';
 import { PageEvent } from '@angular/material/paginator';
 import { QuerySpec } from '@think-it-labs/edc-connector-client';
 import { ContractOffer } from 'src/app/shared/models/contract-offer';
+import { Router } from '@angular/router';
 
 
 
@@ -25,7 +26,7 @@ export class CatalogBrowserComponent implements OnInit {
   paginatorLength = 0;
 
   constructor(private catalogService: CatalogBrowserService,
-    public dialog: MatDialog) {
+    public dialog: MatDialog, private router: Router) {
   }
 
   ngOnInit(): void {
@@ -34,16 +35,18 @@ export class CatalogBrowserComponent implements OnInit {
   }
 
   viewContractOffers(assetId: string, contractOffers: any, endpointUrl: string, properties: any) {
-    this.dialog.open(ContractOffersViewerComponent, {
-      disableClose: true,
-      data: {
-        assetId: assetId,
-        contractOffers: contractOffers,
-        endpointUrl: endpointUrl,
-        properties: properties,
-        isCatalogView: true
-      },
-    });
+    this.router.navigate(['catalog/datasets/view'],{
+			state: {
+        assetDetailData: {
+          assetId: assetId,
+          contractOffers: contractOffers,
+          endpointUrl: endpointUrl,
+          properties: properties,
+          isCatalogView: true,
+          returnUrl: 'catalog'
+        }
+			}
+		})
   }
 
   changePage(event: PageEvent) {

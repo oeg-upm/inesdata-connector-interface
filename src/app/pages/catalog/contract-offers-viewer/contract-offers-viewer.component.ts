@@ -13,6 +13,7 @@ import { PolicyCardBuilder } from 'src/app/shared/models/policy/policy-card-buil
 import { JsonDialogData } from '../../json-dialog/json-dialog/json-dialog.data';
 import { JsonDialogComponent } from '../../json-dialog/json-dialog/json-dialog.component'
 import { PolicyBuilder } from '@think-it-labs/edc-connector-client';
+import { Router } from '@angular/router';
 
 export interface ContractOffersDialogData {
   assetId: string;
@@ -22,6 +23,7 @@ export interface ContractOffersDialogData {
   privateProperties: any;
   dataAddress?: any;
   isCatalogView: boolean;
+  returnUrl?: string;
 }
 
 interface RunningTransferProcess {
@@ -50,26 +52,27 @@ export class ContractOffersViewerComponent {
   dataAddressType: string;
   policyCards: PolicyCard[] = [];
   offers: Offer[] = [];
-
+  data: ContractOffersDialogData= undefined;
   private pollingHandleNegotiation?: any;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: ContractOffersDialogData,
-    @Inject('STORAGE_TYPES') public storageTypes: StorageType[],
+  constructor(@Inject('STORAGE_TYPES') public storageTypes: StorageType[],
     private apiService: CatalogBrowserService, private notificationService: NotificationService,
     private policyCardBuilder: PolicyCardBuilder,
-    private readonly dialog: MatDialog) {
-    this.assetDataKeys = Object.keys(data.properties.assetData);
+    private readonly dialog: MatDialog,
+    private router: Router) {
+    this.data = this.router.getCurrentNavigation().extras.state.assetDetailData;
+    this.assetDataKeys = Object.keys(this.data.properties.assetData);
     this.processAssetData();
     if(this.data.contractOffers){
       this.processPolicies();
     }
 
-    if(data.dataAddress) {
-      if(data.privateProperties) {
+    if(this.data.dataAddress) {
+      if(this.data.privateProperties) {
         this.dataAddressType = DATA_ADDRESS_TYPES.inesDataStore;
       } else {
-        this.dataAddressType = this.getDataAddressName(data.dataAddress.type);
-        delete data.dataAddress['@type'];
+        this.dataAddressType = this.getDataAddressName(this.data.dataAddress.type);
+        delete this.data.dataAddress['@type'];
       }
     }
 
@@ -271,5 +274,7 @@ export class ContractOffersViewerComponent {
     }
   }
 
-
+  backToList(){
+    this.router.navigate([this.data.returnUrl])
+  }
 }

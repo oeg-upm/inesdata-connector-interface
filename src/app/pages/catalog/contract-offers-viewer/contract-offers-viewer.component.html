@@ -1,4 +1,4 @@
-<mat-dialog-content>
+
   <mat-tab-group>
     <mat-tab label="Asset information">
       <mat-tab-group>
@@ -183,11 +183,7 @@
       </mat-tab>
     </ng-container>
   </mat-tab-group>
-</mat-dialog-content>
 
-<mat-dialog-actions>
-  <button color="accent" mat-dialog-close mat-stroked-button>
-    <mat-icon>cancel</mat-icon>
-    close
-  </button>
-</mat-dialog-actions>
+  <button  (click)="backToList()" color="accent" mat-stroked-button>
+    <mat-icon>cancel</mat-icon> Go back
+</button>
