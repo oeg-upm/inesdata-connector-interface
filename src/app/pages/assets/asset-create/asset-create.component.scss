@@ -56,3 +56,6 @@ mat-card-actions {
 .mat-mdc-dialog-content {
   max-height: 85vh;
 }
+:host ::ng-deep .mat-expansion-indicator {
+  display: none;
+}
