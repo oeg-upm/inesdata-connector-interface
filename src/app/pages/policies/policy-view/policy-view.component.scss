@@ -1,5 +1,4 @@
 #wrapper {
-  margin: 20px;
 }
 
 :host ::ng-deep div.mat-expansion-panel-body {
@@ -38,7 +37,7 @@ mat-card {
   font-size: 14px;
 }
 
-.card-actions button{
+.card-actions button {
   margin-right: 10px;
 }
 
@@ -46,8 +45,6 @@ mat-card {
   height: 100%;
 }
 
-mat-card{
+mat-card {
   place-self: normal;
 }
-
-
