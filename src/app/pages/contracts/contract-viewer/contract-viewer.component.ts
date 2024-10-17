@@ -14,6 +14,7 @@ import { TransferProcessService } from 'src/app/shared/services/transferProcess.
 import { DataAddress, QuerySpec } from '@think-it-labs/edc-connector-client';
 import { PageEvent } from '@angular/material/paginator';
 import { DATA_ADDRESS_TYPES } from 'src/app/shared/utils/app.constants';
+import { environment } from 'src/environments/environment';
 
 interface RunningTransferProcess {
   processId: string;
@@ -31,6 +32,7 @@ export class ContractViewerComponent implements OnInit {
   contracts: ContractAgreement[];
   private runningTransfers: RunningTransferProcess[] = [];
   private pollingHandleTransfer?: any;
+  PARTICIPANT_ID = `${environment.runtime.participantId}`;
 
   // Pagination
   pageSize = 10;
@@ -120,6 +122,10 @@ export class ContractViewerComponent implements OnInit {
       .subscribe(results => {
         this.contracts = results;
       });
+  }
+
+  isNotProvisionedByItself(contract: ContractAgreement) {
+    return contract.providerId != this.PARTICIPANT_ID;
   }
 
   private countContractAgreements() {

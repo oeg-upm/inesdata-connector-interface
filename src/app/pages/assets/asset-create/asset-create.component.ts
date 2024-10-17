@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { HttpDataAddress, DataAddress } from '@think-it-labs/edc-connector-client';
+import { HttpDataAddress, DataAddress, AssetInput } from '@think-it-labs/edc-connector-client';
 import { MatDialogRef } from "@angular/material/dialog";
 import { JsonDoc } from "../../../shared/models/json-doc";
 import { StorageType } from "../../../shared/models/storage-type";
@@ -16,14 +16,17 @@ import { VocabularyService } from 'src/app/shared/services/vocabulary.service';
 import { JsonFormData } from 'src/app/shared/models/json-form-data';
 import { InesDataStoreAddress } from 'src/app/shared/models/ines-data-store-address';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { AssetService } from 'src/app/shared/services/asset.service';
+import { BehaviorSubject } from 'rxjs';
+import { Router } from '@angular/router';
 
 
 @Component({
-  selector: 'app-asset-editor-dialog',
-  templateUrl: './asset-editor-dialog.component.html',
-  styleUrls: ['./asset-editor-dialog.component.scss']
+  selector: 'app-asset-create',
+  templateUrl: './asset-create.component.html',
+  styleUrls: ['./asset-create.component.scss']
 })
-export class AssetEditorDialog implements OnInit {
+export class AssetCreateComponent implements OnInit {
 
   readonly uischemaComplete = {
     type: 'VerticalLayout',
@@ -100,6 +103,8 @@ export class AssetEditorDialog implements OnInit {
 
   urlPattern: RegExp = /^(file|ftp|http|https|imap|irc|nntp|acap|icap|mtqp|wss):\/\/(localhost|([a-z\d]([a-z\d-]*[a-z\d])*)|(([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|((\d{1,3}\.){3}\d{1,3}))(:\d+)?(\/[-a-z\d%_.~+]*)*(\?[;&a-z\d%_.~+=-]*)?(\#[-a-z\d_]*)?$/i;
 
+  private fetch$ = new BehaviorSubject(null);
+
   ngOnInit(): void {
     this.validator = this.ajv.compile(this.schema);
     this.defaultForms = []
@@ -141,11 +146,11 @@ export class AssetEditorDialog implements OnInit {
     }
   }
 
-  constructor(private dialogRef: MatDialogRef<AssetEditorDialog>,
+  constructor(private assetService: AssetService,
     private vocabularyService: VocabularyService,
     private notificationService: NotificationService,
-    @Inject('STORAGE_TYPES') public storageTypes: StorageType[]) {
-    dialogRef.disableClose = true;
+    @Inject('STORAGE_TYPES') public storageTypes: StorageType[],
+    private router: Router) {
   }
 
   async onSave() {
@@ -208,7 +213,7 @@ export class AssetEditorDialog implements OnInit {
       assetInput.blob = new Blob([await assetInput?.file.arrayBuffer()])
     }
 
-    this.dialogRef.close({ assetInput });
+    this.createAsset(assetInput)
   }
   addInfoProperties(properties: JsonDoc) {
     // Add default information
@@ -346,4 +351,42 @@ export class AssetEditorDialog implements OnInit {
     const regex = new RegExp(this.urlPattern);
     return regex.test(this.httpDataAddress.baseUrl);
 }
+
+
+private createAsset(asset: AssetInput){
+    const newAsset = asset;
+    if (newAsset) {
+      if (newAsset.dataAddress.type !== DATA_ADDRESS_TYPES.inesDataStore) {
+        this.assetService.createAsset(newAsset).subscribe({
+          next: () => this.fetch$.next(null),
+          error: err => this.showError(err, "This asset cannot be created"),
+          complete: () => {
+            this.navigateToAsset()
+            this.notificationService.showInfo("Successfully created");
+          }
+        })
+      } else {
+        this.assetService.createStorageAsset(newAsset).subscribe({
+          next: () => this.fetch$.next(null),
+          error: err => this.showError(err, "This asset cannot be created"),
+          complete: () => {
+            this.navigateToAsset()
+            this.notificationService.showInfo("Successfully created");
+          }
+        })
+      }
+
+    }
+  }
+
+
+
+  private showError(error: string, errorMessage: string) {
+    this.notificationService.showError(errorMessage);
+    console.error(error);
+  }
+
+  navigateToAsset(){
+    this.router.navigate(['assets'])
+  }
 }

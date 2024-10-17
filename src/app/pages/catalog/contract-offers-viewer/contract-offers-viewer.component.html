@@ -1,4 +1,4 @@
-<mat-dialog-content>
+
   <mat-tab-group>
     <mat-tab label="Asset information">
       <mat-tab-group>
@@ -18,8 +18,8 @@
               <mat-list-item class="property" fxFlex="50">
                 <div class="property-title" matListItemTitle>Content-Type</div>
                 <div class="property-value"
-                  [ngClass]="{'value-not-available': data.properties.contentType === undefined || data.properties.contentType === ''}"
-                  matListItemLine>{{data.properties.contentType ? data.properties.contentType : 'Not available'}}</div>
+                  [ngClass]="{'value-not-available': data.properties.contenttype === undefined || data.properties.contenttype === ''}"
+                  matListItemLine>{{data.properties.contenttype ? data.properties.contenttype : 'Not available'}}</div>
               </mat-list-item>
               <mat-list-item class="property" fxFlex="50">
                 <div class="property-title" matListItemTitle>Version</div>
@@ -58,8 +58,8 @@
               <mat-list-item class="property" fxFlex="50">
                 <div class="property-title" matListItemTitle>File format</div>
                 <div class="property-value"
-                  [ngClass]="{'value-not-available': data.properties.fileFormat === undefined || data.properties.fileFormat === ''}"
-                  matListItemLine>{{data.properties.fileFormat ? data.properties.fileFormat : 'Not available'}}</div>
+                  [ngClass]="{'value-not-available': data.properties.format === undefined || data.properties.format === ''}"
+                  matListItemLine>{{data.properties.format ? data.properties.format : 'Not available'}}</div>
               </mat-list-item>
             </div>
           </mat-card>
@@ -183,11 +183,7 @@
       </mat-tab>
     </ng-container>
   </mat-tab-group>
-</mat-dialog-content>
 
-<mat-dialog-actions>
-  <button color="accent" mat-dialog-close mat-stroked-button>
-    <mat-icon>cancel</mat-icon>
-    close
-  </button>
-</mat-dialog-actions>
+  <button  (click)="backToList()" color="accent" mat-stroked-button>
+    <mat-icon>cancel</mat-icon> Go back
+</button>
