@@ -4,7 +4,87 @@
 
 export const environment = {
   production: false,
-  apiKey: "ApiKeyDefaultValue"
+  jwt: {
+    storageKey: 'access_token',
+    storageRefreshKey: 'refresh_token',
+    allowedDomains: [/.*/i],
+    disallowedRoutes: [/.\/token\.*/i,/.\/public\.*/i]
+  },
+  runtime: {
+    managementApiUrl: "http://localhost:19193/management",
+    catalogUrl: "http://localhost:19193/management/federatedcatalog",
+    sharedUrl: "http://localhost:19196/shared",
+    participantId: "connector-c1",
+    storageAccount: "company2assets",
+    storageExplorerLinkTemplate: "storageexplorer://v=1",
+    theme: "theme-2",
+    service: {
+      asset: {
+        baseUrl: '/v3/assets',
+        storageUrl: '/s3assets',
+        get: '/',
+        getAll: '/request',
+        count: '/pagination/count?type=asset'
+      },
+      contractAgreement: {
+        baseUrl: '/v3/contractagreements',
+        get: '/',
+        getAll: '/request',
+        getNegotiation: '/negotiation',
+        count: '/pagination/count?type=contractAgreement'
+      },
+      policy: {
+        baseUrl: '/v3/policydefinitions',
+        complexBaseUrl: '/v3/complexpolicydefinitions',
+        get: '/',
+        getAll: '/request',
+        count: '/pagination/count?type=policyDefinition'
+      },
+      contractDefinition: {
+        baseUrl: '/v3/contractdefinitions',
+        get: '/',
+        getAll: '/request',
+        count: '/pagination/count?type=contractDefinition'
+      },
+      contractNegotiation: {
+        baseUrl: '/v3/contractnegotiations',
+        get: '/',
+        agreement: '/agreement',
+        state: '/state',
+        terminate: '/terminate',
+        getAll: '/request'
+      },
+      transferProcess: {
+        baseUrl: '/v3/transferprocesses',
+        inesdataBaseUrl: '/v3/inesdatatransferprocesses',
+        get: '/',
+        deprovision: '/deprovision',
+        state: '/state',
+        terminate: '/terminate',
+        getAll: '/request',
+        count: '/pagination/count?type=transferProcess'
+      },
+      vocabulary: {
+        baseUrl: '/connector-vocabularies',
+        getAll: '/request-by-connector',
+        managementUrl:'/vocabularies',
+        getAllShared:'/request'
+      },
+      federatedCatalog: {
+        count: '/pagination/count?type=federatedCatalog',
+        paginationRequest: '/request'
+      }
+    },
+    oauth2: {
+      issuer: 'http://keycloak:8080/realms/dataspace',
+      redirectPath: '/inesdata-connector-interface',
+      clientId: 'dataspace-users',
+      scope: 'openid profile email',
+      responseType: 'code',
+      showDebugInformation: true,
+      allowedUrls: 'http://localhost:4200'
+    }
+  }
 };
 
 /*

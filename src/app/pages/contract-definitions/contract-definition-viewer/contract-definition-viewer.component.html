@@ -1,0 +1,60 @@
+<div id="wrapper">
+  <div class="container">
+    <button (click)="onCreate()" color="accent" mat-stroked-button>
+      <mat-icon>add_circle_outline</mat-icon>
+      Create contract definition
+    </button>
+
+  </div>
+
+  <div fxLayout="row wrap" fxLayoutGap="15px" fxLayoutAlign="start start">
+
+    <mat-card *ngFor="let contractDefinition of contractDefinitions">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>policy</mat-icon>
+        <mat-card-title>{{contractDefinition.id}}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-list dense>
+          <mat-list-item>
+            <mat-icon matListItemIcon>policy</mat-icon>
+            <div class="policy-name" matListItemTitle>Access policy</div>
+            <div matListItemLine>{{contractDefinition.accessPolicyId}}</div>
+          </mat-list-item>
+          <mat-list-item>
+            <mat-icon matListItemIcon>policy</mat-icon>
+            <div class="policy-name" matListItemTitle>Contract policy</div>
+            <div matListItemLine>{{contractDefinition.contractPolicyId}}</div>
+          </mat-list-item>
+          <mat-list-item>
+            <div class="policy-assets" matListItemTitle>Assets</div>
+            <mat-icon matListItemIcon>policy</mat-icon>
+
+            <div matListItemLine *ngIf="contractDefinition.assetsSelector.length == 0; else elseBlock">All assets</div>
+            <ng-template #elseBlock>
+              <div matListItemLine *ngFor="let criterion of contractDefinition.assetsSelector">{{getCriterionFormat(criterion)}}</div>
+            </ng-template>
+          </mat-list-item>
+        </mat-list>
+
+      </mat-card-content>
+
+      <mat-divider></mat-divider>
+      <mat-card-actions class="card-actions">
+        <button (click)="onDelete(contractDefinition)" color="warn" mat-stroked-button>
+          <mat-icon>delete_sweep</mat-icon> Delete
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+  <div fxLayout="row" fxLayoutAlign="center" class="paginator">
+    <mat-paginator
+               (page)="changePage($event)"
+               [pageSize]="pageSize"
+               [length]="paginatorLength"
+               [pageIndex]="currentPage"
+               [pageSizeOptions]="[5, 10, 20]">
+    </mat-paginator>
+  </div>
+</div>

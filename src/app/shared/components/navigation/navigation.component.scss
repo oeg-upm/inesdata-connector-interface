@@ -1,0 +1,66 @@
+.sidenav-container {
+  height: 100%;
+}
+
+.sidenav {
+  width: 300px;
+}
+
+.sidenav .mat-toolbar {
+  background: inherit;
+}
+
+.mat-toolbar.mat-primary {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+.logout {
+  width: 100%;
+  text-align: right;
+  display: flex;
+  justify-content: flex-end;
+  font-size: 16px;
+}
+
+.logout span {
+  display: flex;
+  align-items: center; /* Alinea verticalmente el ícono y el texto */
+  cursor: pointer; /* Cursor tipo pointer solo para el span contenedor */
+  transition: color 0.3s; /* Transición suave para el cambio de color */
+}
+
+.logout span:hover {
+  color: #ffab40; /* Cambia el color de ambos al hacer hover */
+}
+
+.logout mat-icon {
+  font-size: 24px;
+  margin-right: 3px;
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.sidenav-container {
+  display: flex;
+  flex-grow: 1;
+}
+
+mat-sidenav-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.scrollable-content {
+  flex-grow: 1;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+mat-toolbar {
+  min-height: 64px;
+}

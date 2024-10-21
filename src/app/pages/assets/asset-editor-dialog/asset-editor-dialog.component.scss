@@ -1,0 +1,58 @@
+mat-dialog-content {
+    width: 1000px;
+}
+
+.form-field:nth-child(odd) {
+    margin-right: 10px;
+    width: calc(50% - 10px);
+}
+
+.form-field:nth-child(even) {
+  width: calc(50% - 1px);
+}
+
+mat-card-actions {
+    margin-left: 0;
+}
+
+.form-field-stretch{
+  box-sizing: border-box;
+  width: 100%;
+}
+
+:host ::ng-deep .ck-editor__editable_inline {
+  min-height: 300px;
+  color: black;
+  box-sizing: border-box;
+  width: 100%;
+  margin-bottom: 1.5em;
+}
+
+.short-description {
+  width: 100%;
+}
+
+:host ::ng-deep .asset-form mat-card:not(.dialog-card) {
+  width: 100% !important;
+}
+
+.p-15{
+  padding:15px;
+}
+
+.full-width{
+  width: 95%;
+}
+
+.form-field-full{
+  width:100% !important;
+  margin-top: 15px;
+}
+
+.custom-expansion{
+  border: 1px solid #b2b2b2;
+  margin-bottom: 10px;
+}
+.mat-mdc-dialog-content {
+  max-height: 85vh;
+}

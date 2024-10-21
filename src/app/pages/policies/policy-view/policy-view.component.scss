@@ -1,0 +1,53 @@
+#wrapper {
+  margin: 20px;
+}
+
+:host ::ng-deep div.mat-expansion-panel-body {
+  padding-left: 0 !important;
+}
+
+.search-form-field {
+  min-width: 200px;
+  width: 30%;
+  margin-top: 18px;
+}
+
+mat-card-content {
+  margin: 1em 0em;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+button {
+  --mdc-protected-button-container-color: #3b3939 !important;
+}
+
+.mat-mdc-card-avatar {
+  height: 24px;
+}
+
+mat-card {
+  font-family: "Open Sans";
+}
+
+:host ::ng-deep policy-expression {
+  font-size: 14px;
+}
+
+.card-actions button{
+  margin-right: 10px;
+}
+
+.mat-mdc-card-content {
+  height: 100%;
+}
+
+mat-card{
+  place-self: normal;
+}
+
+
