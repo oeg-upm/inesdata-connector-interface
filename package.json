@@ -1,6 +1,6 @@
 {
   "name": "inesdata-connector-interface",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "project": "com.gmv.inesdata",
   "scripts": {
     "ng": "ng",
