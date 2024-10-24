@@ -32,6 +32,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FooterComponent } from './components/footer/footer.component';
+import { SpinnerComponent } from './components/spinner/spinner.component';
+
 
 @NgModule({
   imports: [
@@ -69,7 +71,8 @@ import { FooterComponent } from './components/footer/footer.component';
     ConfirmationDialogComponent,
     UploaderFileComponent,
     DndDirective,
-    FooterComponent
+    FooterComponent,
+    SpinnerComponent
   ],
   exports: [
     NavigationComponent,

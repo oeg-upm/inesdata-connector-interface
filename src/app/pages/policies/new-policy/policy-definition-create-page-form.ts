@@ -5,7 +5,7 @@ import {
   PolicyDefinitionCreatePageFormValue,
 } from './policy-definition-create-page-form-model';
 import { ExpressionFormControls } from '../policy-editor/editor/expression-form-controls';
-import { noWhitespacesOrColonsValidator } from 'src/app/shared/validators/no-whitespaces-or-colons-validator';
+import { noSpecialCharactersValidator } from 'src/app/shared/validators/no-special-characters-validator';
 
 /**
  * Handles AngularForms for NewPolicyDialog
@@ -28,7 +28,7 @@ export class PolicyDefinitionCreatePageForm {
 
   buildFormGroup(): FormGroup<PolicyDefinitionCreatePageFormModel> {
     return this.formBuilder.nonNullable.group({
-      id: ['', [Validators.required, noWhitespacesOrColonsValidator]],
+      id: ['', [Validators.required, noSpecialCharactersValidator]],
       treeControls: this.expressionFormControls.formGroup,
     });
   }
