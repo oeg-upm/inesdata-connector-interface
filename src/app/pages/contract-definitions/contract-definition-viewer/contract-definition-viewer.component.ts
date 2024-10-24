@@ -1,16 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { first } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
-import {
-  ContractDefinitionEditorDialog
-} from '../contract-definition-editor-dialog/contract-definition-editor-dialog.component';
 import { ContractDefinitionService } from "../../../shared/services/contractDefinition.service";
 import { ConfirmationDialogComponent, ConfirmDialogModel } from "../../../shared/components/confirmation-dialog/confirmation-dialog.component";
 import { NotificationService } from "../../../shared/services/notification.service";
 import { ContractDefinition, ContractDefinitionInput } from 'src/app/shared/models/edc-connector-entities';
 import { PageEvent } from '@angular/material/paginator';
 import { QuerySpec } from '@think-it-labs/edc-connector-client';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -30,6 +27,7 @@ export class ContractDefinitionViewerComponent implements OnInit {
 
   constructor(private contractDefinitionService: ContractDefinitionService,
     private notificationService: NotificationService,
+    private router: Router,
     private readonly dialog: MatDialog) {
   }
 
@@ -61,22 +59,7 @@ export class ContractDefinitionViewerComponent implements OnInit {
   }
 
   onCreate() {
-    const dialogRef = this.dialog.open(ContractDefinitionEditorDialog, { disableClose: true });
-    dialogRef.afterClosed().pipe(first()).subscribe((result: { contractDefinition?: ContractDefinitionInput }) => {
-      const newContractDefinition = result?.contractDefinition;
-      if (newContractDefinition) {
-        this.contractDefinitionService.createContractDefinition(newContractDefinition)
-          .subscribe({
-            next: () => this.fetch$.next(null),
-            error: () => this.notificationService.showError("Contract definition cannot be created"),
-            complete: () => {
-              this.countContractDefinitions();
-              this.loadContractDefinitions(this.currentPage);
-              this.notificationService.showInfo("Contract definition created")
-            }
-          });
-      }
-    });
+    this.router.navigate(['contract-definitions/create'])
   }
 
   changePage(event: PageEvent) {

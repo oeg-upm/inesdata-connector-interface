@@ -4,7 +4,6 @@ import { first } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { AssetInput, Asset } from "../../../shared/models/edc-connector-entities";
 import { AssetService } from "../../../shared/services/asset.service";
-import { AssetEditorDialog } from "../asset-editor-dialog/asset-editor-dialog.component";
 import { ConfirmationDialogComponent, ConfirmDialogModel } from "../../../shared/components/confirmation-dialog/confirmation-dialog.component";
 import { NotificationService } from "../../../shared/services/notification.service";
 import { CONTEXTS, DATA_ADDRESS_TYPES } from 'src/app/shared/utils/app.constants';
@@ -12,6 +11,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { EDC_CONTEXT, QuerySpec, DataAddress } from '@think-it-labs/edc-connector-client';
 import { ContractOffersViewerComponent } from '../../catalog/contract-offers-viewer/contract-offers-viewer.component';
 import { compact } from 'jsonld';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-asset-viewer',
@@ -40,7 +40,8 @@ export class AssetViewerComponent implements OnInit {
 
   constructor(private assetService: AssetService,
     private notificationService: NotificationService,
-    private readonly dialog: MatDialog) {
+    private readonly dialog: MatDialog,
+    private router: Router) {
   }
 
   private showError(error: string, errorMessage: string) {
@@ -80,16 +81,18 @@ export class AssetViewerComponent implements OnInit {
 
   viewAsset(asset: Asset) {
     compact(asset, this.CONTEXT).then(compactedAsset => {
-      this.dialog.open(ContractOffersViewerComponent, {
-        data: {
+    this.router.navigate(['/assets/view'],{
+			state: {
+        assetDetailData: {
           assetId: compactedAsset['@id'],
           properties: compactedAsset.properties,
           privateProperties: compactedAsset.privateProperties,
           dataAddress: compactedAsset.dataAddress,
-          isCatalogView: false
-        },
-        disableClose: true
-      });
+          isCatalogView: false,
+          returnUrl: 'assets'
+        }
+			}
+		})
     })
     .catch(error => {
       this.notificationService.showError("Error compacting JsonLD");
@@ -98,34 +101,7 @@ export class AssetViewerComponent implements OnInit {
   }
 
   onCreate() {
-    const dialogRef = this.dialog.open(AssetEditorDialog, { disableClose: true });
-    dialogRef.afterClosed().pipe(first()).subscribe((result: { assetInput?: AssetInput }) => {
-      const newAsset = result?.assetInput;
-      if (newAsset) {
-        if (newAsset.dataAddress.type !== DATA_ADDRESS_TYPES.inesDataStore) {
-          this.assetService.createAsset(newAsset).subscribe({
-            next: () => this.fetch$.next(null),
-            error: err => this.showError(err, "This asset cannot be created"),
-            complete: () => {
-              this.countAssets();
-              this.loadAssets(this.currentPage);
-              this.notificationService.showInfo("Successfully created");
-            }
-          })
-        } else {
-          this.assetService.createStorageAsset(newAsset).subscribe({
-            next: () => this.fetch$.next(null),
-            error: err => this.showError(err, "This asset cannot be created"),
-            complete: () => {
-              this.countAssets();
-              this.loadAssets(this.currentPage);
-              this.notificationService.showInfo("Successfully created");
-            }
-          })
-        }
-
-      }
-    })
+    this.router.navigate(['assets/create'])
   }
 
   changePage(event: PageEvent) {

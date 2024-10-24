@@ -1,24 +1,26 @@
+@import "../../../../theme.scss";
 .mat-mdc-card {
-  --mdc-elevated-card-container-color: #474747;
+  --mdc-elevated-card-container-color: $grey-400;
+  box-shadow: unset;
 }
 
-mat-card-title{
+mat-card-title {
   margin-bottom: 10px;
   color: white;
 }
 
-.property-title{
+.property-title {
   font-weight: bold !important;
 }
 
 mat-list-item:hover .property-title,
-.property-title{
+.property-title {
   color: white;
 }
 
-.property-value{
+.property-value {
   font-size: 14px;
-  color: #adadad;
+  color: #d7d7d7;
 }
 
 .property-icon {
@@ -29,99 +31,95 @@ mat-list-item:hover .property-title,
   padding: 0px 5px;
 }
 
-.json-policy{
+.json-policy {
   white-space: break-spaces;
 }
 
-.dialog-card {
-  width: 750px;
-}
-
 :host ::ng-deep .grey .detail-item {
-	background: #474747;
-	padding: 1rem 1.25rem;
-	border-radius: 16px;
+  background: #474747;
+  padding: 1rem 1.25rem;
+  border-radius: 16px;
 }
 
 .details {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
 .detail-item {
-	flex: 1 1 calc((100% / 2) - 20px);
-	min-width: calc((100% / 2) - 20px);
-	box-sizing: border-box;
+  flex: 1 1 calc((100% / 2) - 20px);
+  min-width: calc((100% / 2) - 20px);
+  box-sizing: border-box;
 }
 
 @media (max-width: 480px) {
-	.detail-item {
-		flex: 1 1 100%;
-		min-width: 100%;
-	}
+  .detail-item {
+    flex: 1 1 100%;
+    min-width: 100%;
+  }
 }
 
 .detail-title {
-	font-family: "Baloo 2", Helvetica, Arial, sans-serif;
-	font-weight: bold;
-	color: #333;
-	display: block;
+  font-family: "Baloo 2", Helvetica, Arial, sans-serif;
+  font-weight: bold;
+  color: #333;
+  display: block;
 
-	&-inline {
-		font-family: "Baloo 2", Helvetica, Arial, sans-serif;
-		font-weight: bold;
-		color: #333;
-		display: inline;
-	}
+  &-inline {
+    font-family: "Baloo 2", Helvetica, Arial, sans-serif;
+    font-weight: bold;
+    color: #333;
+    display: inline;
+  }
 }
 
 .detail-value {
-	font-size: 14px;
-	color: #555;
-	display: block;
+  font-size: 14px;
+  color: #555;
+  display: block;
 
-	&-inline {
-		font-size: 14px;
-		color: #555;
-		display: inline;
-	}
+  &-inline {
+    font-size: 14px;
+    color: #555;
+    display: inline;
+  }
 }
 
 ul {
-	margin: 0px;
+  margin: 0px;
 }
 
-.property-value.description{
+.property-value.description {
   white-space: normal;
 }
 
-.mdc-card.vocabulary{
+.mdc-card.vocabulary {
   padding: 20px 20px 0px 20px;
 }
 
-.mdc-card:not(.vocabulary):not(.contract-offer){
+.mdc-card:not(.vocabulary):not(.contract-offer) {
   padding: 20px;
 }
 
-.property-value{
+.property-value {
   overflow-wrap: anywhere;
   white-space: pre-wrap;
 }
 
-.grey{
+.grey {
   margin-bottom: 15px;
 }
 
-mat-expansion-panel-header{
+mat-expansion-panel-header {
   font-size: 16px;
 }
 
-.contract-offer{
+.contract-offer {
   margin-bottom: 20px;
 }
 
-.value-not-available{
+.value-not-available {
   font-style: italic;
 }
 
@@ -137,7 +135,7 @@ mat-expansion-panel-header{
   padding: 16px;
 }
 
-.mat-mdc-card-actions button:first-child{
+.mat-mdc-card-actions button:first-child {
   margin-right: 10px;
 }
 

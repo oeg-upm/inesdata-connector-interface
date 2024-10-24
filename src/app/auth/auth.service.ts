@@ -73,7 +73,6 @@ export class AuthService {
       })
       .then(() => {
         this.isDoneLoadingSubject$.next(true);
-        this.router.navigate(['']);
       })
       .catch(() => this.isDoneLoadingSubject$.next(true));
   }

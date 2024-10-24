@@ -1,5 +1,6 @@
 
-<mat-dialog-content>
+
+  <h2 class="title-section">Create a vocabulary</h2>
   <div class="asset-creation-tab">
     <div>
       <mat-form-field class="form-field" color="accent">
@@ -28,14 +29,11 @@
       </mat-form-field>
     </div>
   </div>
-</mat-dialog-content>
 
-<mat-dialog-actions>
   <button (click)="onSave()" color="accent" mat-stroked-button>
       <mat-icon>add_circle_outline</mat-icon> Create
   </button>
 
-  <button color="accent" mat-dialog-close mat-stroked-button>
-      <mat-icon>cancel</mat-icon> Cancel
+  <button (click)="navigateToVocabularies()" color="accent" mat-stroked-button>
+      <mat-icon>cancel</mat-icon> Go back
   </button>
-</mat-dialog-actions>

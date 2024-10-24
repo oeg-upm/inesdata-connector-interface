@@ -1,19 +1,16 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { PolicyService } from "../../../shared/services/policy.service";
 import { BehaviorSubject, Observer } from "rxjs";
-import { first } from "rxjs/operators";
-import { MatDialog, MatDialogRef } from "@angular/material/dialog";
-import { NewPolicyDialogComponent } from "../new-policy-dialog/new-policy-dialog.component";
+import { MatDialog} from "@angular/material/dialog";
 import { NotificationService } from "../../../shared/services/notification.service";
 import { ConfirmationDialogComponent, ConfirmDialogModel } from "../../../shared/components/confirmation-dialog/confirmation-dialog.component";
 import { PolicyDefinition, IdResponse, QuerySpec } from "../../../shared/models/edc-connector-entities";
 import { PolicyRuleViewerComponent } from '../policy-rule-viewer/policy-rule-viewer.component';
-import { PageEvent } from '@angular/material/paginator';
-import { PolicyDefinitionCreateDto } from '../../../shared/models/policy/policy-definition-create-dto';
-import { PolicyCard } from '../../../shared/models/policy/policy-card';
+import { PageEvent } from '@angular/material/paginator';import { PolicyCard } from '../../../shared/models/policy/policy-card';
 import { PolicyCardBuilder } from '../../../shared/models/policy/policy-card-builder';
 import { JsonDialogData } from '../../json-dialog/json-dialog/json-dialog.data';
 import { JsonDialogComponent } from '../../json-dialog/json-dialog/json-dialog.component'
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-policy-view',
@@ -38,7 +35,8 @@ export class PolicyViewComponent implements OnInit {
   constructor(private policyService: PolicyService,
     private notificationService: NotificationService,
     private readonly dialog: MatDialog,
-    private policyCardBuilder: PolicyCardBuilder) {
+    private policyCardBuilder: PolicyCardBuilder,
+    private router: Router) {
     this.errorOrUpdateSubscriber = {
       next: x => this.fetch$.next(null),
       error: err => this.showError(err, "An error occurred."),
@@ -55,24 +53,7 @@ export class PolicyViewComponent implements OnInit {
   }
 
   onCreate() {
-    const dialogRef = this.dialog.open(NewPolicyDialogComponent, { disableClose: true });
-    dialogRef.afterClosed().pipe(first()).subscribe({
-      next: (newPolicyDefinition: PolicyDefinitionCreateDto) => {
-        if (newPolicyDefinition) {
-          this.policyService.createComplexPolicy(newPolicyDefinition).subscribe(
-            {
-              next: (response: IdResponse) => this.errorOrUpdateSubscriber.next(response),
-              error: (error: Error) => this.showError(error, "An error occurred while creating the policy."),
-              complete: () => {
-                this.countPolicies();
-                this.loadComplexPolicies(this.currentPage);
-                this.notificationService.showInfo("Successfully created");
-              }
-            }
-          );
-        }
-      }
-    });
+    this.router.navigate(['policies/create'])
   }
 
   delete(policyId: string) {

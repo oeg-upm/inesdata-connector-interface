@@ -1,6 +1,4 @@
-<mat-dialog-content>
-
-    <mat-form-field class="form-field" color="accent" id="form-field-id">
+ <mat-form-field class="form-field" color="accent" id="form-field-id">
         <mat-label>Id</mat-label>
         <input [(ngModel)]="contractDefinition['@id']" [disabled]="editMode" matInput required>
     </mat-form-field>
@@ -34,10 +32,7 @@
         </mat-form-field>
     </div>
 
-</mat-dialog-content>
 
-
-<mat-dialog-actions>
     <button (click)="onSave()" *ngIf="editMode" color="accent" mat-stroked-button>
         <mat-icon>save</mat-icon> Save
     </button>
@@ -46,7 +41,6 @@
         <mat-icon>add_circle_outline</mat-icon> Create
     </button>
 
-    <button color="accent" mat-dialog-close mat-stroked-button>
-        <mat-icon>cancel</mat-icon> Cancel
-    </button>
-</mat-dialog-actions>
+    <button  (click)="navigateToContractDefinitions()" color="accent" mat-stroked-button>
+      <mat-icon>cancel</mat-icon> Go back
+  </button>

@@ -30,14 +30,16 @@
                 'contractSigningDate'))}}</div>
             </mat-list-item>
 
-            <mat-divider></mat-divider>
-            <mat-card-actions class="card-actions">
-              <button color="accent" mat-stroked-button
-                (click)="onTransferClicked(contract)">
-                <mat-icon>downloading</mat-icon>
-                Transfer
-              </button>
-            </mat-card-actions>
+            <div *ngIf="isNotProvisionedByItself(contract)">
+              <mat-divider></mat-divider>
+              <mat-card-actions class="card-actions">
+                <button color="accent" mat-stroked-button
+                  (click)="onTransferClicked(contract)">
+                  <mat-icon>downloading</mat-icon>
+                  Transfer
+                </button>
+              </mat-card-actions>
+            </div>
 
             <mat-card-footer class="contract-card-footer">
               <mat-progress-bar *ngIf="isTransferInProgress(contract.id!)" color="accent" mode="indeterminate">

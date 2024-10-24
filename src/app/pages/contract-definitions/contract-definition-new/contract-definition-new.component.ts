@@ -4,14 +4,17 @@ import { AssetService } from "../../../shared/services/asset.service";
 import { PolicyService } from "../../../shared/services/policy.service";
 import { Asset, PolicyDefinition, ContractDefinitionInput } from "../../../shared/models/edc-connector-entities";
 import { NotificationService } from 'src/app/shared/services/notification.service';
+import { ContractDefinitionService } from 'src/app/shared/services/contractDefinition.service';
+import { BehaviorSubject } from 'rxjs';
+import { Router } from '@angular/router';
 
 
 @Component({
-  selector: 'app-contract-definition-editor-dialog',
-  templateUrl: './contract-definition-editor-dialog.component.html',
-  styleUrls: ['./contract-definition-editor-dialog.component.scss']
+  selector: 'app-contract-definition-new',
+  templateUrl: './contract-definition-new.component.html',
+  styleUrls: ['./contract-definition-new.component.scss']
 })
-export class ContractDefinitionEditorDialog implements OnInit {
+export class ContractDefinitionNewComponent implements OnInit {
 
   policies: Array<PolicyDefinition> = [];
   availableAssets: Asset[] = [];
@@ -26,18 +29,13 @@ export class ContractDefinitionEditorDialog implements OnInit {
     accessPolicyId: undefined!,
     contractPolicyId: undefined!
   };
+  private fetch$ = new BehaviorSubject(null);
 
   constructor(private policyService: PolicyService,
     private assetService: AssetService,
-    private dialogRef: MatDialogRef<ContractDefinitionEditorDialog>,
     private notificationService: NotificationService,
-    @Inject(MAT_DIALOG_DATA) contractDefinition?: ContractDefinitionInput) {
-    if (contractDefinition) {
-      this.contractDefinition = contractDefinition;
-      this.editMode = true;
-    }
-
-    dialogRef.disableClose = true;
+    private contractDefinitionService: ContractDefinitionService,
+    private router: Router) {
   }
 
   ngOnInit(): void {
@@ -76,9 +74,18 @@ export class ContractDefinitionEditorDialog implements OnInit {
     }
 
 
-    this.dialogRef.close({
-      "contractDefinition": this.contractDefinition
-    });
+    const newContractDefinition = this.contractDefinition;
+    if (newContractDefinition) {
+      this.contractDefinitionService.createContractDefinition(newContractDefinition)
+        .subscribe({
+          next: () => this.fetch$.next(null),
+          error: () => this.notificationService.showError("Contract definition cannot be created"),
+          complete: () => {
+            this.navigateToContractDefinitions()
+            this.notificationService.showInfo("Contract definition created")
+          }
+        });
+    }
   }
 
   /**
@@ -92,5 +99,9 @@ export class ContractDefinitionEditorDialog implements OnInit {
     } else {
       return true;
     }
+  }
+
+  navigateToContractDefinitions(){
+    this.router.navigate(['contract-definitions'])
   }
 }

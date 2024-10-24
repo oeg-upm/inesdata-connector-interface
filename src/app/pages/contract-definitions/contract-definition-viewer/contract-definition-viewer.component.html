@@ -18,16 +18,16 @@
         <mat-list dense>
           <mat-list-item>
             <mat-icon matListItemIcon>policy</mat-icon>
-            <div class="policy-name" matListItemTitle>Access policy</div>
+            <div class="bold-text" matListItemTitle>Access policy</div>
             <div matListItemLine>{{contractDefinition.accessPolicyId}}</div>
           </mat-list-item>
           <mat-list-item>
             <mat-icon matListItemIcon>policy</mat-icon>
-            <div class="policy-name" matListItemTitle>Contract policy</div>
+            <div class="bold-text" matListItemTitle>Contract policy</div>
             <div matListItemLine>{{contractDefinition.contractPolicyId}}</div>
           </mat-list-item>
-          <mat-list-item>
-            <div class="policy-assets" matListItemTitle>Assets</div>
+          <mat-list-item class="contract-assets">
+            <div class="bold-text" matListItemTitle>Assets</div>
             <mat-icon matListItemIcon>policy</mat-icon>
 
             <div matListItemLine *ngIf="contractDefinition.assetsSelector.length == 0; else elseBlock">All assets</div>

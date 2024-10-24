@@ -1,29 +1,30 @@
-import { Component} from '@angular/core';
-import { MatDialogRef } from "@angular/material/dialog";
+import { Component,EventEmitter, Output} from '@angular/core';
 import { Vocabulary } from "../../../shared/models/vocabulary";
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { CATEGORIES } from 'src/app/shared/utils/app.constants';
-
+import { VocabularyService } from 'src/app/shared/services/vocabulary.service';
+import { Router } from '@angular/router';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
-  selector: 'app-vocabulary-editor-dialog',
-  templateUrl: './vocabulary-editor-dialog.component.html',
-  styleUrls: ['./vocabulary-editor-dialog.component.scss']
+  selector: 'app-vocabulary-create',
+  templateUrl: './vocabulary-create.component.html',
+  styleUrls: ['./vocabulary-create.component.scss']
 })
-export class VocabularyEditorDialog {
+export class VocabularyCreateComponent {
 
+  private fetch$ = new BehaviorSubject(null);
   // Default asset properties
   id: string = '';
   name: string = '';
   category: string = '';
   jsonSchema: string = '';
   categories = Object.entries(CATEGORIES);
+  @Output() vocabularyChange: EventEmitter<any> = new EventEmitter<any>()
 
 
-  constructor(private dialogRef: MatDialogRef<VocabularyEditorDialog>,
-    private notificationService: NotificationService) {
-
-      dialogRef.disableClose = true;
+  constructor(private vocabularyService: VocabularyService,
+    private notificationService: NotificationService, private router: Router) {
   }
 
   async onSave() {
@@ -45,8 +46,8 @@ export class VocabularyEditorDialog {
       jsonSchema: this.jsonSchema
     };
 
+    this.createVocabulary(vocabulary);
 
-    this.dialogRef.close({ vocabulary });
   }
 
   /**
@@ -69,5 +70,26 @@ export class VocabularyEditorDialog {
     }
 
     return true;
+  }
+
+  private createVocabulary(vocabulary: Vocabulary){
+    this.vocabularyService.createVocabulary(vocabulary).subscribe({
+      next: () => this.fetch$.next(null),
+      error: err => this.showError(err, "This vocabulary cannot be created"),
+      complete: () => {
+        this.notificationService.showInfo("Successfully created");
+        this.navigateToVocabularies()
+      }
+    })
+  }
+
+
+  private showError(error: string, errorMessage: string) {
+    this.notificationService.showError(errorMessage);
+    console.error(error);
+  }
+
+  navigateToVocabularies(){
+    this.router.navigate(['/vocabularies'])
   }
 }
