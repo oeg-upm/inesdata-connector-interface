@@ -19,8 +19,7 @@
   margin-left: 0;
 }
 
-.policy-name,
-#policy-assets {
+.bold-text {
   font-weight: bold !important;
 }
 
@@ -33,4 +32,8 @@ mat-paginator {
   display: flex;
   align-items: center;
   gap: 10px;
+}
+
+.contract-assets .mdc-list-item__secondary-text{
+  white-space: break-spaces;
 }

@@ -8,7 +8,7 @@ import { Vocabulary } from "../../../shared/models/vocabulary";
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { DATA_ADDRESS_TYPES, ASSET_TYPES } from 'src/app/shared/utils/app.constants';
 import { CKEDITOR_CONFIG } from 'src/app/shared/utils/ckeditor.utils';
-
+import { LoadingService } from 'src/app/shared/services/loading.service';
 import { createAjv } from '@jsonforms/core';
 import { angularMaterialRenderers } from '@jsonforms/angular-material';
 import * as jsonld from 'jsonld';
@@ -150,13 +150,16 @@ export class AssetCreateComponent implements OnInit {
     private vocabularyService: VocabularyService,
     private notificationService: NotificationService,
     @Inject('STORAGE_TYPES') public storageTypes: StorageType[],
-    private router: Router) {
+    private router: Router,
+    private loadingService: LoadingService) {
   }
 
   async onSave() {
+    this.loadingService.showLoading();
     // Check whether the asset is valid
     if (!this.checkVocabularyData() || !this.checkRequiredFields()) {
       this.notificationService.showError("Review the form fields");
+      this.loadingService.hideLoading();
       return;
     }
 
@@ -198,6 +201,7 @@ export class AssetCreateComponent implements OnInit {
       dataAddress = this.inesDataStoreAddress;
     } else {
       this.notificationService.showError("Incorrect destination value");
+      this.loadingService.hideLoading();
       return;
     }
 
@@ -208,9 +212,21 @@ export class AssetCreateComponent implements OnInit {
       dataAddress: dataAddress
     };
 
-    if (this.storageTypeId === DATA_ADDRESS_TYPES.inesDataStore) {
-      assetInput.file = this.inesDataStoreAddress?.file
-      assetInput.blob = new Blob([await assetInput?.file.arrayBuffer()])
+    if (this.storageTypeId === DATA_ADDRESS_TYPES.inesDataStore && this.inesDataStoreAddress?.file) {
+      const file = this.inesDataStoreAddress?.file;
+
+      const chunkSize = 1024 * 1024;
+      let offset = 0;
+      const chunks: Blob[] = [];
+
+      while (offset < file.size) {
+        const slice = file.slice(offset, offset + chunkSize);
+        const arrayBuffer = await slice.arrayBuffer();
+        chunks.push(new Blob([arrayBuffer]));
+        offset += chunkSize;
+      }
+
+      assetInput.blob = new Blob(chunks);
     }
 
     this.createAsset(assetInput)
@@ -363,6 +379,7 @@ private createAsset(asset: AssetInput){
           complete: () => {
             this.navigateToAsset()
             this.notificationService.showInfo("Successfully created");
+            this.loadingService.hideLoading();
           }
         })
       } else {
@@ -372,6 +389,7 @@ private createAsset(asset: AssetInput){
           complete: () => {
             this.navigateToAsset()
             this.notificationService.showInfo("Successfully created");
+            this.loadingService.hideLoading();
           }
         })
       }
@@ -384,6 +402,7 @@ private createAsset(asset: AssetInput){
   private showError(error: string, errorMessage: string) {
     this.notificationService.showError(errorMessage);
     console.error(error);
+    this.loadingService.hideLoading();
   }
 
   navigateToAsset(){
