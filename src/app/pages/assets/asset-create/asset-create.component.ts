@@ -409,16 +409,16 @@ export class AssetCreateComponent implements OnInit {
         this.loadingService.hideLoading();
         this.notificationService.showInfo('Asset created successfully');
         this.navigateToAsset();
-      } catch (error) {
+      } catch (error: any) {
         this.loadingService.hideLoading();
-        this.notificationService.showError('Error finalizing the asset creation');
+        this.notificationService.showError('Error finalizing the asset creation: ' + error.error[0].message);
       }
     } else {
       this.assetService.createAsset(assetInput).subscribe({
         next: () => this.fetch$.next(null),
         error: (err) => {
           this.loadingService.hideLoading();
-          this.showError(err, "Error creating the asset");
+          this.showError(err, "Error creating the asset: " + err.error[0].message);
         },
         complete: () => {
           this.loadingService.hideLoading();

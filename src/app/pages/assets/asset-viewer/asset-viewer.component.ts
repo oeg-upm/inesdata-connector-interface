@@ -67,7 +67,7 @@ export class AssetViewerComponent implements OnInit {
         if (res) {
           this.assetService.removeAsset(asset.id).subscribe({
             next: () => this.fetch$.next(null),
-            error: err => this.showError(err, "This asset cannot be deleted"),
+            error: err => this.showError(err, "This asset cannot be deleted: " + err.error[0].message),
             complete: () => {
               this.countAssets();
               this.loadAssets(this.currentPage);
