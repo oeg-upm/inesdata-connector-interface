@@ -12,7 +12,7 @@
 /* tslint:disable:no-unused-variable member-ordering */
 
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, from, lastValueFrom } from 'rxjs';
 
 import { expandArray, Asset, EDC_CONTEXT, JSON_LD_DEFAULT_CONTEXT } from '@think-it-labs/edc-connector-client';
@@ -150,4 +150,63 @@ export class AssetService {
       `${environment.runtime.managementApiUrl}${environment.runtime.service.asset.count}`, body
     )));
   }
+
+  async uploadChunk(assetEntryDto: any, chunk: Blob, fileName: string, chunkIndex: number, totalChunks: number): Promise<any> {
+    const headers = new HttpHeaders({
+      'Content-Disposition': `attachment; filename="${fileName}"`,
+      'Chunk-Index': chunkIndex.toString(),
+      'Total-Chunks': totalChunks.toString()
+    });
+
+    delete assetEntryDto?.file
+    delete assetEntryDto?.blob
+
+    let body = {
+      ...assetEntryDto,
+      "@context": {
+        "@vocab": EDC_CONTEXT,
+        "dcterms": CONTEXTS.dcterms,
+        "dcat": CONTEXTS.dcat
+      }
+    }
+
+    delete body.dataAddress.file
+
+    const formData = new FormData();
+    let json = new Blob([JSON.stringify(body)], { type: "application/json" })
+    formData.append('json', json);
+    formData.append('file', chunk, fileName);
+
+    return await lastValueFrom(
+      this.http.post(`${this.BASE_STORAGE_URL}/upload-chunk`, formData, { headers })
+    );
+  }
+
+  async finalizeUpload(assetEntryDto: any, fileName: string): Promise<any> {
+
+    delete assetEntryDto?.file
+    delete assetEntryDto?.blob
+
+    let body = {
+      ...assetEntryDto,
+      "@context": {
+        "@vocab": EDC_CONTEXT,
+        "dcterms": CONTEXTS.dcterms,
+        "dcat": CONTEXTS.dcat
+      }
+    }
+
+    delete body.dataAddress.file
+
+    const formData = new FormData();
+
+    let json = new Blob([JSON.stringify(body)], { type: "application/json" })
+    formData.append('json', json);
+    formData.append('fileName', fileName);
+
+    return await lastValueFrom(
+      this.http.post(`${this.BASE_STORAGE_URL}/finalize-upload`, formData)
+    );
+  }
 }
+
