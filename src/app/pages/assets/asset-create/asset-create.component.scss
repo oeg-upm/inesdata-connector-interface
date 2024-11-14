@@ -59,3 +59,16 @@ mat-card-actions {
 :host ::ng-deep .mat-expansion-indicator {
   display: none;
 }
+
+.toggle {
+  margin-bottom: 22px;
+  --mat-mdc-form-field-floating-label-scale: 0.75;
+  display: inline-flex;
+  flex-direction: column;
+  min-width: 0;
+  text-align: left;
+}
+
+:host ::ng-deep .toggle .mdc-form-field{
+  font-size: 16px;
+}
