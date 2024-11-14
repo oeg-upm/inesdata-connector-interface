@@ -26,7 +26,8 @@ import { CONTEXTS } from '../utils/app.constants';
 export class AssetService {
 
   private readonly BASE_URL = `${environment.runtime.managementApiUrl}${environment.runtime.service.asset.baseUrl}`;
-  private readonly BASE_STORAGE_URL = `${environment.runtime.managementApiUrl}${environment.runtime.service.asset.storageUrl}`;
+  private readonly UPLOAD_CHUNK_URL = `${environment.runtime.managementApiUrl}${environment.runtime.service.asset.uploadChunk}`;
+  private readonly FINALIZE_UPLOAD_URL = `${environment.runtime.managementApiUrl}${environment.runtime.service.asset.finalizeUpload}`;
 
   constructor(private http: HttpClient) {
   }
@@ -48,39 +49,6 @@ export class AssetService {
 
     return from(lastValueFrom(this.http.post<Asset>(
       `${this.BASE_URL}`, body
-    )));
-  }
-
-
-  /**
-   * Creates a new asset together with a data address
-   * @param assetEntryDto
-   */
-  public createStorageAsset(assetEntryDto: any): Observable<any> {
-
-    const file: File = assetEntryDto?.file
-    const blob: Blob = assetEntryDto?.blob
-    delete assetEntryDto?.file
-    delete assetEntryDto?.blob
-    let body = {
-      ...assetEntryDto,
-      "@context": {
-        "@vocab": EDC_CONTEXT,
-        "dcterms": CONTEXTS.dcterms,
-        "dcat": CONTEXTS.dcat
-      }
-    }
-
-    delete body.dataAddress.file
-
-    let formdata: FormData = new FormData();
-
-    let json = new Blob([JSON.stringify(body)], { type: "application/json" })
-    formdata.append('json', json);
-    formdata.append('file', blob, file?.name);
-
-    return from(lastValueFrom(this.http.post<Asset>(
-      `${this.BASE_STORAGE_URL}`, formdata
     )));
   }
 
@@ -178,7 +146,7 @@ export class AssetService {
     formData.append('file', chunk, fileName);
 
     return await lastValueFrom(
-      this.http.post(`${this.BASE_STORAGE_URL}/upload-chunk`, formData, { headers })
+      this.http.post(`${this.UPLOAD_CHUNK_URL}`, formData, { headers })
     );
   }
 
@@ -205,7 +173,7 @@ export class AssetService {
     formData.append('fileName', fileName);
 
     return await lastValueFrom(
-      this.http.post(`${this.BASE_STORAGE_URL}/finalize-upload`, formData)
+      this.http.post(`${this.FINALIZE_UPLOAD_URL}`, formData)
     );
   }
 }
