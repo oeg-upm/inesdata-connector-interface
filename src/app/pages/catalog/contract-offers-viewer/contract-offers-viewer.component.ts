@@ -218,9 +218,13 @@ export class ContractOffersViewerComponent {
           if (finishedNegotiationStates.includes(updatedNegotiation.state)) {
             let offerId = negotiation.offerId;
             this.runningNegotiations.delete(offerId);
+            const errorDetail = updatedNegotiation.optionalValue("edc", "errorDetail");
             if (updatedNegotiation["state"] === "VERIFIED" || updatedNegotiation["state"] === "FINALIZED") {
               this.finishedNegotiations.set(offerId, updatedNegotiation);
               this.notificationService.showInfo("Contract Negotiation complete!");
+            } else if (updatedNegotiation["state"] === "TERMINATED" && typeof errorDetail === 'string' &&  errorDetail.includes("Contract offer is not valid")) {
+              this.finishedNegotiations.set(offerId, updatedNegotiation);
+              this.notificationService.showError("Contract offer is not valid.");
             }
           }
 
