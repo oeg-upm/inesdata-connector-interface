@@ -10,7 +10,7 @@ $theming-material-components-primary: mat-palette($mat-teal);
 $theming-material-components-accent: mat-palette($mat-orange, A200, A100, A400);
 $theming-material-components-warn: mat-palette($mat-red);
 $theming-material-components-typography: mat.define-typography-config(
-  $font-family: "Open Sans", sans-serif
+  $font-family: "Open Sans",
 );
 
 $theme1: mat-dark-theme(
