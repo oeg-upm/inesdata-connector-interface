@@ -66,31 +66,41 @@ export class ContractViewerComponent implements OnInit {
   onTransferClicked(contract: ContractAgreement) {
     const dialogRef = this.dialog.open(ContractTransferDialog, { disableClose: true });
 
-    dialogRef.afterClosed().pipe(first()).subscribe(async result => {
-      if (result !== undefined && result.transferButtonclicked) {
+    dialogRef.afterClosed().pipe(first()).subscribe({
+      next: async (result) => {
+        if (result !== undefined && result.transferButtonclicked) {
+          try {
+            const transferRequest = await this.createTransferRequest(contract, result.dataAddress);
 
-        const transferRequest = await this.createTransferRequest(contract, result.dataAddress);
+            const initiateTransfer$ = result.dataAddress.type === DATA_ADDRESS_TYPES.inesDataStore
+              ? this.transferService.initiateInesdataTransfer(transferRequest)
+              : this.transferService.initiateTransfer(transferRequest);
 
-        if(result.dataAddress.type === DATA_ADDRESS_TYPES.inesDataStore){
-          this.transferService.initiateInesdataTransfer(transferRequest)
-          .subscribe(transferId => {
-            this.startPolling(transferId, contract["@id"]!);
-          }, error => {
+            initiateTransfer$.subscribe({
+              next: (transferId) => {
+                this.startPolling(transferId, contract["@id"]!);
+              },
+              error: (error) => {
+                console.error(error);
+                this.notificationService.showError("Error initiating transfer");
+              },
+              complete: () => {
+                this.notificationService.showInfo("Transfer initiated successfully");
+              }
+            });
+          } catch (error) {
             console.error(error);
-            this.notificationService.showError("Error initiating transfer");
-          });
-        }else{
-          this.transferService.initiateTransfer(transferRequest)
-          .subscribe(transferId => {
-            this.startPolling(transferId, contract["@id"]!);
-          }, error => {
-            console.error(error);
-            this.notificationService.showError("Error initiating transfer");
-          });
+            this.notificationService.showError("Failed to create transfer request");
+          }
         }
-      }
+      },
+      error: (error) => {
+        console.error("Error closing dialog", error);
+      },
+      complete: () => {}
     });
   }
+
 
   asDate(epochSeconds?: number): string {
     if (epochSeconds) {
@@ -209,24 +219,47 @@ export class ContractViewerComponent implements OnInit {
 
   private pollRunningTransfers() {
     return () => {
-      from(this.runningTransfers) //create from array
-        .pipe(switchMap(runningTransferProcess => this.catalogService.getTransferProcessesById(runningTransferProcess.processId)), // fetch from API
-          filter(transferprocess => ContractViewerComponent.isFinishedState(transferprocess['https://w3id.org/edc/v0.0.1/ns/transferType'][0]['@value'], transferprocess.state)), // only use finished ones
+      from(this.runningTransfers) // Create observable from array
+        .pipe(
+          switchMap(runningTransferProcess =>
+            this.catalogService.getTransferProcessesById(runningTransferProcess.processId)
+          ), // Fetch from API
+          filter(transferProcess =>
+            ContractViewerComponent.isFinishedState(
+              transferProcess['https://w3id.org/edc/v0.0.1/ns/transferType'][0]['@value'],
+              transferProcess.state
+            )
+          ), // Only use finished ones
           tap(transferProcess => {
-            // remove from in-progress
-            this.runningTransfers = this.runningTransfers.filter(rtp => rtp.processId !== transferProcess.id)
-            this.notificationService.showWarning(`Transfer [${transferProcess.id}] complete! Check if the process was successful`, "Show me!", () => {
-              this.router.navigate(['/transfer-history'])
-            })
-          }),
-        ).subscribe(() => {
-          // clear interval if necessary
-          if (this.runningTransfers.length === 0) {
-            clearInterval(this.pollingHandleTransfer);
-            this.pollingHandleTransfer = undefined;
-          }
-        }, error => this.notificationService.showError(error))
-    }
+            // Remove from in-progress
+            this.runningTransfers = this.runningTransfers.filter(rtp => rtp.processId !== transferProcess.id);
 
+            // Show notification
+            this.notificationService.showWarning(
+              `Transfer [${transferProcess.id}] complete! Check if the process was successful`,
+              "Show me!",
+              () => {
+                this.router.navigate(['/transfer-history']);
+              }
+            );
+          })
+        )
+        .subscribe({
+          next: () => {
+            // Clear interval if no running transfers are left
+            if (this.runningTransfers.length === 0) {
+              clearInterval(this.pollingHandleTransfer);
+              this.pollingHandleTransfer = undefined;
+            }
+          },
+          error: (error) => {
+            this.notificationService.showError(error);
+          },
+          complete: () => {
+            console.log("Polling transfers completed.");
+          }
+        });
+    };
   }
+
 }

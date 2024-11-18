@@ -1,6 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { HttpDataAddress, DataAddress, AssetInput } from '@think-it-labs/edc-connector-client';
-import { MatDialogRef } from "@angular/material/dialog";
+import { HttpDataAddress, DataAddress } from '@think-it-labs/edc-connector-client';
 import { JsonDoc } from "../../../shared/models/json-doc";
 import { StorageType } from "../../../shared/models/storage-type";
 import { AmazonS3DataAddress } from "../../../shared/models/amazon-s3-data-address";
@@ -101,7 +100,7 @@ export class AssetCreateComponent implements OnInit {
   config = CKEDITOR_CONFIG
   selectedAssetTypeVocabularies: Vocabulary[]
 
-  urlPattern: RegExp = /^(file|ftp|http|https|imap|irc|nntp|acap|icap|mtqp|wss):\/\/(localhost|([a-z\d]([a-z\d-]*[a-z\d])*)|(([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|((\d{1,3}\.){3}\d{1,3}))(:\d+)?(\/[-a-z\d%_.~+]*)*(\?[;&a-z\d%_.~+=-]*)?(\#[-a-z\d_]*)?$/i;
+  urlPattern: RegExp = /^(file|ftp|http|https|imap|irc|nntp|acap|icap|mtqp|wss):\/\/(?:localhost|(?:[a-z\d]([a-z\d-]*[a-z\d])*)|(?:[a-z\d]([a-z\d-]*[a-z\d])*\.?[a-z]{2,})|(?:(\d{1,3}\.){3}\d{1,3}))(:\d+)?(\/[-a-z\d%_.~+]*)*(\?[;&a-z\d%_.~+=-]*)?(\#[-a-z\d_]*)?$/i;
 
   private fetch$ = new BehaviorSubject(null);
 

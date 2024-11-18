@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { TransferProcessStates } from "../../../shared/models/transfer-process-states";
 import { NegotiationResult } from "../../../shared/models/negotiation-result";
 import { ContractNegotiation, ContractNegotiationRequest, Policy } from "../../../shared/models/edc-connector-entities";
@@ -8,7 +8,6 @@ import { NotificationService } from 'src/app/shared/services/notification.servic
 import { StorageType } from 'src/app/shared/models/storage-type';
 import { PolicyCard } from '../../../shared/models/policy/policy-card';
 import { DATA_ADDRESS_TYPES } from '../../../shared/utils/app.constants';
-import { ContractOffer } from 'src/app/shared/models/contract-offer';
 import { PolicyCardBuilder } from 'src/app/shared/models/policy/policy-card-builder';
 import { JsonDialogData } from '../../json-dialog/json-dialog/json-dialog.data';
 import { JsonDialogComponent } from '../../json-dialog/json-dialog/json-dialog.component'

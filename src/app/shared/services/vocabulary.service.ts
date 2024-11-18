@@ -17,7 +17,7 @@ import { Observable, from, lastValueFrom } from 'rxjs';
 
 import { Vocabulary } from "../models/vocabulary";
 import { environment } from "src/environments/environment";
-import { Asset, EDC_CONTEXT, JSON_LD_DEFAULT_CONTEXT } from '@think-it-labs/edc-connector-client';
+import { EDC_CONTEXT, JSON_LD_DEFAULT_CONTEXT } from '@think-it-labs/edc-connector-client';
 
 @Injectable({
   providedIn: 'root'
