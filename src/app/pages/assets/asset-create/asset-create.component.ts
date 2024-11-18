@@ -100,7 +100,7 @@ export class AssetCreateComponent implements OnInit {
   config = CKEDITOR_CONFIG
   selectedAssetTypeVocabularies: Vocabulary[]
 
-  urlPattern: RegExp = /^(file|ftp|http|https|imap|irc|nntp|acap|icap|mtqp|wss):\/\/(?:localhost|(?:[a-z\d]([a-z\d-]*[a-z\d])*)|(?:[a-z\d]([a-z\d-]*[a-z\d])*\.?[a-z]{2,})|(?:(\d{1,3}\.){3}\d{1,3}))(:\d+)?(\/[-a-z\d%_.~+]*)*(\?[;&a-z\d%_.~+=-]*)?(\#[-a-z\d_]*)?$/i;
+  urlPattern: RegExp = /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z]{2,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)$/;
 
   private fetch$ = new BehaviorSubject(null);
 
