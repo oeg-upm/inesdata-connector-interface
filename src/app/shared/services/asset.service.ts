@@ -12,7 +12,7 @@
 /* tslint:disable:no-unused-variable member-ordering */
 
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, from, lastValueFrom } from 'rxjs';
 
 import { expandArray, Asset, EDC_CONTEXT, JSON_LD_DEFAULT_CONTEXT } from '@think-it-labs/edc-connector-client';
@@ -26,7 +26,8 @@ import { CONTEXTS } from '../utils/app.constants';
 export class AssetService {
 
   private readonly BASE_URL = `${environment.runtime.managementApiUrl}${environment.runtime.service.asset.baseUrl}`;
-  private readonly BASE_STORAGE_URL = `${environment.runtime.managementApiUrl}${environment.runtime.service.asset.storageUrl}`;
+  private readonly UPLOAD_CHUNK_URL = `${environment.runtime.managementApiUrl}${environment.runtime.service.asset.uploadChunk}`;
+  private readonly FINALIZE_UPLOAD_URL = `${environment.runtime.managementApiUrl}${environment.runtime.service.asset.finalizeUpload}`;
 
   constructor(private http: HttpClient) {
   }
@@ -48,39 +49,6 @@ export class AssetService {
 
     return from(lastValueFrom(this.http.post<Asset>(
       `${this.BASE_URL}`, body
-    )));
-  }
-
-
-  /**
-   * Creates a new asset together with a data address
-   * @param assetEntryDto
-   */
-  public createStorageAsset(assetEntryDto: any): Observable<any> {
-
-    const file: File = assetEntryDto?.file
-    const blob: Blob = assetEntryDto?.blob
-    delete assetEntryDto?.file
-    delete assetEntryDto?.blob
-    let body = {
-      ...assetEntryDto,
-      "@context": {
-        "@vocab": EDC_CONTEXT,
-        "dcterms": CONTEXTS.dcterms,
-        "dcat": CONTEXTS.dcat
-      }
-    }
-
-    delete body.dataAddress.file
-
-    let formdata: FormData = new FormData();
-
-    let json = new Blob([JSON.stringify(body)], { type: "application/json" })
-    formdata.append('json', json);
-    formdata.append('file', blob, file?.name);
-
-    return from(lastValueFrom(this.http.post<Asset>(
-      `${this.BASE_STORAGE_URL}`, formdata
     )));
   }
 
@@ -150,4 +118,63 @@ export class AssetService {
       `${environment.runtime.managementApiUrl}${environment.runtime.service.asset.count}`, body
     )));
   }
+
+  async uploadChunk(assetEntryDto: any, chunk: Blob, fileName: string, chunkIndex: number, totalChunks: number): Promise<any> {
+    const headers = new HttpHeaders({
+      'Content-Disposition': `attachment; filename="${fileName}"`,
+      'Chunk-Index': chunkIndex.toString(),
+      'Total-Chunks': totalChunks.toString()
+    });
+
+    delete assetEntryDto?.file
+    delete assetEntryDto?.blob
+
+    let body = {
+      ...assetEntryDto,
+      "@context": {
+        "@vocab": EDC_CONTEXT,
+        "dcterms": CONTEXTS.dcterms,
+        "dcat": CONTEXTS.dcat
+      }
+    }
+
+    delete body.dataAddress.file
+
+    const formData = new FormData();
+    let json = new Blob([JSON.stringify(body)], { type: "application/json" })
+    formData.append('json', json);
+    formData.append('file', chunk, fileName);
+
+    return await lastValueFrom(
+      this.http.post(`${this.UPLOAD_CHUNK_URL}`, formData, { headers })
+    );
+  }
+
+  async finalizeUpload(assetEntryDto: any, fileName: string): Promise<any> {
+
+    delete assetEntryDto?.file
+    delete assetEntryDto?.blob
+
+    let body = {
+      ...assetEntryDto,
+      "@context": {
+        "@vocab": EDC_CONTEXT,
+        "dcterms": CONTEXTS.dcterms,
+        "dcat": CONTEXTS.dcat
+      }
+    }
+
+    delete body.dataAddress.file
+
+    const formData = new FormData();
+
+    let json = new Blob([JSON.stringify(body)], { type: "application/json" })
+    formData.append('json', json);
+    formData.append('fileName', fileName);
+
+    return await lastValueFrom(
+      this.http.post(`${this.FINALIZE_UPLOAD_URL}`, formData)
+    );
+  }
 }
+

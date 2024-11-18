@@ -17,7 +17,8 @@ export const environment = {
     service: {
       asset: {
         baseUrl: '/v3/assets',
-        storageUrl: '/s3assets',
+        uploadChunk: '/s3assets/upload-chunk',
+        finalizeUpload: '/s3assets/finalize-upload',
         get: '/',
         getAll: '/request',
         count: '/pagination/count?type=asset'

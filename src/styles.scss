@@ -16,7 +16,7 @@ span,
 i,
 strong,
 input {
-  font-family: "Open Sans";
+  font-family: "Open Sans", sans-serif;
 }
 
 body {
@@ -193,12 +193,6 @@ mat-card:not(.dialog-card) {
 .w-2 {
   width: 0.5rem;
 }
-.border-l-2 {
-  border-left-width: 2px;
-}
-.items-center {
-  align-items: center;
-}
 
 app-json-dialog {
   display: block;
@@ -314,31 +308,13 @@ app-json-dialog {
   }
 
   .ngx-json-viewer {
-    font-family: "Open Sans" !important;
+    font-family: "Open Sans", sans-serif !important;
     font-size: 14px !important;
   }
 }
 
-// .main-container {
-//   display: flex;
-//   flex-direction: column;
-//   height: 100%;
-
-// }
-
-// app-navigation {
-//   flex: 1 0 auto;
-//   overflow: auto;
-//   height: 100%;
-
-// }
-
-// app-footer{
-//   flex-shrink: 0;
-// }
-
 .title-section {
-  font-family: "Open Sans";
+  font-family: "Open Sans", sans-serif;
 }
 
 .footer-content {

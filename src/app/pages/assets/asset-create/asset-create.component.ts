@@ -1,6 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { HttpDataAddress, DataAddress, AssetInput } from '@think-it-labs/edc-connector-client';
-import { MatDialogRef } from "@angular/material/dialog";
+import { HttpDataAddress, DataAddress } from '@think-it-labs/edc-connector-client';
 import { JsonDoc } from "../../../shared/models/json-doc";
 import { StorageType } from "../../../shared/models/storage-type";
 import { AmazonS3DataAddress } from "../../../shared/models/amazon-s3-data-address";
@@ -89,7 +88,7 @@ export class AssetCreateComponent implements OnInit {
     type: 'InesDataStore'
   };
 
-  assetType:any;
+  assetType: any;
   assetTypes = Object.entries(ASSET_TYPES);
   defaultForms: JsonFormData[]
   selectedForms: JsonFormData[]
@@ -101,7 +100,7 @@ export class AssetCreateComponent implements OnInit {
   config = CKEDITOR_CONFIG
   selectedAssetTypeVocabularies: Vocabulary[]
 
-  urlPattern: RegExp = /^(file|ftp|http|https|imap|irc|nntp|acap|icap|mtqp|wss):\/\/(localhost|([a-z\d]([a-z\d-]*[a-z\d])*)|(([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|((\d{1,3}\.){3}\d{1,3}))(:\d+)?(\/[-a-z\d%_.~+]*)*(\?[;&a-z\d%_.~+=-]*)?(\#[-a-z\d_]*)?$/i;
+  urlPattern: RegExp = /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z]{2,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)$/;
 
   private fetch$ = new BehaviorSubject(null);
 
@@ -122,7 +121,7 @@ export class AssetCreateComponent implements OnInit {
         }
         if (this.selectedVocabularies?.length > 0) {
           this.selectedVocabularies.forEach(s => {
-            if(this.selectedAssetTypeVocabularies.find(satv=> satv['@id'] === s['@id'])){
+            if (this.selectedAssetTypeVocabularies.find(satv => satv['@id'] === s['@id'])) {
               this.initVocabularyForm(s, false)
             }
           })
@@ -168,7 +167,7 @@ export class AssetCreateComponent implements OnInit {
     const forms: JsonFormData[] = [...this.defaultForms, ...this.selectedForms]
 
     let assetDataProperty: any = {}
-    forms.forEach(async f=>{
+    forms.forEach(async f => {
       if (f.schema && f.schema.hasOwnProperty("@context")) {
         // Add context if it is provided in the Json Schema
         const jsonSchema: JsonDoc = f.schema as JsonDoc;
@@ -197,7 +196,7 @@ export class AssetCreateComponent implements OnInit {
       dataAddress = this.amazonS3DataAddress;
     } else if (this.storageTypeId === DATA_ADDRESS_TYPES.httpData) {
       dataAddress = this.httpDataAddress;
-    }  else if (this.storageTypeId === DATA_ADDRESS_TYPES.inesDataStore) {
+    } else if (this.storageTypeId === DATA_ADDRESS_TYPES.inesDataStore) {
       dataAddress = this.inesDataStoreAddress;
     } else {
       this.notificationService.showError("Incorrect destination value");
@@ -213,6 +212,7 @@ export class AssetCreateComponent implements OnInit {
     };
 
     if (this.storageTypeId === DATA_ADDRESS_TYPES.inesDataStore && this.inesDataStoreAddress?.file) {
+      this.loadingService.showLoading('Processing the file...');
       const file = this.inesDataStoreAddress?.file;
 
       const chunkSize = 1024 * 1024;
@@ -229,7 +229,7 @@ export class AssetCreateComponent implements OnInit {
       assetInput.blob = new Blob(chunks);
     }
 
-    this.createAsset(assetInput)
+    await this.createAsset(assetInput)
   }
   addInfoProperties(properties: JsonDoc) {
     // Add default information
@@ -245,7 +245,7 @@ export class AssetCreateComponent implements OnInit {
     this.addKeywords(properties);
   }
 
-  addKeywords(properties: JsonDoc){
+  addKeywords(properties: JsonDoc) {
     const parsedKeywords: string[] = [];
     this.keywords.split(",").forEach(keyword => parsedKeywords.push(keyword.trim()));
     properties["dcat:keyword"] = parsedKeywords;
@@ -286,7 +286,7 @@ export class AssetCreateComponent implements OnInit {
     if (!this.id || !this.storageTypeId || !this.name || !this.version || !this.description || !this.keywords || !this.shortDescription || !this.assetType) {
       return false;
     } else {
-      if (this.storageTypeId === DATA_ADDRESS_TYPES.httpData && (!this.httpDataAddress.name || !this.httpDataAddress.baseUrl  || !this.validateUrl())) {
+      if (this.storageTypeId === DATA_ADDRESS_TYPES.httpData && (!this.httpDataAddress.name || !this.httpDataAddress.baseUrl || !this.validateUrl())) {
         return false;
       }
       if (this.storageTypeId === DATA_ADDRESS_TYPES.amazonS3 && !this.amazonS3DataAddress.region) {
@@ -328,7 +328,7 @@ export class AssetCreateComponent implements OnInit {
 
     if (this.selectedVocabularies.length > 0) {
       this.selectedVocabularies.forEach(s => {
-        if(this.selectedAssetTypeVocabularies.find(satv=> satv['@id'] === s['@id'])){
+        if (this.selectedAssetTypeVocabularies.find(satv => satv['@id'] === s['@id'])) {
           this.initVocabularyForm(s, false)
         }
       })
@@ -339,24 +339,24 @@ export class AssetCreateComponent implements OnInit {
    * Transform to text asset type value
    * @returns asset type text
    */
-  getAssetTypeText(){
-    return this.assetType?ASSET_TYPES[this.assetType as keyof typeof ASSET_TYPES]:'';
+  getAssetTypeText() {
+    return this.assetType ? ASSET_TYPES[this.assetType as keyof typeof ASSET_TYPES] : '';
   }
 
-  setFiles(event:File[]){
-    if(event?.length>0){
+  setFiles(event: File[]) {
+    if (event?.length > 0) {
       this.inesDataStoreAddress.file = event[0]
-    }else{
+    } else {
       delete this.inesDataStoreAddress.file
     }
   }
 
-  onSelectionChangeVocabulary(){
+  onSelectionChangeVocabulary() {
     this.selectedForms = []
 
     if (this.selectedVocabularies.length > 0) {
       this.selectedVocabularies.forEach(s => {
-        if(this.selectedAssetTypeVocabularies.find(satv=> satv['@id'] === s['@id'])){
+        if (this.selectedAssetTypeVocabularies.find(satv => satv['@id'] === s['@id'])) {
           this.initVocabularyForm(s, false)
         }
       })
@@ -366,37 +366,67 @@ export class AssetCreateComponent implements OnInit {
   validateUrl(): boolean {
     const regex = new RegExp(this.urlPattern);
     return regex.test(this.httpDataAddress.baseUrl);
-}
-
-
-private createAsset(asset: AssetInput){
-    const newAsset = asset;
-    if (newAsset) {
-      if (newAsset.dataAddress.type !== DATA_ADDRESS_TYPES.inesDataStore) {
-        this.assetService.createAsset(newAsset).subscribe({
-          next: () => this.fetch$.next(null),
-          error: err => this.showError(err, "This asset cannot be created"),
-          complete: () => {
-            this.navigateToAsset()
-            this.notificationService.showInfo("Successfully created");
-            this.loadingService.hideLoading();
-          }
-        })
-      } else {
-        this.assetService.createStorageAsset(newAsset).subscribe({
-          next: () => this.fetch$.next(null),
-          error: err => this.showError(err, "This asset cannot be created"),
-          complete: () => {
-            this.navigateToAsset()
-            this.notificationService.showInfo("Successfully created");
-            this.loadingService.hideLoading();
-          }
-        })
-      }
-
-    }
   }
 
+
+  async createAsset(assetInput: any) {
+    if (this.storageTypeId === DATA_ADDRESS_TYPES.inesDataStore && this.inesDataStoreAddress.file) {
+      const file = this.inesDataStoreAddress.file;
+      const chunkSize = 50 * 1024 * 1024; // 50 MB
+      const totalChunks = Math.ceil(file.size / chunkSize);
+      const fileName = file.name;
+      const maxRetries = 3;
+
+      for (let chunkIndex = 0; chunkIndex < totalChunks; chunkIndex++) {
+        const start = chunkIndex * chunkSize;
+        const chunk = file.slice(start, start + chunkSize);
+
+        let attempt = 0;
+        let success = false;
+
+        const progressPercentage = Math.floor(((chunkIndex + 1) / totalChunks) * 100);
+
+        while (attempt < maxRetries && !success) {
+          try {
+            this.loadingService.updateMessage(`Uploading file: ${progressPercentage}% completed`);
+
+            await this.assetService.uploadChunk(assetInput, chunk, fileName, chunkIndex, totalChunks);
+            success = true;
+          } catch (error) {
+            attempt++;
+            if (attempt >= maxRetries) {
+              this.loadingService.hideLoading();
+              this.notificationService.showError(`Error uploading chunk ${chunkIndex + 1}. Maximum retries reached.`);
+              return;
+            }
+          }
+        }
+      }
+
+      try {
+        await this.assetService.finalizeUpload(assetInput, fileName);
+        this.loadingService.hideLoading();
+        this.notificationService.showInfo('Asset created successfully');
+        this.navigateToAsset();
+      } catch (error: any) {
+        this.loadingService.hideLoading();
+        this.notificationService.showError('Error finalizing the asset creation: ' + error.error[0].message);
+      }
+    } else {
+      this.assetService.createAsset(assetInput).subscribe({
+        next: () => this.fetch$.next(null),
+        error: (err) => {
+          this.loadingService.hideLoading();
+          this.showError(err, "Error creating the asset: " + err.error[0].message);
+        },
+        complete: () => {
+          this.loadingService.hideLoading();
+          this.notificationService.showInfo('Asset created successfully');
+          this.navigateToAsset();
+        },
+      });
+    }
+  }
 
 
   private showError(error: string, errorMessage: string) {
@@ -405,7 +435,7 @@ private createAsset(asset: AssetInput){
     this.loadingService.hideLoading();
   }
 
-  navigateToAsset(){
+  navigateToAsset() {
     this.router.navigate(['assets'])
   }
 }

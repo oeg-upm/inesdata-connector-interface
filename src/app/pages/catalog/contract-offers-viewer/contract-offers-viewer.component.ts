@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { TransferProcessStates } from "../../../shared/models/transfer-process-states";
 import { NegotiationResult } from "../../../shared/models/negotiation-result";
 import { ContractNegotiation, ContractNegotiationRequest, Policy } from "../../../shared/models/edc-connector-entities";
@@ -8,7 +8,6 @@ import { NotificationService } from 'src/app/shared/services/notification.servic
 import { StorageType } from 'src/app/shared/models/storage-type';
 import { PolicyCard } from '../../../shared/models/policy/policy-card';
 import { DATA_ADDRESS_TYPES } from '../../../shared/utils/app.constants';
-import { ContractOffer } from 'src/app/shared/models/contract-offer';
 import { PolicyCardBuilder } from 'src/app/shared/models/policy/policy-card-builder';
 import { JsonDialogData } from '../../json-dialog/json-dialog/json-dialog.data';
 import { JsonDialogComponent } from '../../json-dialog/json-dialog/json-dialog.component'
@@ -218,9 +217,13 @@ export class ContractOffersViewerComponent {
           if (finishedNegotiationStates.includes(updatedNegotiation.state)) {
             let offerId = negotiation.offerId;
             this.runningNegotiations.delete(offerId);
+            const errorDetail = updatedNegotiation.optionalValue("edc", "errorDetail");
             if (updatedNegotiation["state"] === "VERIFIED" || updatedNegotiation["state"] === "FINALIZED") {
               this.finishedNegotiations.set(offerId, updatedNegotiation);
               this.notificationService.showInfo("Contract Negotiation complete!");
+            } else if (updatedNegotiation["state"] === "TERMINATED" && typeof errorDetail === 'string' &&  errorDetail.includes("Contract offer is not valid")) {
+              this.finishedNegotiations.set(offerId, updatedNegotiation);
+              this.notificationService.showError("Contract offer is not valid.");
             }
           }
 
