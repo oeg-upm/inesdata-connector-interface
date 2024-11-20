@@ -161,25 +161,25 @@
         </div>
 
         <div class="form-field toggle">
-          <mat-slide-toggle [(ngModel)]="httpDataAddress.proxyBody" color="accent">
+          <mat-slide-toggle [(ngModel)]="httpDataAddress.proxyBody"(ngModelChange)="onToggleChange('proxyBody', $event)" color="accent">
             Proxy Body
           </mat-slide-toggle>
         </div>
 
         <div class="form-field toggle">
-          <mat-slide-toggle [(ngModel)]="httpDataAddress.proxyPath" color="accent">
+          <mat-slide-toggle [(ngModel)]="httpDataAddress.proxyPath" (ngModelChange)="onToggleChange('proxyPath', $event)" color="accent">
             Proxy Path
           </mat-slide-toggle>
         </div>
 
         <div class="form-field toggle">
-          <mat-slide-toggle [(ngModel)]="httpDataAddress.proxyQueryParams" color="accent">
+          <mat-slide-toggle [(ngModel)]="httpDataAddress.proxyQueryParams" (ngModelChange)="onToggleChange('proxyQueryParams', $event)" color="accent">
             Proxy Query Params
           </mat-slide-toggle>
         </div>
 
         <div class="form-field toggle">
-          <mat-slide-toggle [(ngModel)]="httpDataAddress.proxyMethod" color="accent">
+          <mat-slide-toggle [(ngModel)]="httpDataAddress.proxyMethod" (ngModelChange)="onToggleChange('proxyMethod', $event)" color="accent">
             Proxy Method
           </mat-slide-toggle>
         </div>

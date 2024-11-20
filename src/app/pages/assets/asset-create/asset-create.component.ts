@@ -18,6 +18,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { AssetService } from 'src/app/shared/services/asset.service';
 import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 
 @Component({
@@ -437,5 +438,9 @@ export class AssetCreateComponent implements OnInit {
 
   navigateToAsset() {
     this.router.navigate(['assets'])
+  }
+
+  onToggleChange(propertyName: string, event: MatSlideToggleChange): void {
+    this.httpDataAddress[propertyName] = event ? 'true' : 'false';
   }
 }
