@@ -1,15 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { first } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
-import { AssetInput, Asset } from "../../../shared/models/edc-connector-entities";
+import { Asset } from "../../../shared/models/edc-connector-entities";
 import { AssetService } from "../../../shared/services/asset.service";
 import { ConfirmationDialogComponent, ConfirmDialogModel } from "../../../shared/components/confirmation-dialog/confirmation-dialog.component";
 import { NotificationService } from "../../../shared/services/notification.service";
-import { CONTEXTS, DATA_ADDRESS_TYPES } from 'src/app/shared/utils/app.constants';
 import { PageEvent } from '@angular/material/paginator';
-import { EDC_CONTEXT, QuerySpec, DataAddress } from '@think-it-labs/edc-connector-client';
-import { ContractOffersViewerComponent } from '../../catalog/contract-offers-viewer/contract-offers-viewer.component';
+import { EDC_CONTEXT, QuerySpec } from '@think-it-labs/edc-connector-client';
 import { compact } from 'jsonld';
 import { Router } from '@angular/router';
 
@@ -67,7 +64,7 @@ export class AssetViewerComponent implements OnInit {
         if (res) {
           this.assetService.removeAsset(asset.id).subscribe({
             next: () => this.fetch$.next(null),
-            error: err => this.showError(err, "This asset cannot be deleted"),
+            error: err => this.showError(err, "This asset cannot be deleted: " + err.error[0].message),
             complete: () => {
               this.countAssets();
               this.loadAssets(this.currentPage);

@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ContractDefinitionService } from "../../../shared/services/contractDefinition.service";
 import { ConfirmationDialogComponent, ConfirmDialogModel } from "../../../shared/components/confirmation-dialog/confirmation-dialog.component";
 import { NotificationService } from "../../../shared/services/notification.service";
-import { ContractDefinition, ContractDefinitionInput } from 'src/app/shared/models/edc-connector-entities';
+import { ContractDefinition } from 'src/app/shared/models/edc-connector-entities';
 import { PageEvent } from '@angular/material/paginator';
 import { QuerySpec } from '@think-it-labs/edc-connector-client';
 import { Router } from '@angular/router';

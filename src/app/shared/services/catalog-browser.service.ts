@@ -12,10 +12,8 @@ import {
   ContractNegotiation,
   TransferProcess,
   TransferProcessInput,
-  Policy,
 } from "../models/edc-connector-entities";
-import { JSON_LD_DEFAULT_CONTEXT, PolicyBuilder, QuerySpec } from '@think-it-labs/edc-connector-client';
-import { ContractOffer } from '../models/contract-offer';
+import { JSON_LD_DEFAULT_CONTEXT, QuerySpec } from '@think-it-labs/edc-connector-client';
 
 
 
@@ -154,34 +152,7 @@ export class CatalogBrowserService {
 			}
       const assetId = dataset["@id"];
 
-      const hasPolicy = dataset["odrl:hasPolicy"];
       const contractOffers = dataset["odrl:hasPolicy"];
-
-      // if (Array.isArray(hasPolicy)) {
-      //   for (const offer of hasPolicy) {
-
-      //     const contractOffer = new PolicyBuilder()
-      //     .raw({
-      //       ...offer,
-      //       assigner: catalog.participantId,
-      //       target: assetId
-      //     })
-      //     .build();
-
-      //     contractOffers.push(contractOffer);
-      //   }
-      // } else {
-
-      //   const contractOffer = new PolicyBuilder()
-      //     .raw({
-      //       ...hasPolicy,
-      //       assigner: catalog.participantId,
-      //       target: assetId
-      //     })
-      //     .build();
-
-      //     contractOffers.push(contractOffer);
-      // }
 
       const endpointUrl = this.findEndpointUrl(dataset, catalog);
 

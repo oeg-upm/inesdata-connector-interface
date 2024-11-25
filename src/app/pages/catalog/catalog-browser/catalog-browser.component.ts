@@ -1,12 +1,9 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { CatalogBrowserService } from "../../../shared/services/catalog-browser.service";
 import { DataOffer } from 'src/app/shared/models/data-offer';
-import { ContractOffersViewerComponent } from '../contract-offers-viewer/contract-offers-viewer.component';
-import { Policy } from 'src/app/shared/models/edc-connector-entities';
 import { PageEvent } from '@angular/material/paginator';
 import { QuerySpec } from '@think-it-labs/edc-connector-client';
-import { ContractOffer } from 'src/app/shared/models/contract-offer';
 import { Router } from '@angular/router';
 
 

@@ -21,6 +21,8 @@ mat-list-item:hover .property-title,
 .property-value {
   font-size: 14px;
   color: #d7d7d7;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
 }
 
 .property-icon {
@@ -100,11 +102,6 @@ ul {
 
 .mdc-card:not(.vocabulary):not(.contract-offer) {
   padding: 20px;
-}
-
-.property-value {
-  overflow-wrap: anywhere;
-  white-space: pre-wrap;
 }
 
 .grey {
