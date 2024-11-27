@@ -13,7 +13,7 @@ $theming-material-components-typography: mat.define-typography-config(
   $font-family: "Open Sans",
 );
 
-$theme1: mat-dark-theme(
+$theme1: mat-light-theme(
   (
     color: (
       primary: mat-palette($mat-teal),
@@ -38,7 +38,7 @@ $grey-700: #707070;
 $grey-800: #808080;
 $grey-900: #909090;
 
-$theme2: mat-dark-theme(
+$theme2: mat-light-theme(
   (
     color: (
       primary: mat-palette($mat-light-blue),
@@ -50,7 +50,7 @@ $theme2: mat-dark-theme(
   )
 );
 
-$theme3: mat-dark-theme(
+$theme3: mat-light-theme(
   (
     color: (
       primary: mat-palette($mat-light-green),
@@ -122,7 +122,6 @@ $theme3: mat-dark-theme(
   .mat-expansion-panel-header[_ngcontent-ng-c808659378]:hover:not(
     [aria-disabled="true"]
   ) {
-  background: rgb(255 171 64 / 20%);
   transition: 0.2s background;
 }
 

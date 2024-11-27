@@ -1,5 +1,22 @@
 @import "./theme.scss";
 
+:root {
+  /* Mode 1 */
+  /* color */
+  --white: #ffffff;
+  --brand-500: #ef7011;
+  --grey-400: #eeeeee;
+  --grey-500: #e6e6e6;
+  --grey-600: #d9d8d8;
+  --grey-700: #b3b3b3;
+  --grey-800: #a3a3a3;
+  --secondary-500: #3c6b85;
+  --secondary-600: #203f57;
+  --secondary-700: #212529;
+  --secondary-red-500: #f44336;
+  --tertiary-500: #4dafba;
+}
+
 /* global styles */
 
 html,
@@ -131,9 +148,6 @@ mat-card:not(.dialog-card) {
   font-size: 14px;
   letter-spacing: 0.04em;
 }
-.items-center {
-  align-items: center;
-}
 
 .gap-4 {
   gap: 1rem;
@@ -154,9 +168,6 @@ mat-card:not(.dialog-card) {
 }
 .border-solid {
   border-style: solid;
-}
-.border-l-2 {
-  border-left-width: 2px;
 }
 .border-0 {
   border-width: 0px;
@@ -193,6 +204,13 @@ mat-card:not(.dialog-card) {
 .w-2 {
   width: 0.5rem;
 }
+.border-l-2 {
+  border-left-width: 2px;
+}
+.items-center {
+  align-items: center;
+}
+
 
 app-json-dialog {
   display: block;
