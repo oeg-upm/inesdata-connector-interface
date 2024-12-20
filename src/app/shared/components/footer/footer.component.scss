@@ -5,6 +5,7 @@
   border-width: 1px 0px 1px 0px;
   border-style: solid;
   border-color: var(--Grey-500, #E6E6E6);
+  background-color: white;
 
   &__company {
     border-top: 2px solid#E6E6E6;
@@ -12,12 +13,13 @@
     font-family: "Open Sans", sans-serif;
     color: var(--secondary-600);
     text-align: center;
-    font-size: 12px;
+    font-size: 16px;
     font-weight: 600;
     line-height: 16.34px;
     text-align: center;
     text-underline-position: from-font;
     text-decoration-skip-ink: none;
+    background-color: white;
 
     p {
       margin: 0;

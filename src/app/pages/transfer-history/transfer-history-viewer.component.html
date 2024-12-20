@@ -1,7 +1,7 @@
 <div id="wrapper">
 
   <div>
-    <div fxLayout="row" fxLayoutAlign="end" class="table-header-container">
+    <div fxLayout="row" fxLayoutAlign="space-between" class="table-header-container">
       <button mat-stroked-button (click)="refresh()" color="accent">
         <mat-icon>cached</mat-icon>
         Refresh
@@ -52,6 +52,12 @@
 
       <tr mat-header-row *matHeaderRowDef="columns" class="transfer-history-table-header"></tr>
       <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" [attr.colspan]="6">
+          There are no transfers.
+        </td>
+      </tr>
     </table>
   </div>
 </div>

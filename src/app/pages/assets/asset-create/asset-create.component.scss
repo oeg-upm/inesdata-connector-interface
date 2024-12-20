@@ -1,7 +1,3 @@
-mat-dialog-content {
-    width: 1000px;
-}
-
 .form-field:nth-child(odd) {
     margin-right: 10px;
     width: calc(50% - 10px);
@@ -11,9 +7,6 @@ mat-dialog-content {
   width: calc(50% - 1px);
 }
 
-mat-card-actions {
-    margin-left: 0;
-}
 
 .form-field-stretch{
   box-sizing: border-box;
@@ -21,8 +14,9 @@ mat-card-actions {
 }
 
 :host ::ng-deep .ck-editor__editable_inline {
+  border-color: var(--secondary-600) !important;
   min-height: 300px;
-  color: black;
+  color: var(--secondary-600);
   box-sizing: border-box;
   width: 100%;
   margin-bottom: 1.5em;
@@ -36,39 +30,37 @@ mat-card-actions {
   width: 100% !important;
 }
 
-.p-15{
-  padding:15px;
-}
-
-.full-width{
-  width: 95%;
-}
-
 .form-field-full{
   width:100% !important;
   margin-top: 15px;
 }
 
-.custom-expansion{
-  border: 1px solid #b2b2b2;
-  margin-bottom: 10px;
-}
-.mat-mdc-dialog-content {
-  max-height: 85vh;
-}
-:host ::ng-deep .mat-expansion-indicator {
-  display: none;
+.mat-mdc-tab-group {
+  background-color: white;
 }
 
-.toggle {
-  margin-bottom: 22px;
-  --mat-mdc-form-field-floating-label-scale: 0.75;
-  display: inline-flex;
-  flex-direction: column;
-  min-width: 0;
-  text-align: left;
+.mat-mdc-tab-group .mat-mdc-tab-group {
+  background-color: var(--grey-400);
 }
 
-:host ::ng-deep .toggle .mdc-form-field{
-  font-size: 16px;
+:host ::ng-deep .mat-mdc-tab-group .mat-mdc-tab-group mat-form-field .mat-mdc-text-field-wrapper{
+  background-color: white;
 }
+
+mat-panel-title,
+:host ::ng-deep th {
+  color: var(--secondary-600);
+}
+
+:host ::ng-deep .mat-column-action {
+  text-align: center;
+}
+
+:host ::ng-deep .ck-reset_all :not(.ck-reset_all-excluded *) {
+  color: var(--secondary-500);
+}
+
+:host ::ng-deep .ck.ck-editor__top .ck-sticky-panel .ck-sticky-panel__content {
+  border-color: var(--secondary-500);
+}
+

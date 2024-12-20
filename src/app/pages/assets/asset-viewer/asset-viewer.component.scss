@@ -1,35 +1,8 @@
-#wrapper {
+mat-card-actions {
+  padding-right: 15px !important;
+  padding-bottom: 20px !important;
 }
 
-.main-property-icon {
-  font-size: 12px;
-}
-
-.search-form-field {
-  min-width: 200px;
-  width: 30%;
-  margin-top: 18px;
-}
-
-.card-actions {
-  margin-left: 0;
-}
-
-.asset-property {
-  font-weight: bold !important;
-}
-
-mat-paginator {
-  display: inline-block;
-  background-color: transparent;
-}
-
-.container {
-  display: flex;
-  align-items: center;
-  gap: 10px; /* Adjust the gap between elements */
-}
-
-.card-actions button {
+.card-actions button:first-child {
   margin-right: 10px;
 }

@@ -6,21 +6,22 @@
 
 mat-card-title {
   margin-bottom: 10px;
-  color: white;
+  color: var(--secondary-600);
 }
 
 .property-title {
   font-weight: bold !important;
+  font-size:  14px;
 }
 
 mat-list-item:hover .property-title,
 .property-title {
-  color: white;
+  color: var(--secondary-600);
 }
 
 .property-value {
   font-size: 14px;
-  color: #d7d7d7;
+  color: var(--secondary-600);
   overflow-wrap: anywhere;
   white-space: pre-wrap;
 }
@@ -38,7 +39,7 @@ mat-list-item:hover .property-title,
 }
 
 :host ::ng-deep .grey .detail-item {
-  background: #474747;
+  background: var(--grey-400);
   padding: 1rem 1.25rem;
   border-radius: 16px;
 }
@@ -63,33 +64,35 @@ mat-list-item:hover .property-title,
 }
 
 .detail-title {
-  font-family: "Baloo 2", Helvetica, Arial, sans-serif;
   font-weight: bold;
-  color: #333;
+  color: var(--secondary-600);
   display: block;
 
   &-inline {
-    font-family: "Baloo 2", Helvetica, Arial, sans-serif;
     font-weight: bold;
-    color: #333;
+    color: var(--secondary-600);
     display: inline;
   }
 }
 
 .detail-value {
   font-size: 14px;
-  color: #555;
+  color: var(--secondary-600);
   display: block;
 
   &-inline {
     font-size: 14px;
-    color: #555;
+    color: var(--secondary-600);
     display: inline;
   }
 }
 
 ul {
   margin: 0px;
+}
+
+li::marker {
+  color: var(--secondary-500);
 }
 
 .property-value.description {
@@ -114,6 +117,7 @@ mat-expansion-panel-header {
 
 .contract-offer {
   margin-bottom: 20px;
+  background-color: white;
 }
 
 .value-not-available {
@@ -125,7 +129,7 @@ mat-expansion-panel-header {
 }
 
 :host ::ng-deep a {
-  color: white;
+  color: var(--grey-400);
 }
 
 .mat-mdc-card-actions {
@@ -140,10 +144,34 @@ mat-expansion-panel-header {
   margin-top: var(--mdc-linear-progress-track-height, -4px);
 }
 
-:host ::ng-deep .bg-white {
-  background-color: rgb(71 71 71);
+:host ::ng-deep policy-expression {
+  font-size: 14px;
+}
+
+.property-value:before {
+  content: unset;
+}
+
+.mat-expansion-panel{
+  background-color: var(--grey-400);
+  box-shadow: unset   !important;
+}
+
+:host ::ng-deep .mat-expansion-indicator:after{
+  color: var(--secondary-600);
+}
+
+.contract-offer mat-card-title {
+  letter-spacing: 1.25px;
+  font-size: 14px;
+  font-weight: bold;
 }
 
 :host ::ng-deep policy-expression {
-  font-size: 14px;
+  color: var(--secondary-500);
+}
+
+mat-card-actions {
+  padding-right: 10px !important;
+  padding-bottom: 15px !important;
 }

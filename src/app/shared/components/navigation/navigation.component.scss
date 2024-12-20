@@ -11,7 +11,7 @@
 
 .sidenav .mat-toolbar {
   background: inherit;
-  font-size: 22px;
+  font-size: 26px;
   font-weight: 400;
   line-height: 27.24px;
   color: var(--secondary-600);
@@ -29,23 +29,16 @@
   text-align: right;
   display: flex;
   justify-content: flex-end;
-  font-size: 16px;
+  font-size: 18px;
 }
 
 .logout span {
   display: flex;
   align-items: center;
-  /* Alinea verticalmente el ícono y el texto */
   cursor: pointer;
-  /* Cursor tipo pointer solo para el span contenedor */
   transition: color 0.3s;
-  /* Transición suave para el cambio de color */
 }
 
-.logout span:hover {
-  color: #ffab40;
-  /* Cambia el color de ambos al hacer hover */
-}
 
 .logout mat-icon {
   font-size: 18px;
@@ -53,7 +46,7 @@
   align-content: center;
 }
 
-.container {
+.navigation-container {
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -73,12 +66,16 @@ mat-sidenav-content {
 
 mat-toolbar {
   min-height: 64px;
-  font-size: 16px;
+  font-size: 18px;
 }
 
 :host ::ng-deep .mdc-list-item__primary-text,
 :host ::ng-deep mat-nav-list mat-icon{
   color: var(--secondary-600) !important;
+}
+
+mat-sidenav :host ::ng-deep .mdc-list-item__primary-text {
+  font-size: 18px;
 }
 
 :host ::ng-deep .mdc-list-item:focus::before {
@@ -87,4 +84,8 @@ mat-toolbar {
 
 :host ::ng-deep .mdc-list-item:focus {
   background-color: var(--grey-400);
+}
+
+.mat-drawer-container {
+  background-color: white;
 }

@@ -1,39 +1,7 @@
-#wrapper {
-}
-
-.main-property-icon {
-  font-size: 12px;
-}
-
-:host ::ng-deep div.mat-expansion-panel-body {
-  padding-left: 0 !important;
-}
-
-.search-form-field {
-  min-width: 200px;
-  width: 30%;
-  margin-top: 18px;
-}
-
-.card-actions {
-  margin-left: 0;
-}
-
-.bold-text {
-  font-weight: bold !important;
-}
-
-mat-paginator {
-  display: inline-block;
-  background-color: transparent;
-}
-
-.container {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
 .contract-assets .mdc-list-item__secondary-text{
   white-space: break-spaces;
+}
+
+mat-card-actions {
+  padding-right: 15px !important;
 }

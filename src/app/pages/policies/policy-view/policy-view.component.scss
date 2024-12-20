@@ -2,37 +2,17 @@
   padding-left: 0 !important;
 }
 
-.search-form-field {
-  min-width: 200px;
-  width: 30%;
-  margin-top: 18px;
-}
-
 mat-card-content {
   margin: 1em 0em;
-}
-
-.container {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-button {
-  --mdc-protected-button-container-color: #3b3939 !important;
 }
 
 .mat-mdc-card-avatar {
   height: 24px;
 }
 
-mat-card {
-  font-family: "Open Sans", sans-serif;
-  place-self: normal;
-}
-
 :host ::ng-deep policy-expression {
   font-size: 14px;
+  color: var(--secondary-500);
 }
 
 .card-actions button {
@@ -53,4 +33,13 @@ mat-card {
 
 :host ::ng-deep .mat-mdc-card-header-text{
   width: 100%;
+}
+
+mat-card-actions {
+  padding-right: 5px !important;
+  padding-bottom: 15px !important;
+}
+
+.mat-mdc-card-content {
+  padding-left: 32px;
 }
