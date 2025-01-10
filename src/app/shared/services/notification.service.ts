@@ -27,7 +27,7 @@ export class NotificationService {
       duration: onAction ? 5000 : 3000, // no auto-cancel if an action was specified
       verticalPosition: "top",
       politeness: "polite",
-      horizontalPosition: "center",
+      horizontalPosition: "end",
       panelClass: ["snackbar-warning-style"] //see styles.scss
     }
     let ref = this.snackBar.open(message, action, config);
@@ -55,7 +55,7 @@ export class NotificationService {
       duration: onAction ? 5000 : 3000, // no auto-cancel if an action was specified
       verticalPosition: "top",
       politeness: "polite",
-      horizontalPosition: "center",
+      horizontalPosition: "end",
       panelClass: ["snackbar-info-style"] //see styles.scss
     }
     let ref = this.snackBar.open(message, action, config);
@@ -72,11 +72,11 @@ export class NotificationService {
       duration: 5000, // no auto-cancel if an action was specified
       verticalPosition: "top",
       politeness: "assertive",
-      horizontalPosition: "center",
+      horizontalPosition: "end",
       panelClass: ["snackbar-error-style"] //see styles.scss
     }
 
-    let ref = this.snackBar.open(message, undefined, config)
+    let ref = this.snackBar.open(message, undefined, config);
     return ref.afterDismissed();
   }
 

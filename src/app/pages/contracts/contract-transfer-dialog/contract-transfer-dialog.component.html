@@ -15,7 +15,7 @@
 
   <mat-form-field class="form-field" color="accent" id="form-field-destination">
     <mat-label>Destination</mat-label>
-    <mat-select [(ngModel)]="storageTypeId">
+    <mat-select [(ngModel)]="storageTypeId" required>
       <mat-option *ngFor="let trasnferType of transferTypes" [value]="trasnferType.id">
         {{trasnferType.name}}
       </mat-option>

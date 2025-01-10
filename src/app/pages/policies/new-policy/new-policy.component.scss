@@ -1,3 +1,4 @@
-:host ::ng-deep policy-form-expression-constraint {
-  color: var(--secondary-600);
+:host ::ng-deep policy-form-expression-constraint,
+:host ::ng-deep policy-form-expression {
+  color: var(--secondary-500);
 }

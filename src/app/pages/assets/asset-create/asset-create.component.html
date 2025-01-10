@@ -1,14 +1,14 @@
-<mat-card class="creation-card">
+<div class="creation-card">
   <mat-card-header>
     <mat-card-title>Create an asset</mat-card-title>
   </mat-card-header>
 
-  <mat-tab-group>
+  <mat-tab-group animationDuration="0ms" mat-stretch-tabs="false" mat-align-tabs="start" class="main-tab-group">
     <mat-tab label="Asset information">
       <div class="asset-creation-tab">
         <div>
           <mat-form-field class="form-field" color="accent">
-            <mat-label>Id</mat-label>
+            <mat-label>ID</mat-label>
             <input required [(ngModel)]="id" matInput>
           </mat-form-field>
           <mat-form-field class="form-field" color="accent">
@@ -35,7 +35,7 @@
           </mat-form-field>
         </div>
         <div>
-          <ckeditor [(ngModel)]="description" [config]="config" [editor]="editor"></ckeditor>
+          <ckeditor [(ngModel)]="description" #descriptionModel="ngModel" [config]="config" [editor]="editor" [ngClass]="{'ckeditor-error': descriptionModel.invalid && descriptionModel.touched}" required></ckeditor>
         </div>
         <div>
           <mat-form-field class="form-field" color="accent">
@@ -65,9 +65,9 @@
     </mat-tab>
 
     <mat-tab label="Detailed information" *ngIf="vocabularies?.length > 0">
-      <mat-tab-group>
+      <mat-tab-group animationDuration="0ms" mat-stretch-tabs="false" mat-align-tabs="start">
         <mat-tab label="Default information" *ngIf="defaultVocabularies?.length>0 && defaultForms?.length>0">
-          <div class="asset-creation-tab">
+          <div class="asset-creation-vocabularies">
             <div *ngFor="let defaultForm of defaultForms">
               <mat-expansion-panel class="custom-expansion">
                 <mat-expansion-panel-header>
@@ -82,7 +82,7 @@
           </div>
         </mat-tab>
         <mat-tab [label]="getAssetTypeText()+' information'" *ngIf="selectedVocabularies?.length>0">
-          <div>
+          <div class="asset-creation-tab">
             <mat-form-field class="form-field-full" color="accent">
               <mat-label>Vocabularies</mat-label>
               <mat-select [(ngModel)]="selectedAssetTypeVocabularies" multiple
@@ -93,7 +93,7 @@
               </mat-select>
             </mat-form-field>
           </div>
-          <div class="asset-creation-tab">
+          <div class="asset-creation-vocabularies">
             <div *ngFor="let selectedForm of selectedForms">
               <mat-expansion-panel class="custom-expansion">
                 <mat-expansion-panel-header>
@@ -118,7 +118,7 @@
         <div>
           <mat-form-field class="form-field" color="accent">
             <mat-label>Destination</mat-label>
-            <mat-select [(ngModel)]="storageTypeId">
+            <mat-select [(ngModel)]="storageTypeId" required>
               <mat-option *ngFor="let storageType of storageTypes " [value]="storageType.id">
                 {{storageType.name}}
               </mat-option>
@@ -237,8 +237,8 @@
     </mat-tab>
   </mat-tab-group>
 
-  <div fxLayout="row" fxLayoutGap="15px" fxLayoutAlign="end">
-    <button (click)="navigateToAsset()" color="accent" mat-stroked-button>
+  <div fxLayout="row" fxLayoutGap="15px" fxLayoutAlign="end" class="form-actions">
+    <button (click)="navigateToAsset()" color="warn" mat-stroked-button>
       <mat-icon>cancel</mat-icon> Cancel
     </button>
 
@@ -246,4 +246,4 @@
       <mat-icon>add_circle_outline</mat-icon> Create
     </button>
   </div>
-</mat-card>
+</div>

@@ -84,12 +84,12 @@
     }
 
     polygon {
-      fill: var(--secondary-600);
+      fill: var(--secondary-500);
     }
 
     polygon:not(:first-child),
     path {
-      fill: var(--secondary-500);
+      fill: var(--secondary-600);
     }
   }
 }

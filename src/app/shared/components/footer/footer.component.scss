@@ -2,13 +2,10 @@
 
 .footer {
   padding: 10px 20px;
-  border-width: 1px 0px 1px 0px;
-  border-style: solid;
-  border-color: var(--Grey-500, #E6E6E6);
+  border-top: 3px solid #E6E6E6;
   background-color: white;
 
   &__company {
-    border-top: 2px solid#E6E6E6;
     padding: 10px 0;
     font-family: "Open Sans", sans-serif;
     color: var(--secondary-600);
@@ -27,16 +24,11 @@
   }
 
   &__logos {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
+    text-align: center;
 
     img {
-      max-width: unset;
-      height: auto;
-      margin: auto;
+      height: 60px;
+      margin: 10px 30px;
     }
   }
 
@@ -47,17 +39,11 @@
   }
 }
 
-// RESPONSIVE
-// Tablets y portátiles
 @media (max-width: 1600px) {
   .footer {
     &__logos {
       grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
       gap: 15px;
-    }
-
-    img {
-      max-width: 150px;
     }
   }
 }
@@ -82,12 +68,4 @@
       gap: 10px;
     }
   }
-}
-
-.footer-container {
-  z-index: 1;
-  position: sticky;
-  left: 0%;
-  bottom: 0%;
-  width: 100%;
 }
