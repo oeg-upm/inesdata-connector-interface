@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { HttpDataAddress, DataAddress } from '@think-it-labs/edc-connector-client';
 import { JsonDoc } from "../../../shared/models/json-doc";
 import { StorageType } from "../../../shared/models/storage-type";
@@ -19,6 +19,7 @@ import { AssetService } from 'src/app/shared/services/asset.service';
 import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { NgModel } from '@angular/forms';
 
 
 @Component({
@@ -91,8 +92,9 @@ export class AssetCreateComponent implements OnInit {
 
   assetType: any;
   assetTypes = Object.entries(ASSET_TYPES);
-  defaultForms: JsonFormData[]
-  selectedForms: JsonFormData[]
+  defaultForms: JsonFormData[];
+  selectedForms: JsonFormData[];
+  @ViewChildren(NgModel) formControls: QueryList<NgModel>;
 
   inesDataStoreFiles: File[]
 
@@ -156,6 +158,9 @@ export class AssetCreateComponent implements OnInit {
 
   async onSave() {
     this.loadingService.showLoading();
+    this.formControls.toArray().forEach(control => {
+      control.control.markAsTouched();
+    });
     // Check whether the asset is valid
     if (!this.checkVocabularyData() || !this.checkRequiredFields()) {
       this.notificationService.showError("Review the form fields");

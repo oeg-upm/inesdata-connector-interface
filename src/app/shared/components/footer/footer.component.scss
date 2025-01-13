@@ -1,35 +1,34 @@
 /* Custom FOOTER component styles */
 
 .footer {
-  background-color: #303030;
   padding: 10px 20px;
-  border-top: solid 1px rgba(255, 255, 255, 0.12);
+  border-top: 3px solid #E6E6E6;
+  background-color: white;
 
   &__company {
-    border-top: solid 1px rgba(255, 255, 255, 0.12);
     padding: 10px 0;
     font-family: "Open Sans", sans-serif;
-    font-size: 12px;
-    color: white;
-    font-weight: 500;
+    color: var(--secondary-600);
     text-align: center;
-    background-color: #303030;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 16.34px;
+    text-align: center;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+    background-color: white;
+
     p {
       margin: 0;
     }
   }
 
   &__logos {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
+    text-align: center;
 
     img {
-      max-width: unset;
-      height: auto;
-      margin: auto;
+      height: 60px;
+      margin: 10px 30px;
     }
   }
 
@@ -40,16 +39,11 @@
   }
 }
 
-// RESPONSIVE
-// Tablets y portátiles
 @media (max-width: 1600px) {
   .footer {
     &__logos {
       grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
       gap: 15px;
-    }
-    img {
-      max-width: 150px;
     }
   }
 }
@@ -57,6 +51,7 @@
 @media (max-width: 1400px) {
   .footer {
     padding: 15px;
+
     &__logos {
       grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
       gap: 10px;
@@ -67,17 +62,10 @@
 @media (max-width: 1200px) {
   .footer {
     padding: 10px;
+
     &__logos {
       grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
       gap: 10px;
     }
   }
-}
-
-.footer-container {
-  z-index: 1;
-  position: sticky;
-  left: 0%;
-  bottom: 0%;
-  width: 100%;
 }

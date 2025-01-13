@@ -13,7 +13,6 @@ export const environment = {
     participantId: "",
     storageAccount: '',
     storageExplorerLinkTemplate: '',
-    theme: '',
     service: {
       asset: {
         baseUrl: '/v3/assets',

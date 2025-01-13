@@ -1,10 +1,11 @@
-import { Component,EventEmitter, Output} from '@angular/core';
+import { Component,EventEmitter, Output, QueryList, ViewChildren} from '@angular/core';
 import { Vocabulary } from "../../../shared/models/vocabulary";
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { CATEGORIES } from 'src/app/shared/utils/app.constants';
 import { VocabularyService } from 'src/app/shared/services/vocabulary.service';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
+import { NgModel } from '@angular/forms';
 
 @Component({
   selector: 'app-vocabulary-create',
@@ -20,14 +21,19 @@ export class VocabularyCreateComponent {
   category: string = '';
   jsonSchema: string = '';
   categories = Object.entries(CATEGORIES);
-  @Output() vocabularyChange: EventEmitter<any> = new EventEmitter<any>()
+  @Output() vocabularyChange: EventEmitter<any> = new EventEmitter<any>();
 
+  @ViewChildren(NgModel) formControls: QueryList<NgModel>;
 
   constructor(private vocabularyService: VocabularyService,
     private notificationService: NotificationService, private router: Router) {
   }
 
   async onSave() {
+    this.formControls.toArray().forEach(control => {
+      control.control.markAsTouched();
+    });
+
     // Check whether the asset is valid
     if (!this.checkRequiredFields()) {
       this.notificationService.showError("Review the form fields");

@@ -1,18 +1,4 @@
-mat-dialog-content {
-  min-width: 1500px;
+:host ::ng-deep policy-form-expression-constraint,
+:host ::ng-deep policy-form-expression {
+  color: var(--secondary-500);
 }
-
-.form-field-half{
-  box-sizing: border-box;
-  width: calc(50% - 2px);
-  margin: 1px;
-}
-.form-field-stretch{
-  box-sizing: border-box;
-  width: 100%;
-}
-.mat-mdc-dialog-content {
-  max-height: 85vh;
-  min-height: 65vh;
-}
-

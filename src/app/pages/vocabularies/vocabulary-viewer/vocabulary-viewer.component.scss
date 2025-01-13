@@ -1,31 +1,13 @@
-.main-property-icon {
-  font-size: 12px;
+mat-card-actions {
+  padding-right: 15px !important;
+  padding-bottom: 20px !important;
 }
 
-.search-form-field {
-  min-width: 200px;
-  width: 30%;
-  margin-top: 18px;
+button:not(:first-child) {
+  margin-left: 10px;
 }
 
-.card-actions {
-  margin-left: 0;
-}
-
-.main-property {
-  font-weight: bold !important;
-}
-
-mat-paginator {
-  display: inline-block;
-  background-color: transparent;
-}
-
-.container {
-  display: flex;
-  align-items: center;
-  gap: 10px; /* Adjust the gap between elements */
-}
-.card-actions button {
-  margin-right: 10px;
+.section-header button{
+  margin-bottom: 10px;
+  margin-top: 10px;
 }

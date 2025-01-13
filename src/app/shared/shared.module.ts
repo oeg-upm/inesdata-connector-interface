@@ -33,6 +33,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FooterComponent } from './components/footer/footer.component';
 import { SpinnerComponent } from './components/spinner/spinner.component';
+import { SnackBarAnimationDirective } from './directives/snackbar-animation.directive';
 
 
 @NgModule({
@@ -63,8 +64,7 @@ import { SpinnerComponent } from './components/spinner/spinner.component';
     MatChipsModule,
     MatTooltipModule,
     MatDatepickerModule,
-    MatMenuModule,
-    MatTooltipModule
+    MatMenuModule
   ],
   declarations: [
     NavigationComponent,
@@ -72,7 +72,8 @@ import { SpinnerComponent } from './components/spinner/spinner.component';
     UploaderFileComponent,
     DndDirective,
     FooterComponent,
-    SpinnerComponent
+    SpinnerComponent,
+    SnackBarAnimationDirective
   ],
   exports: [
     NavigationComponent,
@@ -107,7 +108,8 @@ import { SpinnerComponent } from './components/spinner/spinner.component';
     MatDatepickerModule,
     MatMenuModule,
     MatTooltipModule,
-    FooterComponent
+    FooterComponent,
+    SnackBarAnimationDirective
   ]
 })
 export class SharedModule {}

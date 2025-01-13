@@ -13,17 +13,41 @@ $theming-material-components-typography: mat.define-typography-config(
   $font-family: "Open Sans",
 );
 
-$theme1: mat-dark-theme(
-  (
-    color: (
-      primary: mat-palette($mat-teal),
-      accent: mat-palette($mat-orange, A200, A100, A400),
-      warn: mat-palette($mat-red),
-    ),
-    typography: $theming-material-components-typography,
-    density: 0,
-  )
-);
+$custom-primary: mat.define-palette((
+  50: #eaf3f7,
+  100: #c8dbe4,
+  200: #a4c2d0,
+  300: #7fa8bb,
+  400: #5f92a9,
+  500: #3c6b85,
+  600: #203f57,
+  700: #212529,
+  800: #18202c,
+  900: #0f1519,
+  contrast: (
+    50: black,
+    100: black,
+    200: black,
+    300: black,
+    400: black,
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white
+  ),
+));
+
+
+$custom-theme: mat-light-theme((
+  color: (
+    primary: $custom-primary,
+    accent: $custom-primary,
+    warn: mat-palette($mat-red),
+  ),
+  typography: $theming-material-components-typography,
+  density: 0,
+));
 
 $primary: #ffab40;
 
@@ -38,94 +62,5 @@ $grey-700: #707070;
 $grey-800: #808080;
 $grey-900: #909090;
 
-$theme2: mat-dark-theme(
-  (
-    color: (
-      primary: mat-palette($mat-light-blue),
-      accent: mat-palette($mat-orange, A200, A100, A400),
-      warn: mat-palette($mat-red),
-    ),
-    typography: $theming-material-components-typography,
-    density: 0,
-  )
-);
+@include mat.all-component-themes($custom-theme);
 
-$theme3: mat-dark-theme(
-  (
-    color: (
-      primary: mat-palette($mat-light-green),
-      accent: mat-palette($mat-orange, A200, A100, A400),
-      warn: mat-palette($mat-red),
-    ),
-    typography: $theming-material-components-typography,
-    density: 0,
-  )
-);
-
-@include mat.all-component-themes($theme1);
-
-.theme-1 {
-  // use default
-}
-
-.theme-2 {
-  @include mat.all-component-colors($theme2);
-  .mat-expansion-panel {
-    box-shadow: unset !important;
-    .mat-expansion-panel-header {
-      .mat-content-hide-toggle {
-        .mat-expansion-panel-header-title {
-          color: #ffab40;
-        }
-      }
-      &::after {
-        border-color: #ffab40;
-        border-style: solid;
-        border-width: 0 2px 2px 0;
-        content: "";
-        display: inline-block;
-        padding: 6px;
-        transform: rotate(45deg);
-        vertical-align: middle;
-        height: 0px;
-        margin-top: -5px;
-        margin-right: 0px;
-      }
-    }
-    &.mat-expanded {
-      .mat-expansion-panel-header {
-        &::after {
-          transform: rotate(-135deg);
-          margin-top: 0px;
-        }
-      }
-    }
-  }
-  button.mdc-button {
-    margin: 20px 0;
-    & + button.mdc-button {
-      margin-left: 10px;
-    }
-  }
-}
-
-.theme-2
-  .mat-expansion-panel
-  .mat-expansion-panel-header.cdk-keyboard-focused:not([aria-disabled="true"]),
-.theme-2
-  .mat-expansion-panel
-  .mat-expansion-panel-header.cdk-program-focused:not([aria-disabled="true"]),
-.theme-2
-  .mat-expansion-panel:not(.mat-expanded)
-  .mat-expansion-panel-header:hover:not([aria-disabled="true"]),
-.mat-expansion-panel[_ngcontent-ng-c808659378]:not(.mat-expanded)
-  .mat-expansion-panel-header[_ngcontent-ng-c808659378]:hover:not(
-    [aria-disabled="true"]
-  ) {
-  background: rgb(255 171 64 / 20%);
-  transition: 0.2s background;
-}
-
-.theme-3 {
-  @include mat.all-component-colors($theme3);
-}

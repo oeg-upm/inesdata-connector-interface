@@ -1,17 +1,21 @@
 
-  <mat-tab-group>
+  <button class="go-back" (click)="backToList()" color="accent" mat-stroked-button>
+    <mat-icon>arrow_back</mat-icon> Go back
+  </button>
+
+  <mat-tab-group animationDuration="0ms" mat-stretch-tabs="false" mat-align-tabs="start" class="main-tab-group">
     <mat-tab label="Asset information">
-      <mat-tab-group>
+      <mat-tab-group animationDuration="0ms" mat-stretch-tabs="false" mat-align-tabs="start">
         <mat-tab label="General information">
           <mat-card class="dialog-card">
             <div fxLayout="row" fxLayoutGap="15px">
               <mat-list-item class="property" fxFlex="50">
-                <div class="property-title" matListItemTitle>Id</div>
-                <div class="property-value" matListItemLine>{{data.properties.id}}</div>
+                <div class="property-title" matListItemTitle>ID</div>
+                <div class="property-value" matListItemLine><p>{{data.properties.id}}</p></div>
               </mat-list-item>
               <mat-list-item class="property" fxFlex="50">
                 <div class="property-title" matListItemTitle>Name</div>
-                <div class="property-value" matListItemLine>{{data.properties.name}}</div>
+                <div class="property-value" matListItemLine><p>{{data.properties.name}}</p></div>
               </mat-list-item>
             </div>
             <div fxLayout="row" fxLayoutGap="15px">
@@ -19,33 +23,33 @@
                 <div class="property-title" matListItemTitle>Content-Type</div>
                 <div class="property-value"
                   [ngClass]="{'value-not-available': data.properties.contenttype === undefined || data.properties.contenttype === ''}"
-                  matListItemLine>{{data.properties.contenttype ? data.properties.contenttype : 'Not available'}}</div>
+                  matListItemLine><p>{{data.properties.contenttype ? data.properties.contenttype : 'Not available'}}</p></div>
               </mat-list-item>
               <mat-list-item class="property" fxFlex="50">
                 <div class="property-title" matListItemTitle>Version</div>
-                <div class="property-value" matListItemLine>{{data.properties.version}}</div>
+                <div class="property-value" matListItemLine><p>{{data.properties.version}}</p></div>
               </mat-list-item>
             </div>
             <div fxLayout="row">
               <mat-list-item class="property">
                 <div class="property-title" matListItemTitle>Short description</div>
-                <div class="property-value description" matListItemLine>{{data.properties.shortDescription}}</div>
+                <div class="property-value description" matListItemLine><p>{{data.properties.shortDescription}}</p></div>
               </mat-list-item>
             </div>
             <div fxLayout="row">
-              <mat-list-item class="property">
+              <mat-list-item class="property description">
                 <div class="property-title" matListItemTitle>Description</div>
-                <div class="property-value description" [innerHTML]="data.properties.description" matListItemLine></div>
+                <div class="property-value" [innerHTML]="data.properties.description" matListItemLine></div>
               </mat-list-item>
             </div>
             <div fxLayout="row" fxLayoutGap="15px">
               <mat-list-item class="property" fxFlex="50">
                 <div class="property-title" matListItemTitle>Asset type</div>
-                <div class="property-value" matListItemLine>{{data.properties.assetType}}</div>
+                <div class="property-value" matListItemLine><p>{{data.properties.assetType}}</p></div>
               </mat-list-item>
               <mat-list-item class="property" fxFlex="50">
                 <div class="property-title" matListItemTitle>Keywords</div>
-                <div class="property-value" matListItemLine>{{data.properties.keywords}}</div>
+                <div class="property-value" matListItemLine><p>{{data.properties.keywords}}</p></div>
               </mat-list-item>
             </div>
             <div fxLayout="row" fxLayoutGap="15px">
@@ -53,13 +57,13 @@
                 <div class="property-title" matListItemTitle>Byte size</div>
                 <div class="property-value"
                   [ngClass]="{'value-not-available': data.properties.byteSize === undefined || data.properties.byteSize === ''}"
-                  matListItemLine>{{data.properties.byteSize ? data.properties.byteSize : 'Not available'}}</div>
+                  matListItemLine><p>{{data.properties.byteSize ? data.properties.byteSize : 'Not available'}}</p></div>
               </mat-list-item>
               <mat-list-item class="property" fxFlex="50">
                 <div class="property-title" matListItemTitle>File format</div>
                 <div class="property-value"
                   [ngClass]="{'value-not-available': data.properties.format === undefined || data.properties.format === ''}"
-                  matListItemLine>{{data.properties.format ? data.properties.format : 'Not available'}}</div>
+                  matListItemLine><p>{{data.properties.format ? data.properties.format : 'Not available'}}</p></div>
               </mat-list-item>
             </div>
           </mat-card>
@@ -69,7 +73,7 @@
             <div *ngFor="let item of assetDataEntries[key]" class="grey">
               <ng-container *ngIf="item.isArray; else objectOrPlainValue">
                 <ng-container *ngIf="containsOnlyObjects(item.value); else simpleList">
-                  <mat-expansion-panel hideToggle>
+                  <mat-expansion-panel>
                     <mat-expansion-panel-header>
                       <mat-panel-title class="property-title">{{item.key}}</mat-panel-title>
                     </mat-expansion-panel-header>
@@ -100,7 +104,7 @@
               </ng-container>
               <ng-template #objectOrPlainValue>
                 <ng-container *ngIf="item.isObject; else plainValue">
-                  <mat-expansion-panel hideToggle>
+                  <mat-expansion-panel>
                     <mat-expansion-panel-header>
                       <mat-panel-title class="property-title">{{item.key}}</mat-panel-title>
                     </mat-expansion-panel-header>
@@ -128,14 +132,14 @@
               <div fxLayout="row">
                 <mat-list-item class="property">
                   <div class="property-title" matListItemTitle>Storage type</div>
-                  <div class="property-value" matListItemLine>{{ dataAddressType }}</div>
+                  <div class="property-value" matListItemLine><p>{{ dataAddressType }}</p></div>
                 </mat-list-item>
               </div>
               <ng-container *ngIf="data.privateProperties; else dataAddressProperties">
                 <div fxLayout="row">
                   <mat-list-item class="property">
                     <div class="property-title" matListItemTitle>File</div>
-                    <div class="property-value" matListItemLine>{{ data.dataAddress.keyName }}</div>
+                    <div class="property-value" matListItemLine><p>{{ data.dataAddress.keyName }}</p></div>
                   </mat-list-item>
                 </div>
               </ng-container>
@@ -145,7 +149,7 @@
                     <div fxFlex="1 1 calc(50% - 15px)" *ngIf="property.key != 'type'">
                       <mat-list-item class="property">
                         <div class="property-title" matListItemTitle>{{ property.key }}</div>
-                        <div class="property-value" matListItemLine>{{ property.value }}</div>
+                        <div class="property-value" matListItemLine><p>{{ property.value }}</p></div>
                       </mat-list-item>
                     </div>
                   </ng-container>
@@ -167,7 +171,7 @@
             </app-policy-renderer>
           </mat-card-content>
           <mat-card-actions align="end">
-            <button (click)="onPolicyDetailClick(offer.policyCard)" color="info" mat-stroked-button>
+            <button (click)="onPolicyDetailClick(offer.policyCard)" color="accent" mat-stroked-button>
               <mat-icon>info</mat-icon> View JSON-LD
             </button>
             <button (click)="onNegotiateClicked(offer.policy)" color="accent" mat-stroked-button
@@ -184,6 +188,4 @@
     </ng-container>
   </mat-tab-group>
 
-  <button  (click)="backToList()" color="accent" mat-stroked-button>
-    <mat-icon>cancel</mat-icon> Go back
-</button>
+

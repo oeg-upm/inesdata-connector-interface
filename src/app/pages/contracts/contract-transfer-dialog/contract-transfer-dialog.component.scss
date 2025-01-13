@@ -11,6 +11,14 @@ mat-dialog-content {
   width: 50%
 }
 
-mat-card-actions {
-  margin-left: 0;
+:host ::ng-deep .mdc-dialog .mdc-dialog__content {
+  margin-bottom: 0;
+}
+
+:host ::ng-deep .mdc-dialog__title::before{
+  height: 0;
+}
+
+.mat-mdc-dialog-actions {
+  justify-content: end;
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { AssetService } from "../../../shared/services/asset.service";
 import { PolicyService } from "../../../shared/services/policy.service";
 import { Asset, PolicyDefinition, ContractDefinitionInput } from "../../../shared/models/edc-connector-entities";
@@ -6,6 +6,7 @@ import { NotificationService } from 'src/app/shared/services/notification.servic
 import { ContractDefinitionService } from 'src/app/shared/services/contractDefinition.service';
 import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
+import { NgModel } from '@angular/forms';
 
 
 @Component({
@@ -29,6 +30,7 @@ export class ContractDefinitionNewComponent implements OnInit {
     contractPolicyId: undefined!
   };
   private fetch$ = new BehaviorSubject(null);
+  @ViewChildren(NgModel) formControls: QueryList<NgModel>;
 
   constructor(private policyService: PolicyService,
     private assetService: AssetService,
@@ -54,6 +56,10 @@ export class ContractDefinitionNewComponent implements OnInit {
   }
 
   onSave() {
+    this.formControls.toArray().forEach(control => {
+      control.control.markAsTouched();
+    });
+
     if (!this.checkRequiredFields()) {
       this.notificationService.showError("Review required fields");
       return;
