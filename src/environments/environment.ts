@@ -17,7 +17,6 @@ export const environment = {
     participantId: "connector-c1",
     storageAccount: "company2assets",
     storageExplorerLinkTemplate: "storageexplorer://v=1",
-    theme: "",
     service: {
       asset: {
         baseUrl: '/v3/assets',
