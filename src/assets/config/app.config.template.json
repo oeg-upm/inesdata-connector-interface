@@ -5,7 +5,6 @@
   "participantId": "$PARTICIPANT_ID",
   "storageAccount": "$STORAGE_ACCOUNT",
   "storageExplorerLinkTemplate": "$STORAGE_LINK_TEMPLATE",
-  "theme": "$APP_THEME",
   "service": {
     "asset": {
       "baseUrl": "/v3/assets",

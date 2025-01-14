@@ -1,36 +1,3 @@
-#wrapper {
-}
-
-.main-property-icon {
-  font-size: 12px;
-}
-
-:host ::ng-deep div.mat-expansion-panel-body {
-  padding-left: 0 !important;
-}
-
-.search-form-field {
-  min-width: 200px;
-  width: 30%;
-  margin-top: 18px;
-}
-
-.card-actions {
-  margin-left: 0;
-  display: flex;
-  justify-content: center;
-}
-
-.asset-property-name {
-  font-weight: bold !important;
-}
-
-.container {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-mat-expansion-panel {
-  margin-bottom: 10px !important;
+mat-card-actions {
+  padding-bottom: 5px !important;
 }

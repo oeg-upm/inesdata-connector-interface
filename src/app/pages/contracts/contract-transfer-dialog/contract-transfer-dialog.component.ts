@@ -1,4 +1,5 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, QueryList, ViewChildren } from '@angular/core';
+import { NgModel } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { DataAddress, HttpDataAddress } from '@think-it-labs/edc-connector-client';
 import { AmazonS3DataAddress } from 'src/app/shared/models/amazon-s3-data-address';
@@ -32,6 +33,8 @@ export class ContractTransferDialog {
     type: 'HttpData'
   };
 
+  @ViewChildren(NgModel) formControls: QueryList<NgModel>;
+
   constructor(@Inject('TRANSFER_TYPES') public transferTypes: StorageType[],
     private dialogRef: MatDialogRef<ContractTransferDialog>,
     private notificationService: NotificationService) {
@@ -40,6 +43,10 @@ export class ContractTransferDialog {
   }
 
   onTransfer() {
+    this.formControls.toArray().forEach(control => {
+      control.control.markAsTouched();
+    });
+
     let dataAddress: DataAddress;
 
     if (this.storageTypeId === DATA_ADDRESS_TYPES.amazonS3) {

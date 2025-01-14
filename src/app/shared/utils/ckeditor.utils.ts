@@ -9,5 +9,5 @@ export const CKEDITOR_CONFIG = {
     'blockQuote','|',
     'undo','redo',
   ],
-  placeholder: 'Description of the asset*'
+  placeholder: 'Description of the asset *'
 }

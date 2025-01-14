@@ -16,7 +16,6 @@ export class UploaderFileComponent {
    * on file drop handler
    */
   onFileDropped(event:any) {
-    console.log()
     this.prepareFilesList(this.isMultiple?event:[event[0]]);
   }
 

@@ -1,12 +1,4 @@
-#wrapper {
-}
-
-.container {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.contract-property-header {
-  font-weight: bold !important;
+mat-card-actions {
+  padding-right: 15px !important;
+  padding-bottom: 15px !important;
 }

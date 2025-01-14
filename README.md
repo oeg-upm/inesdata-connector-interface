@@ -105,3 +105,7 @@ See [how to contribute](https://github.com/eclipse-dataspaceconnector/DataSpaceC
 # Acknowledgements
 
 INESData (https://inesdata-project.eu/) is a Spanish Incubator of Data Spaces and AI Services using federated infrastructures in the Cloud. It focuses on simplifying  the tech adoption and accelerating the industry deployment of the national Data Space ecosystem by contributing with four Data Spaces (language, mobility, legal and public tender, and media) to demonstrate the benefits of Data Spaces and applicability of the related technology. It is funded by the Spanish Ministry of Digital Transformation and NextGenerationEU, in the framework of the UNICO I+D CLOUD Program - Real Decreto 959/2022. 
+
+## Disclaimer
+
+Este trabajo ha recibido financiación del proyecto INESData (Infraestructura para la INvestigación de ESpacios de DAtos distribuidos en UPM), un proyecto financiado en el contexto de la convocatoria UNICO I+D CLOUD del Ministerio para la Transformación Digital y de la Función Pública en el marco del PRTR financiado por Unión Europea (NextGenerationEU)

@@ -1,4 +1,4 @@
-<div class="flex flex-row justify-between space-x-2">
+<div class="flex flex-row dialog-header justify-between space-x-2">
   <div class="mat-card-header" mat-dialog-title removeClass="mat-dialog-title">
     <mat-icon class="mat-card-avatar-icon">
       {{ data.icon }}
@@ -20,6 +20,15 @@
     (click)="onAction(data.toolbarButton)">
     <mat-icon class="mat-icon-[22px]">{{ data.toolbarButton.icon }}</mat-icon>
   </button>
+  <div class="flex flex-row">
+    <button
+      mat-icon-button
+      color="accent"
+      mat-dialog-close
+      [disabled]="busy">
+      <mat-icon>cancel</mat-icon>
+    </button>
+  </div>
 </div>
 
 <div mat-dialog-content>
@@ -46,13 +55,5 @@
       >Cleaned JSON
     </mat-checkbox>
   </div>
-  <div class="flex flex-row">
-    <button
-      mat-button
-      color="accent"
-      [mat-dialog-close]="null"
-      [disabled]="busy">
-      <mat-icon>cancel</mat-icon> Close
-    </button>
-  </div>
+
 </div>

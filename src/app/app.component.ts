@@ -20,7 +20,7 @@ export class AppComponent implements OnInit {
    * @param router Router service
    * @param titleService Title service
    * @param activatedRoute ActivatedRoute service
-   * @param authService Auth service   
+   * @param authService Auth service
    */
   constructor(
     private router: Router,
@@ -46,9 +46,5 @@ export class AppComponent implements OnInit {
       ).subscribe((title: string) => {
         this.titleService.setTitle(title);
       });
-  }
-
-  themeClass(): string | undefined {
-    return environment.runtime.theme;
   }
 }

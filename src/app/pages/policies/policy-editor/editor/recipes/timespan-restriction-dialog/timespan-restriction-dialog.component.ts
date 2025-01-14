@@ -10,6 +10,7 @@ import { validDateRange } from 'src/app/shared/validators/valid-date-range-optio
 @Component({
   selector: 'timespan-restriction-dialog',
   templateUrl: './timespan-restriction-dialog.component.html',
+  styleUrls: ['./timespan-restriction-dialog.component.scss']
 })
 export class TimespanRestrictionDialogComponent implements OnDestroy {
   group = this.formBuilder.nonNullable.group({
