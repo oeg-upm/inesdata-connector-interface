@@ -161,7 +161,7 @@ export class CatalogBrowserService {
         properties: properties,
         endpointUrl: endpointUrl,
         contractOffers: contractOffers,
-        originator: catalog["originator"],
+        originator: " http://connector-c2:29194/protoklgsdnsglsknglksdnglksnglskdngklsdgcoldfisofosidfosidfhdsoifhsdoifhsiofdhsiofhiosdfhiosh",
       }
 
       arr.push(dataOffer);

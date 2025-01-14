@@ -25,13 +25,13 @@
   font-style: italic;
 }
 :-moz-placeholder {
-  font-style: italic;  
+  font-style: italic;
 }
 ::-moz-placeholder {
-  font-style: italic;  
+  font-style: italic;
 }
-:-ms-input-placeholder {  
-  font-style: italic; 
+:-ms-input-placeholder {
+  font-style: italic;
 }
 
 /* global styles */
@@ -609,6 +609,7 @@ mat-card:not(.creation-card) {
   height: 100%;
   word-wrap: break-word;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
 
 mat-card-content,
@@ -789,4 +790,13 @@ mat-tab-group.main-tab-group > .mat-mdc-tab-header .mat-mdc-tab .mdc-tab__ripple
 mat-tab-group:not(.main-tab-group) .mat-mdc-tab-header {
   border-bottom: 1px solid var(--grey-400);
   padding-left: 15px;
+}
+
+mat-list-item {
+  height: max-content !important;
+}
+
+.mdc-list-item__secondary-text {
+  white-space: pre-wrap !important;
+  overflow-wrap: anywhere !important;
 }
