@@ -29,7 +29,7 @@ interface RunningTransferProcess {
 })
 export class ContractViewerComponent implements OnInit {
 
-  contracts: ContractAgreement[];
+  contracts: ContractAgreement[] = [];
   private runningTransfers: RunningTransferProcess[] = [];
   private pollingHandleTransfer?: any;
   PARTICIPANT_ID = `${environment.runtime.participantId}`;
