@@ -103,8 +103,6 @@ export class AssetCreateComponent implements OnInit {
   config = CKEDITOR_CONFIG
   selectedAssetTypeVocabularies: Vocabulary[]
 
-  urlPattern: RegExp = /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z]{2,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)$/;
-
   private fetch$ = new BehaviorSubject(null);
 
   ngOnInit(): void {
@@ -370,8 +368,12 @@ export class AssetCreateComponent implements OnInit {
   }
 
   validateUrl(): boolean {
-    const regex = new RegExp(this.urlPattern);
-    return regex.test(this.httpDataAddress.baseUrl);
+    try {
+      var url = new URL(this.httpDataAddress.baseUrl);
+    } catch (e) {
+      return false;
+    }
+    return url.protocol === "http:" || url.protocol === "https:";
   }
 
 
