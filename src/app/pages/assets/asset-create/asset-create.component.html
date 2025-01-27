@@ -64,7 +64,7 @@
       </div>
     </mat-tab>
 
-    <mat-tab label="Detailed information" *ngIf="vocabularies?.length > 0">
+    <mat-tab label="Detailed information" *ngIf="vocabularies?.length > 0 && ((defaultVocabularies?.length>0 && defaultForms?.length>0) || selectedVocabularies?.length>0)">
       <mat-tab-group animationDuration="0ms" mat-stretch-tabs="false" mat-align-tabs="start">
         <mat-tab label="Default information" *ngIf="defaultVocabularies?.length>0 && defaultForms?.length>0">
           <div class="asset-creation-vocabularies">
